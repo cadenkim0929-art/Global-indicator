@@ -223,3 +223,28 @@ export function getFrequencyCounts(): Record<IndicatorFrequency, number> {
   for (const ind of f.indicators) counts[ind.frequency] = (counts[ind.frequency] || 0) + 1;
   return counts as Record<IndicatorFrequency, number>;
 }
+
+export type IndicatorDetailCard = IndicatorCard & { fullHistory: IndicatorObservation[] };
+
+export function getIndicatorDetail(indicatorId: string): IndicatorDetailCard | null {
+  const card = getIndicatorCards().find((item) => item.id === indicatorId);
+  if (!card) return null;
+  return { ...card, fullHistory: getIndicatorHistory(indicatorId) };
+}
+
+function detailGdpCountry(indicatorId: string) {
+  if (indicatorId.includes('korea')) return 'korea';
+  if (indicatorId.includes('japan')) return 'japan';
+  if (indicatorId.includes('india')) return 'india';
+  if (indicatorId.includes('china')) return 'china';
+  if (indicatorId.includes('eurozone')) return 'eurozone';
+  if (indicatorId.includes('_us') || indicatorId === 'gdp_current_usd') return 'us';
+  return null;
+}
+
+export function getGdpCountryDetail(country: string): IndicatorDetailCard[] {
+  return getIndicatorCards()
+    .filter((item) => (item.id.startsWith('gdp_') || item.id === 'gdp_current_usd') && detailGdpCountry(item.id) === country)
+    .map((item) => ({ ...item, fullHistory: getIndicatorHistory(item.id) }));
+}
+

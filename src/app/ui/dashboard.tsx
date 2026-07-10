@@ -1,6 +1,8 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import Link from 'next/link';
+import { useEffect, useMemo, useState } from 'react';
+import Sparkline from './indicator-sparkline';
 import type { Article, IndicatorCard, IndicatorFrequency } from '@/lib/types';
 
 interface Stats {
@@ -132,6 +134,14 @@ function formatDate(value: string | null) {
   const kst = new Date(d.getTime() + 9 * 60 * 60 * 1000);
   return `${kst.getUTCFullYear()}-${String(kst.getUTCMonth() + 1).padStart(2, '0')}-${String(kst.getUTCDate()).padStart(2, '0')} ${String(kst.getUTCHours()).padStart(2, '0')}:${String(kst.getUTCMinutes()).padStart(2, '0')} KST`;
 }
+function isTodayKst(value: string) {
+  const now = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  const published = new Date(new Date(value).getTime() + 9 * 60 * 60 * 1000);
+  return now.getUTCFullYear() === published.getUTCFullYear()
+    && now.getUTCMonth() === published.getUTCMonth()
+    && now.getUTCDate() === published.getUTCDate();
+}
+
 function sourceRegion(name: string) {
   if (/[가-힣]|\.kr|korea/i.test(name)) return '한국';
   if (/[ぁ-ヿ一-龯]|japan|\.jp/i.test(name)) return '일본';
@@ -150,6 +160,9 @@ export default function Dashboard({
   const [articles, setArticles] = useState(initialArticles);
   const [stats, setStats] = useState(initialStats);
   const [page, setPage] = useState<PageKey>('feed');
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('view') === 'macro') setPage('macro');
+  }, []);
   const [days, setDays] = useState(initialStats.lookbackDays ?? 90);
   const [customDays, setCustomDays] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -291,7 +304,20 @@ export default function Dashboard({
       .sort((a, b) => GDP_COUNTRY_ORDER.indexOf(a.country) - GDP_COUNTRY_ORDER.indexOf(b.country));
   }, [allIndicators]);
 
-  function renderIndicatorCard(ind: IndicatorCard, growth?: IndicatorCard) {
+  const macroHighlight = useMemo(() => {
+    const seen = new Set<string>();
+    return indicators
+      .flatMap((indicator) => indicator.relatedNews.map((news) => ({ indicator, news })))
+      .filter(({ news }) => {
+        const key = news.link || news.title;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .sort((a, b) => +new Date(b.news.publishedAt) - +new Date(a.news.publishedAt))[0] || null;
+  }, [indicators]);
+
+  function renderIndicatorCard(ind: IndicatorCard) {
     const up = ind.pctChange !== null && ind.pctChange > 0;
     const down = ind.pctChange !== null && ind.pctChange < 0;
     const isRateIndicator = /%|percent|growth|qoq/i.test(ind.unit);
@@ -307,31 +333,29 @@ export default function Dashboard({
         : ind.pctChange !== null
           ? `${up ? '▲' : down ? '▼' : '–'} ${Math.abs(ind.pctChange)}%`
           : '전기 데이터 없음';
-    const growthLine = formatGrowthLine(growth);
     const badge = indicatorImpactBadge(ind);
-    return <div className="indicatorCard" key={ind.id}>
-      <div className="indicatorHead">
-        <span className="indicatorName">{ind.nameKo}</span>
-        <span className={`epBadge ${badge.tone}`} title={badge.title}>{badge.label}</span>
-      </div>
-      {ind.dataStatus !== 'insufficient' ? <>
-        <div className="indicatorValue">
+    const changeClass = ind.dataStatus === 'stale' ? 'stale' : isRateIndicator
+      ? (rateUp ? 'up' : rateDown ? 'down' : '')
+      : up ? 'up' : down ? 'down' : '';
+
+    return <Link href={`/indicators/${ind.id}`} className="indicatorCard indicatorListCard" key={ind.id} aria-label={`${ind.nameKo} 상세 보기`}>
+      <div className="indicatorListMain">
+        <div className="indicatorHead">
+          <span className="indicatorName">{ind.nameKo}</span>
+          <span className={`epBadge ${badge.tone}`} title={badge.title}>{badge.label}</span>
+        </div>
+        <span className="indicatorListMeta">{ind.frequency.toUpperCase()} · {formatIndicatorPeriod(ind)}</span>
+        {ind.dataStatus !== 'insufficient' ? <div className="indicatorValue">
           {formatIndicatorValue(ind.latestValue, ind.unit)}
           <span className="indicatorUnit">{ind.unit}</span>
-        </div>
-        {growthLine && <div className="indicatorSubMetric">GDP 성장률 <b>{growthLine}</b><span>{formatIndicatorPeriod(growth)}</span></div>}
-        <div className={`indicatorChange ${ind.dataStatus === 'stale' ? 'stale' : isRateIndicator ? (rateUp ? 'up' : rateDown ? 'down' : '') : up ? 'up' : down ? 'down' : ''}`}>
-          {changeText}
-          <span className="indicatorPeriod">{formatIndicatorPeriod(ind)}</span>
-        </div>
-      </> : <div className="indicatorEmpty">데이터 수집 대기 중</div>}
-      {ind.relatedNews && ind.relatedNews.length > 0 && <div className="indicatorNews">
-        <span className="indicatorNewsLabel">관련 뉴스</span>
-        {ind.relatedNews.map((n, i) => (
-          <a key={i} href={n.link} target="_blank" rel="noreferrer" className="indicatorNewsItem" title={n.title}>{n.title}</a>
-        ))}
-      </div>}
-    </div>;
+        </div> : <div className="indicatorEmpty">데이터 수집 대기 중</div>}
+      </div>
+      <div className="indicatorListTrend">
+        <Sparkline history={ind.history} />
+        <span className={`indicatorChange ${changeClass}`}>{changeText}</span>
+      </div>
+      <span className="indicatorChevron" aria-hidden="true">›</span>
+    </Link>;
   }
 
   function metricLine(label: string, ind?: IndicatorCard, opts?: { kind?: 'level' | 'growth'; hideDelta?: boolean }) {
@@ -372,8 +396,6 @@ export default function Dashboard({
   }) {
     const primary = group.quarterly || group.annual || group.quarterlyGrowth || group.annualGrowth;
     if (!primary) return null;
-    const newsSource = [group.quarterly, group.annual, group.quarterlyGrowth, group.annualGrowth]
-      .find((x) => x?.relatedNews && x.relatedNews.length > 0);
     const badge = indicatorImpactBadge(group.quarterly || group.quarterlyGrowth || primary);
     const hasStale = [group.quarterly, group.annual, group.quarterlyGrowth, group.annualGrowth]
       .some((x) => x?.dataStatus === 'stale');
@@ -396,7 +418,7 @@ export default function Dashboard({
     const judgment = lead === null ? '' : lead.v < 0 ? '역성장' : (lead.qoq ? lead.v > 0.5 : lead.v > 2) ? '성장세' : '정체';
     // 명목(비계절조정) 분기 수준값의 전기 대비 화살표는 계절 노이즈라 숨김.
     const quarterlyIsNominal = !!group.quarterly?.nameKo.includes('명목');
-    return <div className="indicatorCard gdpCountryCard" key={`gdp-country-${group.country}`}>
+    return <Link href={`/indicators/gdp-${group.country}`} className="indicatorCard gdpCountryCard indicatorListCard" key={`gdp-country-${group.country}`} aria-label={`${GDP_COUNTRY_LABELS[group.country] || group.country} GDP 상세 보기`}>
       <div className="indicatorHead">
         <span className="indicatorName">{GDP_COUNTRY_LABELS[group.country] || group.country} GDP</span>
         <span className={`epBadge ${badge.tone}`} title={badge.title}>{badge.label}</span>
@@ -404,6 +426,7 @@ export default function Dashboard({
       {lead !== null && <div className={`indicatorValue gdpGrowthLead ${gClass}`}>
         {lead.v > 0 ? '+' : ''}{lead.v.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}<span className="indicatorUnit">{lead.suffix}</span>
       </div>}
+      <Sparkline history={(lead?.ind || primary).history} className="gdpSparkline" />
       <div className="gdpMetricStack">
         {metricLine(
           quarterlyIsNominal ? '분기 명목 GDP' : group.quarterly?.nameKo.includes('실질') ? '분기 실질 GDP' : '분기 GDP',
@@ -417,13 +440,7 @@ export default function Dashboard({
         {hasStale ? '일부 지표 최신 아님' : judgment}
         <span className="indicatorPeriod">{formatIndicatorPeriod(lead?.ind || primary)}</span>
       </div>
-      {newsSource?.relatedNews && newsSource.relatedNews.length > 0 && <div className="indicatorNews">
-        <span className="indicatorNewsLabel">관련 뉴스</span>
-        {newsSource.relatedNews.map((n, i) => (
-          <a key={i} href={n.link} target="_blank" rel="noreferrer" className="indicatorNewsItem" title={n.title}>{n.title}</a>
-        ))}
-      </div>}
-    </div>;
+    </Link>;
   }
 
   return <main className="appShell">
@@ -519,6 +536,17 @@ export default function Dashboard({
             ))}
           </div>
         </div>
+        {macroHighlight && <article className="macroHighlightCard">
+          <div>
+            <span className="macroHighlightLabel">{isTodayKst(macroHighlight.news.publishedAt) ? '오늘의 매크로 브리프' : '최근 매크로 브리프'}</span>
+            <h2>{macroHighlight.news.title}</h2>
+            <p>{macroHighlight.news.sourceName} · {shortDate(macroHighlight.news.publishedAt)} · {macroHighlight.indicator.nameKo}</p>
+          </div>
+          <div className="macroHighlightActions">
+            <a href={macroHighlight.news.link} target="_blank" rel="noreferrer">뉴스 원문 ↗</a>
+            <Link href={`/indicators/${macroHighlight.indicator.id}`}>지표 보기</Link>
+          </div>
+        </article>}
         {indicatorLoading ? <div className="indicatorGrid" key="macro-loading"><div className="empty"><b>불러오는 중…</b></div></div> : indicators.length === 0 ? <div className="indicatorGrid" key="macro-empty"><div className="empty"><b>이 시간축에 등록된 지표가 없습니다</b></div></div> : indicatorHorizonKey === 'long' ? <div className="indicatorSections" key="macro-gdp-country-grouped">
           <section className="indicatorSection">
             <div className="indicatorSectionHead"><b>국가별 GDP</b></div>
