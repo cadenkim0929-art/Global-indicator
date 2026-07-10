@@ -265,3 +265,105 @@ h1{margin:0;font:700 clamp(28px,3.2vw,40px)/1.15 'Noto Sans KR',sans-serif;lette
   .sourceRow{align-items:flex-start;gap:12px}
   .sourceStats{flex-direction:row}
 }
+
+/* ── v4.13 매크로 지표 목록·상세 ───────────────────────────── */
+.indicatorGrid{grid-template-columns:1fr;gap:10px}
+.indicatorListCard{
+  position:relative;display:grid;grid-template-columns:minmax(0,1fr) 150px 18px;
+  align-items:center;gap:20px;padding:18px 20px;color:inherit;
+  transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease;
+}
+.indicatorListCard:hover{border-color:color-mix(in srgb,var(--brand) 46%,var(--line));box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+.indicatorListMain{min-width:0;display:grid;gap:7px}
+.indicatorListMeta{font:700 10.5px 'JetBrains Mono';letter-spacing:.05em;color:var(--muted-2);text-transform:uppercase}
+.indicatorListTrend{display:grid;justify-items:end;gap:4px;color:var(--brand)}
+.indicatorListTrend .indicatorChange{display:block;font-size:11.5px}
+.indicatorChevron{font:400 28px/1 'Noto Sans KR';color:var(--muted-2);transition:transform .18s ease,color .18s ease}
+.indicatorListCard:hover .indicatorChevron{transform:translateX(2px);color:var(--brand)}
+.indicatorSparkline{display:block;overflow:visible;color:var(--brand)}
+.sparklineLine{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.sparklineDot{fill:var(--surface);stroke:currentColor;stroke-width:2;vector-effect:non-scaling-stroke}
+.sparklineEmpty{stroke:var(--line);stroke-width:1.5;stroke-dasharray:3 3}
+.gdpCountryCard .indicatorSparkline{margin-left:auto}
+
+.macroHighlightCard{
+  margin:0 0 18px;padding:22px 24px;border-radius:var(--radius);
+  border:1px solid color-mix(in srgb,var(--brand) 28%,var(--line));
+  background:linear-gradient(135deg,color-mix(in srgb,var(--brand) 8%,var(--surface)),var(--surface));
+  box-shadow:var(--shadow-sm);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center;
+}
+.macroHighlightLabel{display:block;margin-bottom:7px;font:800 10.5px 'JetBrains Mono';letter-spacing:.12em;text-transform:uppercase;color:var(--brand)}
+.macroHighlightCard h2{margin:0;font:750 19px/1.45 'Noto Sans KR';letter-spacing:-.015em;color:var(--text)}
+.macroHighlightCard p{margin:7px 0 0;font:600 12px 'Noto Sans KR';color:var(--muted)}
+.macroHighlightActions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.macroHighlightActions a{padding:9px 13px;border-radius:var(--radius-pill);font:700 12px 'Noto Sans KR';border:1px solid var(--line);background:var(--surface);color:var(--text-dim)}
+.macroHighlightActions a:last-child{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 11%,var(--surface));color:var(--brand-dim)}
+
+.detailPage{width:min(1120px,calc(100% - 36px));margin:0 auto;padding:26px 0 72px}
+.detailTopbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:44px;padding-bottom:18px;border-bottom:1px solid var(--line-soft)}
+.detailBrand{display:flex;align-items:center;gap:10px;font:750 14px 'Noto Sans KR';color:var(--text)}
+.detailBrand span{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:linear-gradient(145deg,var(--brand-bright),var(--brand-dim));color:#FFF8EC;font-size:11px;box-shadow:0 6px 16px rgba(168,99,30,.2)}
+.detailBack{font:700 12.5px 'Noto Sans KR';color:var(--brand)}
+.detailSeriesTabs,.detailRangeTabs{display:flex;gap:7px;overflow-x:auto;scrollbar-width:thin}
+.detailSeriesTabs{margin-bottom:18px;padding-bottom:2px}
+.detailSeriesTabs button,.detailRangeTabs button{white-space:nowrap;padding:8px 13px;border-radius:var(--radius-pill);border:1px solid var(--line);background:var(--surface);color:var(--muted);font:700 12px 'Noto Sans KR'}
+.detailSeriesTabs button.active,.detailRangeTabs button.active{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,var(--surface));color:var(--brand-dim);box-shadow:inset 0 -2px 0 var(--brand)}
+.detailHero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:end;margin-bottom:24px}
+.detailKicker,.detailSectionEyebrow{display:block;margin-bottom:8px;font:800 10.5px 'JetBrains Mono';letter-spacing:.13em;text-transform:uppercase;color:var(--brand)}
+.detailHero h1{font-size:clamp(30px,5vw,50px)}
+.detailSeriesName{margin:9px 0 0;color:var(--muted);font:600 13px 'Noto Sans KR'}
+.detailLeadValue{display:grid;justify-items:end;gap:6px;text-align:right}
+.detailLeadValue strong{font:800 clamp(30px,5vw,48px)/1 'Noto Sans KR';letter-spacing:-.035em;color:var(--text)}
+.detailLeadValue strong small{margin-left:7px;font:600 12px 'Noto Sans KR';color:var(--muted)}
+.detailLeadValue span{font:750 13px 'JetBrains Mono';color:var(--muted)}
+.detailLeadValue span.up{color:#B5473A}.detailLeadValue span.down{color:#2E6B8A}
+.detailLeadValue time{font:600 11px 'JetBrains Mono';color:var(--muted-2)}
+.detailPanel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+.detailChartPanel{padding:22px 24px 16px;margin-bottom:14px}
+.detailPanelHead{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:12px}
+.detailPanelHead span{font:800 9.5px 'JetBrains Mono';letter-spacing:.13em;text-transform:uppercase;color:var(--muted-2)}
+.detailPanelHead h2,.detailCopy h2,.detailNewsPanel h2{margin:2px 0 0;font:800 20px 'Noto Sans KR';color:var(--text)}
+.detailChartWrap{width:100%;overflow:hidden}
+.detailChart{display:block;width:100%;height:auto;min-height:260px}
+.detailGridLine{stroke:var(--line-soft);stroke-width:1;vector-effect:non-scaling-stroke}
+.detailBaseline{stroke:color-mix(in srgb,var(--brand) 45%,var(--line));stroke-width:1.2;stroke-dasharray:5 5;vector-effect:non-scaling-stroke}
+.detailBaselineLabel,.detailAxisLabel{font:600 10px 'JetBrains Mono';fill:var(--muted-2)}
+.detailTrendLine{fill:none;stroke:var(--brand);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.detailTrendDot{fill:var(--surface);stroke:var(--brand);stroke-width:3;vector-effect:non-scaling-stroke}
+.detailChartEmpty{display:grid;place-items:center;min-height:250px;color:var(--muted);font:600 13px 'Noto Sans KR'}
+.detailStatsGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.detailStatsGrid article{padding:17px 18px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--surface);box-shadow:var(--shadow-sm);display:grid;gap:6px}
+.detailStatsGrid span{font:700 11px 'Noto Sans KR';color:var(--muted)}
+.detailStatsGrid strong{font:800 18px/1.25 'Noto Sans KR';color:var(--text);overflow-wrap:anywhere}
+.detailStatsGrid small{font:600 10.5px 'Noto Sans KR';color:var(--brand)}
+.detailEditorialGrid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);gap:14px}
+.detailCopy,.detailNewsPanel{padding:24px 26px}
+.detailCopy p{margin:11px 0 0;font:500 14px/1.8 'Noto Sans KR';color:var(--text-dim)}
+.detailCopy h3{margin:24px 0 0;padding-top:20px;border-top:1px solid var(--line-soft);font:800 15px 'Noto Sans KR';color:var(--text)}
+.detailNewsList{display:grid;margin-top:14px}
+.detailNewsList a{display:grid;gap:6px;padding:13px 0;border-top:1px solid var(--line-soft)}
+.detailNewsList a:first-child{border-top:0;padding-top:3px}
+.detailNewsList strong{font:650 13px/1.5 'Noto Sans KR';color:var(--text-dim)}
+.detailNewsList a:hover strong{color:var(--brand)}
+.detailNewsList span,.detailNoNews{font:600 10.5px 'Noto Sans KR';color:var(--muted-2)}
+.detailSource{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:18px;padding:14px 2px;color:var(--muted);font:600 11px 'Noto Sans KR'}
+.detailSource>a{color:var(--brand);font-weight:800}.detailSource small{margin-left:auto;color:var(--muted-2)}
+
+@media(max-width:760px){
+  .indicatorListCard{grid-template-columns:minmax(0,1fr) auto;gap:12px}
+  .indicatorListTrend{grid-column:1 / -1;grid-row:2;grid-template-columns:auto 1fr;justify-items:start;align-items:center;gap:12px}
+  .indicatorChevron{position:absolute;right:18px;top:18px}
+  .indicatorHead{padding-right:26px}
+  .macroHighlightCard{grid-template-columns:1fr;padding:19px 20px}
+  .macroHighlightActions{justify-content:flex-start}
+  .detailPage{width:min(100% - 28px,1120px);padding-top:16px}
+  .detailTopbar{margin-bottom:30px}
+  .detailHero{grid-template-columns:1fr;align-items:start}
+  .detailLeadValue{justify-items:start;text-align:left}
+  .detailPanelHead{align-items:flex-start;flex-direction:column}
+  .detailStatsGrid{grid-template-columns:1fr 1fr}
+  .detailEditorialGrid{grid-template-columns:1fr}
+  .detailSource small{width:100%;margin-left:0}
+}
+@media(max-width:430px){.detailStatsGrid{grid-template-columns:1fr}.detailChartPanel{padding:18px 14px 10px}.detailCopy,.detailNewsPanel{padding:21px 20px}}
+
