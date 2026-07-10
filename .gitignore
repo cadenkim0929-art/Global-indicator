@@ -1,0 +1,10 @@
+.next/
+node_modules/
+__pycache__/
+*.pyc
+.env
+.env.local
+.DS_Store
+*.tsbuildinfo
+data/articles.json
+data/articles_backup.json

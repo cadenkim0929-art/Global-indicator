@@ -1,0 +1,1162 @@
+[
+  {
+    "id": "basf",
+    "name": "BASF",
+    "url": "https://news.google.com/rss/search?q=site:basf.com/global/en/media/news-releases?h=1&t=materials%20%26%20industries+&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_BASF"
+  },
+  {
+    "id": "covestro",
+    "name": "Covestro",
+    "url": "https://news.google.com/rss/search?q=site:covestro.com/press/?h=1&t=materials%20%26%20industries+&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Covestro"
+  },
+  {
+    "id": "lanxess",
+    "name": "Lanxess",
+    "url": "https://news.google.com/rss/search?q=site:lanxess.com/en/media/press-releases?query=?h=1&t=materials%20%26%20industries+&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Lanxess"
+  },
+  {
+    "id": "evonik",
+    "name": "Evonik",
+    "url": "https://news.google.com/rss/search?q=%22Evonik%22%20engineering%20plastics%20OR%20polyamide%20OR%20specialty&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Evonik"
+  },
+  {
+    "id": "arkema",
+    "name": "Arkema",
+    "url": "https://news.google.com/rss/search?q=site:arkema.com/usa/en/media&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Arkema"
+  },
+  {
+    "id": "solvay",
+    "name": "Solvay",
+    "url": "https://www.google.com/alerts/feeds/08314131469544637935/14381856084193196698",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Solvay"
+  },
+  {
+    "id": "dsm-firmenich",
+    "name": "DSM-Firmenich",
+    "url": "https://news.google.com/rss/search?q=%22DSM-Firmenich%22%20OR%20%22DSM%20Engineering%22%20plastics%20OR%20polymer&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_DSM-Firmenich"
+  },
+  {
+    "id": "victrex",
+    "name": "Victrex",
+    "url": "https://news.google.com/rss/search?q=%22Victrex%22%20PEEK%20OR%20polymer&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Victrex"
+  },
+  {
+    "id": "sika",
+    "name": "Sika",
+    "url": "https://news.google.com/rss/search?q=site:sika.com/en/media&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Sika"
+  },
+  {
+    "id": "clariant",
+    "name": "Clariant",
+    "url": "https://news.google.com/rss/search?q=site:clariant.com/en/Media&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Clariant"
+  },
+  {
+    "id": "dupont",
+    "name": "DuPont",
+    "url": "https://www.google.com/alerts/feeds/08314131469544637935/16574582527918156914",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_DuPont"
+  },
+  {
+    "id": "celanese",
+    "name": "Celanese",
+    "url": "https://news.google.com/rss/search?q=site:celanese.com/news-and-media&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Celanese"
+  },
+  {
+    "id": "eastman",
+    "name": "Eastman",
+    "url": "https://news.google.com/rss/search?q=site:eastman.com/en/media-center/news-stories&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Eastman"
+  },
+  {
+    "id": "huntsman",
+    "name": "Huntsman",
+    "url": "https://www.google.co.kr/alerts/feeds/08314131469544637935/6008789960845779297",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Huntsman"
+  },
+  {
+    "id": "sabic",
+    "name": "SABIC",
+    "url": "https://www.google.co.kr/alerts/feeds/08314131469544637935/15309779367336578517",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_SABIC"
+  },
+  {
+    "id": "ascend",
+    "name": "Ascend",
+    "url": "https://www.google.com/alerts/feeds/08314131469544637935/4707629242901144407",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Ascend"
+  },
+  {
+    "id": "toray",
+    "name": "Toray",
+    "url": "https://news.google.com/rss/search?q=site:toray.com/news/?language=EN&region=GLOBAL&newsCategory=press&q=&year=&newsTag=&page=1&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Toray"
+  },
+  {
+    "id": "teijin",
+    "name": "Teijin",
+    "url": "https://news.google.com/rss/search?q=site:https://www.teijin.com/news&q=&year=&newsTag=&page=1&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Teijin"
+  },
+  {
+    "id": "mitsubishichem",
+    "name": "MitsubishiChem",
+    "url": "https://www.google.com/alerts/feeds/08314131469544637935/6140286540628297134",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_MitsubishiChem"
+  },
+  {
+    "id": "asahikasei",
+    "name": "AsahiKasei",
+    "url": "https://news.google.com/rss/search?q=site:https://www.asahi-kasei-plastics.com/en/topics&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_AsahiKasei"
+  },
+  {
+    "id": "sumitomochemical",
+    "name": "SumitomoChemical",
+    "url": "https://news.google.com/rss/search?q=site:https://www.sumitomo-chem.co.jp/english/news&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_SumitomoChemical"
+  },
+  {
+    "id": "mitsuichemicals",
+    "name": "MitsuiChemicals",
+    "url": "https://news.google.com/rss/search?q=site:https://jp.mitsuichemicals.com/en/release&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_MitsuiChemicals"
+  },
+  {
+    "id": "ube",
+    "name": "UBE",
+    "url": "https://news.google.com/rss/search?q=site:https://ube.com/ube/en/news&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_UBE"
+  },
+  {
+    "id": "daicel",
+    "name": "Daicel",
+    "url": "https://news.google.com/rss/search?q=site:https://www.daicel.com/en/news&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Daicel"
+  },
+  {
+    "id": "kuraray",
+    "name": "Kuraray",
+    "url": "https://news.google.com/rss/search?q=site:https://www.kuraray.com/global-en/news&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Kuraray"
+  },
+  {
+    "id": "polyplastics",
+    "name": "Polyplastics",
+    "url": "https://news.google.com/rss/search?q=site:hpps.daicel.com&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Polyplastics"
+  },
+  {
+    "id": "lgchem",
+    "name": "LGChem",
+    "url": "https://news.google.com/rss/search?q=%22LG%20Chem%22%20OR%20%22LG%ED%99%94%ED%95%99%22%20engineering%20plastics%20OR%20polycarbonate%20OR%20ABS&hl=ko&gl=KR&ceid=KR:ko",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_LGChem"
+  },
+  {
+    "id": "lottechem",
+    "name": "LotteChem",
+    "url": "https://www.google.com/alerts/feeds/08314131469544637935/288588102668610568",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_LotteChem"
+  },
+  {
+    "id": "skchemicals",
+    "name": "SKChemicals",
+    "url": "https://news.google.com/rss/search?q=site:https://www.skchemicals.com/prcenter/&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_SKChemicals"
+  },
+  {
+    "id": "kolon",
+    "name": "Kolon",
+    "url": "https://news.google.com/rss/search?q=%22Kolon%20Industries%22%20OR%20%22%EC%BD%94%EC%98%A4%EB%A1%B1%EC%9D%B8%EB%8D%94%EC%8A%A4%ED%8A%B8%EB%A6%AC%22%20polyester%20OR%20film%20OR%20industrial&hl=ko&gl=KR&ceid=KR:ko",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Kolon"
+  },
+  {
+    "id": "ga-plasticstoday",
+    "name": "GA_PlasticsToday",
+    "url": "https://news.google.com/rss/search?q=site%3Aplasticstoday.com&hl=en&gl=US&ceid=US:en",
+    "category": "업계 미디어",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_PlasticsToday"
+  },
+  {
+    "id": "ga",
+    "name": "GA_化学工業日報",
+    "url": "https://news.google.com/rss/search?q=%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%83%AA%E3%83%B3%E3%82%B0%E3%83%97%E3%83%A9%E3%82%B9%E3%83%81%E3%83%83%E3%82%AF%20OR%20%E3%82%A8%E3%83%B3%E3%83%97%E3%83%A9%20OR%20%E3%83%9D%E3%83%AA%E3%82%AB%E3%83%BC%E3%83%9C%E3%83%8D%E3%83%BC%E3%83%88%20OR%20%E3%83%9D%E3%83%AA%E3%82%A2%E3%83%9F%E3%83%89&hl=ja&gl=JP&ceid=JP:ja",
+    "category": "업계 미디어",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_化学工業日報"
+  },
+  {
+    "id": "ga",
+    "name": "GA_케미컬뉴스",
+    "url": "https://news.google.com/rss/search?q=%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81%ED%94%8C%EB%9D%BC%EC%8A%A4%ED%8B%B1%20OR%20%EC%97%94%ED%94%84%EB%9D%BC%20OR%20%ED%8F%B4%EB%A6%AC%EC%B9%B4%EB%B3%B4%EB%84%A4%EC%9D%B4%ED%8A%B8%20OR%20%ED%8F%B4%EB%A6%AC%EC%95%84%EB%AF%B8%EB%93%9C%20OR%20%ED%8A%B9%EC%88%98%EC%88%98%EC%A7%80&hl=ko&gl=KR&ceid=KR:ko",
+    "category": "업계 미디어",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_케미컬뉴스"
+  },
+  {
+    "id": "ga-bpa",
+    "name": "GA_BPA",
+    "url": "https://news.google.com/rss/search?q=%22bisphenol%20A%22%20OR%20BPA%20price%20OR%20capacity%20OR%20shortage&hl=en&gl=US&ceid=US:en",
+    "category": "원료 시장",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_BPA"
+  },
+  {
+    "id": "ga-caprolactam",
+    "name": "GA_Caprolactam",
+    "url": "https://news.google.com/rss/search?q=caprolactam%20price%20OR%20production%20OR%20shortage%20OR%20nylon&hl=en&gl=US&ceid=US:en",
+    "category": "원료 시장",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_Caprolactam"
+  },
+  {
+    "id": "ga-adipicacid",
+    "name": "GA_AdipicAcid",
+    "url": "https://news.google.com/rss/search?q=%22adipic%20acid%22%20price%20OR%20capacity%20OR%20production&hl=en&gl=US&ceid=US:en",
+    "category": "원료 시장",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_AdipicAcid"
+  },
+  {
+    "id": "ga-mdi-tdi",
+    "name": "GA_MDI_TDI",
+    "url": "https://news.google.com/rss/search?q=MDI%20OR%20TDI%20isocyanate%20price%20OR%20capacity%20OR%20polyurethane&hl=en&gl=US&ceid=US:en",
+    "category": "원료 시장",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_MDI_TDI"
+  },
+  {
+    "id": "ga-naphtha-benzene",
+    "name": "GA_Naphtha_Benzene",
+    "url": "https://news.google.com/rss/search?q=naphtha%20OR%20benzene%20petrochemical%20feedstock%20price%20Asia&hl=en&gl=US&ceid=US:en",
+    "category": "원료 시장",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_Naphtha_Benzene"
+  },
+  {
+    "id": "ga-chemanalyst",
+    "name": "GA_ChemAnalyst",
+    "url": "https://news.google.com/rss/search?q=polycarbonate%20OR%20polyamide%20OR%20PBT%20OR%20engineering%20plastics%20price%20market&hl=en&gl=US&ceid=US:en",
+    "category": "원료 시장",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_ChemAnalyst"
+  },
+  {
+    "id": "ga-pfas",
+    "name": "GA_PFAS",
+    "url": "https://news.google.com/rss/search?q=PFAS%20ban%20OR%20restriction%20plastics%20OR%20polymer%20OR%20fluoropolymer&hl=en&gl=US&ceid=US:en",
+    "category": "규제·무역",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_PFAS"
+  },
+  {
+    "id": "ga-reach",
+    "name": "GA_REACH",
+    "url": "https://news.google.com/rss/search?q=REACH%20regulation%20polymer%20OR%20plastics%20chemical%20restriction&hl=en&gl=US&ceid=US:en",
+    "category": "규제·무역",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_REACH"
+  },
+  {
+    "id": "ga-tariff",
+    "name": "GA_Tariff",
+    "url": "https://news.google.com/rss/search?q=tariff%20OR%20anti-dumping%20engineering%20plastics%20OR%20resin%20OR%20polymer&hl=en&gl=US&ceid=US:en",
+    "category": "규제·무역",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_Tariff"
+  },
+  {
+    "id": "ga-cbam",
+    "name": "GA_CBAM",
+    "url": "https://news.google.com/rss/search?q=CBAM%20OR%20%22carbon%20border%22%20chemical%20OR%20polymer%20OR%20plastics&hl=en&gl=US&ceid=US:en",
+    "category": "규제·무역",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_CBAM"
+  },
+  {
+    "id": "ga-china-export",
+    "name": "GA_China_Export",
+    "url": "https://news.google.com/rss/search?q=China%20export%20control%20chemical%20OR%20polymer%20OR%20rare%20earth%20restriction&hl=en&gl=US&ceid=US:en",
+    "category": "규제·무역",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_China_Export"
+  },
+  {
+    "id": "ga-auto-lightweight",
+    "name": "GA_Auto_Lightweight",
+    "url": "https://news.google.com/rss/search?q=automotive%20lightweighting%20plastics%20OR%20polymer%20OR%20composite&hl=en&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_Auto_Lightweight"
+  },
+  {
+    "id": "ga-ev-battery",
+    "name": "GA_EV_Battery",
+    "url": "https://news.google.com/rss/search?q=%22electric%20vehicle%22%20OR%20%22EV%20battery%22%20plastics%20OR%20polymer%20connector%20OR%20housing&hl=en&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_EV_Battery"
+  },
+  {
+    "id": "ga-5g-datacenter",
+    "name": "GA_5G_DataCenter",
+    "url": "https://news.google.com/rss/search?q=5G%20OR%20%22data%20center%22%20thermal%20management%20polymer%20OR%20LCP%20OR%20connector&hl=en&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_5G_DataCenter"
+  },
+  {
+    "id": "ga-medical",
+    "name": "GA_Medical",
+    "url": "https://news.google.com/rss/search?q=%22medical%20device%22%20OR%20%22medical%20grade%22%20plastics%20OR%20PEEK%20OR%20polycarbonate&hl=en&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_Medical"
+  },
+  {
+    "id": "ga-aerospace",
+    "name": "GA_Aerospace",
+    "url": "https://news.google.com/rss/search?q=aerospace%20composite%20PEEK%20OR%20PPS%20OR%20%22carbon%20fiber%22%20polymer&hl=en&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_Aerospace"
+  },
+  {
+    "id": "plasticsengineering",
+    "name": "Plasticsengineering",
+    "url": "https://news.google.com/rss/search?q=site%3Aplasticsengineering.org%20&hl=en&gl=US&ceid=US:en",
+    "category": "업계 미디어",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Plasticsengineering"
+  },
+  {
+    "id": "interplasinsights-industry",
+    "name": "InterplasInsights_Industry",
+    "url": "https://news.google.com/rss/search?q=site%3Ainterplasinsights.com/plastics-industry-news%20&hl=en&gl=US&ceid=US:en",
+    "category": "업계 미디어",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_InterplasInsights_Industry"
+  },
+  {
+    "id": "interplasinsights-material",
+    "name": "InterplasInsights_Material",
+    "url": "https://news.google.com/rss/search?q=site%3Ainterplasinsights.com/plastics-materials%20&hl=en&gl=US&ceid=US:en",
+    "category": "업계 미디어",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_InterplasInsights_Material"
+  },
+  {
+    "id": "",
+    "name": "플라스틱코리아",
+    "url": "https://news.google.com/rss/search?q=site%3Aplastickorea.co.kr&hl=ko&gl=KR&ceid=KR:ko",
+    "category": "업계 미디어",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_플라스틱코리아"
+  },
+  {
+    "id": "ga-adsale",
+    "name": "GA_Adsale",
+    "url": "https://news.google.com/rss/search?q=site:adsalecprj.com&hl=en-US&gl=US&ceid=US:en",
+    "category": "업계 미디어",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_Adsale"
+  },
+  {
+    "id": "plasticnews",
+    "name": "Plasticnews",
+    "url": "https://news.google.com/rss/search?q=site:plasticsnews.com&hl=en-US&gl=US&ceid=US:en",
+    "category": "업계 미디어",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Plasticnews"
+  },
+  {
+    "id": "icis",
+    "name": "ICIS",
+    "url": "https://news.google.com/rss/search?q=site%3Aicis.com&hl=en&gl=US&ceid=US:en",
+    "category": "업계 미디어",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_ICIS"
+  },
+  {
+    "id": "ga-greencarreports",
+    "name": "GA_Greencarreports",
+    "url": "https://news.google.com/rss/search?q=site%3Agreencarreports.com&hl=en&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_Greencarreports"
+  },
+  {
+    "id": "ga-cehmeurope",
+    "name": "GA_cehmeurope",
+    "url": "https://news.google.com/rss/search?q=site%3Achemeurope.com&hl=en&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_cehmeurope"
+  },
+  {
+    "id": "ga-industrysourcing",
+    "name": "GA_Industrysourcing",
+    "url": "https://news.google.com/rss/search?q=site%3Aindustrysourcing.com&hl=en&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_Industrysourcing"
+  },
+  {
+    "id": "ga-chinaplas",
+    "name": "GA_Chinaplas",
+    "url": "https://news.google.com/rss/search?q=site:chinaplasonline.com&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GA_Chinaplas"
+  },
+  {
+    "id": "trinseo",
+    "name": "Trinseo",
+    "url": "https://news.google.com/rss/search?q=site:trinseo.com/news-and-events&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Trinseo"
+  },
+  {
+    "id": "impacton",
+    "name": "Impacton",
+    "url": "https://news.google.com/rss/search?q=site:impacton.net&hl=en-US&gl=US&ceid=US:en",
+    "category": "업계 미디어",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Impacton"
+  },
+  {
+    "id": "plasticeurope",
+    "name": "Plasticeurope",
+    "url": "https://news.google.com/rss/search?q=site:plasticseurope.org&hl=en-US&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Plasticeurope"
+  },
+  {
+    "id": "gn-envalior",
+    "name": "GN_Envalior",
+    "url": "https://news.google.com/rss/search?q=%22Envalior%22&hl=en&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Envalior"
+  },
+  {
+    "id": "gn-syensqo",
+    "name": "GN_Syensqo",
+    "url": "https://news.google.com/rss/search?q=%22Syensqo%22&hl=en&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Syensqo"
+  },
+  {
+    "id": "gn-kingfa-wanhua",
+    "name": "GN_Kingfa_Wanhua",
+    "url": "https://news.google.com/rss/search?q=%22Kingfa%22%20OR%20%22Wanhua%20Chemical%22&hl=en&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Kingfa_Wanhua"
+  },
+  {
+    "id": "gn-ems-chemie",
+    "name": "GN_EMS_Chemie",
+    "url": "https://news.google.com/rss/search?q=%22EMS-Chemie%22%20OR%20%22EMS-Grivory%22&hl=en&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_EMS_Chemie"
+  },
+  {
+    "id": "gn-superep",
+    "name": "GN_SuperEP",
+    "url": "https://news.google.com/rss/search?q=%22polyphenylene%20sulfide%22%20OR%20%22liquid%20crystal%20polymer%22%20OR%20%22PEEK%20polymer%22&hl=en&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_SuperEP"
+  },
+  {
+    "id": "gn-engplastics",
+    "name": "GN_EngPlastics",
+    "url": "https://news.google.com/rss/search?q=%22engineering%20plastics%22%20OR%20%22engineering%20polymers%22&hl=en&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_EngPlastics"
+  },
+  {
+    "id": "gn-ep-korea",
+    "name": "GN_EP_Korea",
+    "url": "https://news.google.com/rss/search?q=%22%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81%20%ED%94%8C%EB%9D%BC%EC%8A%A4%ED%8B%B1%22%20OR%20%22%EC%97%94%ED%94%84%EB%9D%BC%22%20OR%20%22%EC%8A%88%ED%8D%BC%EC%97%94%ED%94%84%EB%9D%BC%22&hl=ko&gl=KR&ceid=KR:ko",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_EP_Korea"
+  },
+  {
+    "id": "gn-radici-domo",
+    "name": "GN_Radici_Domo",
+    "url": "https://news.google.com/rss/search?q=%22RadiciGroup%22%20OR%20%22Domo%20Chemicals%22%20OR%20%22Ascend%20Performance%20Materials%22&hl=en&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Radici_Domo"
+  },
+  {
+    "id": "sig-edgar-trinseo",
+    "name": "SIG_EDGAR_Trinseo",
+    "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=8-K&company=trinseo&owner=exclude&count=40&output=atom",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "SIG_EDGAR_Trinseo"
+  },
+  {
+    "id": "sig-edgar-celanese",
+    "name": "SIG_EDGAR_Celanese",
+    "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=8-K&company=celanese&owner=exclude&count=40&output=atom",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "SIG_EDGAR_Celanese"
+  },
+  {
+    "id": "sig-edgar-dupont",
+    "name": "SIG_EDGAR_DuPont",
+    "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=8-K&company=dupont&owner=exclude&count=40&output=atom",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "SIG_EDGAR_DuPont"
+  },
+  {
+    "id": "sig-edgar-eastman",
+    "name": "SIG_EDGAR_Eastman",
+    "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=8-K&company=eastman+chemical&owner=exclude&count=40&output=atom",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "SIG_EDGAR_Eastman"
+  },
+  {
+    "id": "sig-edgar-avient",
+    "name": "SIG_EDGAR_Avient",
+    "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=8-K&company=avient&owner=exclude&count=40&output=atom",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "SIG_EDGAR_Avient"
+  },
+  {
+    "id": "sig-reddit-plastics",
+    "name": "SIG_Reddit_Plastics",
+    "url": "https://www.reddit.com/r/plastics/.rss",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "SIG_Reddit_Plastics"
+  },
+  {
+    "id": "gn-de-fachmedien",
+    "name": "GN_DE_Fachmedien",
+    "url": "https://news.google.com/rss/search?q=site%3Aplasticker.de%20OR%20site%3Akunststoffweb.de%20OR%20site%3Ak-zeitung.de&hl=de&gl=DE&ceid=DE:de",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_DE_Fachmedien"
+  },
+  {
+    "id": "gn-de-keywords",
+    "name": "GN_DE_Keywords",
+    "url": "https://news.google.com/rss/search?q=Polycarbonat%20OR%20Polyamid%20OR%20%22technische%20Kunststoffe%22&hl=de&gl=DE&ceid=DE:de",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_DE_Keywords"
+  },
+  {
+    "id": "gn-fr-keywords",
+    "name": "GN_FR_Keywords",
+    "url": "https://news.google.com/rss/search?q=polycarbonate%20OR%20polyamide%20OR%20%22plastiques%20techniques%22%20OR%20plasturgie&hl=fr&gl=FR&ceid=FR:fr",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_FR_Keywords"
+  },
+  {
+    "id": "gn-it-keywords",
+    "name": "GN_IT_Keywords",
+    "url": "https://news.google.com/rss/search?q=policarbonato%20OR%20poliammide%20OR%20tecnopolimeri%20OR%20site%3Apolimerica.it&hl=it&gl=IT&ceid=IT:it",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_IT_Keywords"
+  },
+  {
+    "id": "gn-jp-fachmedien",
+    "name": "GN_JP_Fachmedien",
+    "url": "https://news.google.com/rss/search?q=site%3Achemicaldaily.co.jp%20OR%20site%3Anikkan.co.jp%20%E6%A8%B9%E8%84%82&hl=ja&gl=JP&ceid=JP:ja",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_JP_Fachmedien"
+  },
+  {
+    "id": "gn-jp-keywords",
+    "name": "GN_JP_Keywords",
+    "url": "https://news.google.com/rss/search?q=%E3%82%A8%E3%83%B3%E3%83%97%E3%83%A9%20OR%20%E3%83%9D%E3%83%AA%E3%82%AB%E3%83%BC%E3%83%9C%E3%83%8D%E3%83%BC%E3%83%88%20OR%20%E3%83%9D%E3%83%AA%E3%82%A2%E3%83%9F%E3%83%89%20OR%20%E6%A8%B9%E8%84%82%20%E5%80%A4%E4%B8%8A%E3%81%92&hl=ja&gl=JP&ceid=JP:ja",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_JP_Keywords"
+  },
+  {
+    "id": "gn-zh-keywords",
+    "name": "GN_ZH_Keywords",
+    "url": "https://news.google.com/rss/search?q=%E5%B7%A5%E7%A8%8B%E5%A1%91%E6%96%99%20OR%20%E8%81%9A%E7%A2%B3%E9%85%B8%E9%85%AF%20OR%20%E8%81%9A%E9%85%B0%E8%83%BA%20OR%20%E6%94%B9%E6%80%A7%E5%A1%91%E6%96%99&hl=zh-CN&gl=CN&ceid=CN:zh-Hans",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_ZH_Keywords"
+  },
+  {
+    "id": "gn-tr-keywords",
+    "name": "GN_TR_Keywords",
+    "url": "https://news.google.com/rss/search?q=polikarbonat%20OR%20poliamid%20OR%20%22m%C3%BChendislik%20plastikleri%22%20OR%20plastik%20sekt%C3%B6r%C3%BC&hl=tr&gl=TR&ceid=TR:tr",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_TR_Keywords"
+  },
+  {
+    "id": "gn-macplas",
+    "name": "GN_Macplas",
+    "url": "https://news.google.com/rss/search?q=site%3Amacplas.it/en&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Macplas"
+  },
+  {
+    "id": "gn-rubbernews",
+    "name": "GN_RubberNews",
+    "url": "https://news.google.com/rss/search?q=site%3Arubbernews.com%20engineering%20OR%20nylon%20OR%20TPV%20OR%20TPE&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_RubberNews"
+  },
+  {
+    "id": "gn-sustainplast",
+    "name": "GN_Sustainplast",
+    "url": "https://news.google.com/rss/search?q=site%3Asustainableplastics.com&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Sustainplast"
+  },
+  {
+    "id": "gn-britishplastics",
+    "name": "GN_BritishPlastics",
+    "url": "https://news.google.com/rss/search?q=site%3Abritishplastics.co.uk&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_BritishPlastics"
+  },
+  {
+    "id": "gn-omnexus",
+    "name": "GN_Omnexus",
+    "url": "https://news.google.com/rss/search?q=site%3Aomnexus.specialchem.com&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Omnexus"
+  },
+  {
+    "id": "gn-euwidplastics",
+    "name": "GN_EuwidPlastics",
+    "url": "https://news.google.com/rss/search?q=site%3Aeuwid-plastics.com&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_EuwidPlastics"
+  },
+  {
+    "id": "gn-india-ep",
+    "name": "GN_India_EP",
+    "url": "https://news.google.com/rss/search?q=%22engineering%20plastics%22%20OR%20polyamide%20OR%20polycarbonate%20India&hl=en-IN&gl=IN&ceid=IN:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_India_EP"
+  },
+  {
+    "id": "gn-india-poly",
+    "name": "GN_India_Poly",
+    "url": "https://news.google.com/rss/search?q=Supreme%20Petrochem%20OR%20%22DCW%20Ltd%22%20OR%20%22Gujarat%20State%20Fertilizers%22%20nylon%20OR%20SAN%20OR%20ABS&hl=en-IN&gl=IN&ceid=IN:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_India_Poly"
+  },
+  {
+    "id": "gn-brazil-ep",
+    "name": "GN_Brazil_EP",
+    "url": "https://news.google.com/rss/search?q=Braskem%20OR%20%22poliamida%22%20OR%20%22pl%C3%A1stico%20de%20engenharia%22&hl=pt-BR&gl=BR&ceid=BR:pt-419",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Brazil_EP"
+  },
+  {
+    "id": "gn-mena-ep",
+    "name": "GN_MENA_EP",
+    "url": "https://news.google.com/rss/search?q=SABIC%20OR%20Tasnee%20OR%20Sipchem%20engineering%20plastics%20OR%20polycarbonate&hl=en&gl=AE&ceid=AE:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_MENA_EP"
+  },
+  {
+    "id": "gn-sea-ep",
+    "name": "GN_SEA_EP",
+    "url": "https://news.google.com/rss/search?q=%22engineering%20plastics%22%20Thailand%20OR%20Malaysia%20OR%20Indonesia%20OR%20Vietnam%20OR%20Singapore&hl=en&gl=SG&ceid=SG:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_SEA_EP"
+  },
+  {
+    "id": "gn-russia-ep",
+    "name": "GN_Russia_EP",
+    "url": "https://news.google.com/rss/search?q=%D0%B8%D0%BD%D0%B6%D0%B5%D0%BD%D0%B5%D1%80%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%81%D1%82%D0%B8%D0%BA%D0%B8%20OR%20%D0%BF%D0%BE%D0%BB%D0%B8%D0%BA%D0%B0%D1%80%D0%B1%D0%BE%D0%BD%D0%B0%D1%82%20OR%20%D0%BF%D0%BE%D0%BB%D0%B8%D0%B0%D0%BC%D0%B8%D0%B4&hl=ru&gl=RU&ceid=RU:ru",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Russia_EP"
+  },
+  {
+    "id": "gn-humanoid",
+    "name": "GN_Humanoid",
+    "url": "https://news.google.com/rss/search?q=humanoid%20robot%20materials%20OR%20actuator%20plastic%20OR%20robot%20components%20polymer&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Humanoid"
+  },
+  {
+    "id": "gn-semicon-pkg",
+    "name": "GN_Semicon_Pkg",
+    "url": "https://news.google.com/rss/search?q=semiconductor%20packaging%20LCP%20OR%20%22glass%20substrate%22%20OR%20advanced%20packaging%20material&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Semicon_Pkg"
+  },
+  {
+    "id": "gn-drone-uam",
+    "name": "GN_Drone_UAM",
+    "url": "https://news.google.com/rss/search?q=eVTOL%20OR%20UAM%20OR%20drone%20lightweight%20composite%20OR%20thermoplastic&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Drone_UAM"
+  },
+  {
+    "id": "gn-hydrogen",
+    "name": "GN_Hydrogen",
+    "url": "https://news.google.com/rss/search?q=hydrogen%20fuel%20cell%20OR%20electrolyzer%20PPS%20OR%20fluoropolymer%20OR%20membrane%20material&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Hydrogen"
+  },
+  {
+    "id": "gn-cable-wire",
+    "name": "GN_Cable_Wire",
+    "url": "https://news.google.com/rss/search?q=data%20center%20cable%20OR%20%22high%20voltage%22%20connector%20engineering%20plastic&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Cable_Wire"
+  },
+  {
+    "id": "gn-defense",
+    "name": "GN_Defense",
+    "url": "https://news.google.com/rss/search?q=defense%20OR%20military%20lightweight%20polymer%20OR%20ballistic%20composite&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Defense"
+  },
+  {
+    "id": "robot-ep",
+    "name": "Robot + EP",
+    "url": "https://news.google.com/rss/search?q=humanoid%20OR%20%22service%20robot%22%20OR%20%22industrial%20robot%22%20%28polymer%20OR%20resin%20OR%20%22engineering%20plastic%22%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_robot-ep"
+  },
+  {
+    "id": "robot-ep-kr",
+    "name": "로봇+EP(국문)",
+    "url": "https://news.google.com/rss/search?q=%ED%9C%B4%EB%A8%B8%EB%85%B8%EC%9D%B4%EB%93%9C%20OR%20%ED%98%91%EB%8F%99%EB%A1%9C%EB%B4%87%20OR%20%EC%82%B0%EC%97%85%EC%9A%A9%EB%A1%9C%EB%B4%87%20%28%EC%88%98%EC%A7%80%20OR%20%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81%ED%94%8C%EB%9D%BC%EC%8A%A4%ED%8B%B1%20OR%20%ED%8F%B4%EB%A6%AC%EB%A8%B8%29&hl=ko&gl=KR&ceid=KR:ko",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_robot-ep-kr"
+  },
+  {
+    "id": "medical-ep",
+    "name": "Medical+EP",
+    "url": "https://news.google.com/rss/search?q=medical%20device%20OR%20implant%20%28PEEK%20OR%20polycarbonate%20OR%20%22medical%20grade%22%20polymer%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_medical-ep"
+  },
+  {
+    "id": "medical-ep-kr",
+    "name": "의료기기+EP(국문)",
+    "url": "https://news.google.com/rss/search?q=%EC%9D%98%EB%A3%8C%EA%B8%B0%EA%B8%B0%20OR%20%EC%9E%84%ED%94%8C%EB%9E%80%ED%8A%B8%20%28%EC%88%98%EC%A7%80%20OR%20%ED%8F%B4%EB%A6%AC%EB%A8%B8%20OR%20%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81%ED%94%8C%EB%9D%BC%EC%8A%A4%ED%8B%B1%29&hl=ko&gl=KR&ceid=KR:ko",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_medical-ep-kr"
+  },
+  {
+    "id": "ess-ep",
+    "name": "ESS+EP",
+    "url": "https://news.google.com/rss/search?q=%22energy%20storage%20system%22%20OR%20ESS%20battery%20enclosure%20%28flame%20retardant%20OR%20polymer%20OR%20resin%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_ess-ep"
+  },
+  {
+    "id": "semicon-ai-ep",
+    "name": "Semicon/AI+EP",
+    "url": "https://news.google.com/rss/search?q=semiconductor%20packaging%20OR%20%22AI%20data%20center%22%20%28%22glass%20substrate%22%20OR%20LCP%20OR%20PPS%20OR%20polycarbonate%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_semicon-ai-ep"
+  },
+  {
+    "id": "autodrive-ep",
+    "name": "Autonomous Driving+EP",
+    "url": "https://news.google.com/rss/search?q=autonomous%20driving%20OR%20lidar%20OR%20ADAS%20%28housing%20OR%20polymer%20OR%20%22engineering%20plastic%22%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_autodrive-ep"
+  },
+  {
+    "id": "icis-petrochem",
+    "name": "ICIS Petrochemical",
+    "url": "https://news.google.com/rss/search?q=site%3Aicis.com%20petrochemical%20OR%20polymer%20OR%20%22engineering%20plastics%22&hl=en-US&gl=US&ceid=US:en",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_icis-petrochem"
+  },
+  {
+    "id": "spglobal-chem",
+    "name": "S&P Global Chemicals",
+    "url": "https://news.google.com/rss/search?q=site%3Aspglobal.com%20petrochemical%20OR%20%22chemical%20industry%22%20outlook&hl=en-US&gl=US&ceid=US:en",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_spglobal-chem"
+  },
+  {
+    "id": "reuters-chem",
+    "name": "Reuters Chemicals",
+    "url": "https://news.google.com/rss/search?q=site%3Areuters.com%20petrochemical%20OR%20%22chemical%20industry%22%20outlook&hl=en-US&gl=US&ceid=US:en",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_reuters-chem"
+  },
+  {
+    "id": "macro-kr",
+    "name": "한국 매크로",
+    "url": "https://news.google.com/rss/search?q=%ED%95%9C%EA%B5%AD%EC%9D%80%ED%96%89%20OR%20KDI%20%EA%B2%BD%EA%B8%B0%EC%A0%84%EB%A7%9D%20%EC%84%9D%EC%9C%A0%ED%99%94%ED%95%99%20OR%20%ED%99%94%ED%95%99%EC%97%85%ED%99%A9&hl=ko&gl=KR&ceid=KR:ko",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_macro-kr"
+  },
+  {
+    "id": "trade-kr",
+    "name": "한국 통상",
+    "url": "https://news.google.com/rss/search?q=%EC%82%B0%EC%97%85%ED%86%B5%EC%83%81%EC%9E%90%EC%9B%90%EB%B6%80%20OR%20%ED%95%9C%EA%B5%AD%EB%AC%B4%EC%97%AD%ED%98%91%ED%9A%8C%20%EA%B4%80%EC%84%B8%20OR%20%ED%86%B5%EC%83%81%EB%A7%88%EC%B0%B0&hl=ko&gl=KR&ceid=KR:ko",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_trade-kr"
+  },
+  {
+    "id": "yonhap-econ",
+    "name": "연합뉴스 경제",
+    "url": "https://news.google.com/rss/search?q=%EC%88%98%EC%B6%9C%20%EB%8F%99%ED%96%A5%20OR%20%EC%84%9D%EC%9C%A0%ED%99%94%ED%95%99%20%EC%97%85%ED%99%A9%20OR%20%ED%99%94%ED%95%99%20%EA%B2%BD%EA%B8%B0&hl=ko&gl=KR&ceid=KR:ko",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_yonhap-econ"
+  },
+  {
+    "id": "eu-cbam",
+    "name": "EU CBAM",
+    "url": "https://news.google.com/rss/search?q=CBAM%20OR%20%22carbon%20border%20adjustment%22%20OR%20EU%20trade%20chemical&hl=en-US&gl=US&ceid=US:en",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_eu-cbam"
+  },
+  {
+    "id": "us-tariff",
+    "name": "US Tariff",
+    "url": "https://news.google.com/rss/search?q=site%3Austr.gov%20OR%20site%3Acommerce.gov%20tariff%20chemical%20OR%20petrochemical&hl=en-US&gl=US&ceid=US:en",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_us-tariff"
+  },
+  {
+    "id": "china-trade",
+    "name": "China Trade",
+    "url": "https://news.google.com/rss/search?q=%E5%8F%8D%E5%80%BE%E9%94%80%20OR%20%E5%85%B3%E7%A8%8E%20%E5%8C%96%E5%B7%A5%20OR%20%E5%8C%96%E5%AD%A6%E5%93%81%E8%B4%B8%E6%98%93&hl=zh-CN&gl=CN&ceid=CN:zh-Hans",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_china-trade"
+  },
+  {
+    "id": "wto-dispute",
+    "name": "WTO Dispute",
+    "url": "https://news.google.com/rss/search?q=WTO%20dispute%20chemical%20OR%20trade%20remedy%20plastics&hl=en-US&gl=US&ceid=US:en",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_wto-dispute"
+  },
+  {
+    "id": "auto-outlook",
+    "name": "Automotive Outlook",
+    "url": "https://news.google.com/rss/search?q=automotive%20production%20outlook%20OR%20%22EV%20demand%22%20forecast%202026&hl=en-US&gl=US&ceid=US:en",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_auto-outlook"
+  },
+  {
+    "id": "electronics-outlook",
+    "name": "Electronics Outlook",
+    "url": "https://news.google.com/rss/search?q=semiconductor%20demand%20outlook%20OR%20electronics%20industry%20forecast&hl=en-US&gl=US&ceid=US:en",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_electronics-outlook"
+  },
+  {
+    "id": "petrochem-cycle",
+    "name": "Petrochem Cycle",
+    "url": "https://news.google.com/rss/search?q=naphtha%20price%20OR%20petrochemical%20margin%20OR%20cracker%20spread%20OR%20%22chemical%20cycle%22&hl=en-US&gl=US&ceid=US:en",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_petrochem-cycle"
+  },
+  {
+    "id": "tradewar-global",
+    "name": "Trade War Global",
+    "url": "https://news.google.com/rss/search?q=%22trade%20war%22%20OR%20%22anti-dumping%22%20OR%20%22countervailing%20duty%22%20chemical%20OR%20plastics&hl=en-US&gl=US&ceid=US:en",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_tradewar-global"
+  },
+  {
+    "id": "india-trade",
+    "name": "India Trade",
+    "url": "https://news.google.com/rss/search?q=India%20petrochemical%20customs%20duty%20OR%20tariff%20OR%20anti-dumping%20chemical&hl=en-IN&gl=IN&ceid=IN:en",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_india-trade"
+  },
+  {
+    "id": "sea-trade",
+    "name": "SEA Trade",
+    "url": "https://news.google.com/rss/search?q=%28Thailand%20OR%20Malaysia%20OR%20Indonesia%20OR%20Vietnam%20OR%20Singapore%29%20petrochemical%20OR%20tariff%20OR%20investment%20incentive&hl=en-SG&gl=SG&ceid=SG:en",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_sea-trade"
+  },
+  {
+    "id": "macro-gdp-global",
+    "name": "Global GDP Nowcast",
+    "url": "https://news.google.com/rss/search?q=%28%22GDP+growth%22+OR+%22economic+growth%22+OR+recession+OR+%22soft+landing%22%29+%28US+OR+China+OR+Japan+OR+Korea+OR+India+OR+eurozone%29+when%3A30d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-gdp-global"
+  },
+  {
+    "id": "macro-gdp-china",
+    "name": "China GDP Macro",
+    "url": "https://news.google.com/rss/search?q=%28%22China+GDP%22+OR+%22Chinese+economy%22+OR+%22China+economic+growth%22+OR+%22%EC%A4%91%EA%B5%AD+GDP%22+OR+%22%E4%B8%AD%E5%9B%BD+GDP%22%29+when%3A30d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-gdp-china"
+  },
+  {
+    "id": "macro-gdp-korea",
+    "name": "Korea GDP Macro",
+    "url": "https://news.google.com/rss/search?q=%28%22Korea+GDP%22+OR+%22Korean+economy%22+OR+%22%ED%95%9C%EA%B5%AD+GDP%22+OR+%22%EA%B2%BD%EC%A0%9C%EC%84%B1%EC%9E%A5%EB%A5%A0%22+OR+%22%ED%95%9C%EA%B5%AD+%EA%B2%BD%EC%A0%9C%EC%84%B1%EC%9E%A5%22%29+when%3A30d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-gdp-korea"
+  },
+  {
+    "id": "macro-gdp-japan",
+    "name": "Japan GDP Macro",
+    "url": "https://news.google.com/rss/search?q=%28%22Japan+GDP%22+OR+%22Japanese+economy%22+OR+%22Japan+economic+growth%22+OR+%22%E6%97%A5%E6%9C%AC+GDP%22%29+when%3A30d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-gdp-japan"
+  },
+  {
+    "id": "macro-gdp-india",
+    "name": "India GDP Macro",
+    "url": "https://news.google.com/rss/search?q=%28%22India+GDP%22+OR+%22Indian+economy%22+OR+%22India+economic+growth%22%29+when%3A30d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-gdp-india"
+  },
+  {
+    "id": "macro-gdp-eurozone",
+    "name": "Eurozone GDP Macro",
+    "url": "https://news.google.com/rss/search?q=%28%22eurozone+GDP%22+OR+%22euro+area+economy%22+OR+%22Eurozone+economic+growth%22%29+when%3A30d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-gdp-eurozone"
+  },
+  {
+    "id": "macro-pmi-global",
+    "name": "Global Manufacturing PMI",
+    "url": "https://news.google.com/rss/search?q=%28%22manufacturing+PMI%22+OR+%22factory+activity%22+OR+%22purchasing+managers+index%22+OR+%22%EC%A0%9C%EC%A1%B0%EC%97%85+PMI%22+OR+%22PMI%22%29+%28China+OR+Korea+OR+Japan+OR+India+OR+eurozone+OR+US%29+when%3A30d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-pmi-global"
+  },
+  {
+    "id": "macro-industrial-production",
+    "name": "Industrial Production",
+    "url": "https://news.google.com/rss/search?q=%28%22industrial+production%22+OR+%22factory+output%22+OR+%22manufacturing+output%22+OR+%22%EC%82%B0%EC%97%85%EC%83%9D%EC%82%B0%22+OR+%22%EA%B3%B5%EC%9E%A5+%EC%83%9D%EC%82%B0%22%29+%28China+OR+Korea+OR+Japan+OR+India+OR+eurozone+OR+US%29+when%3A30d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-industrial-production"
+  },
+  {
+    "id": "macro-cpi-inflation",
+    "name": "CPI Inflation",
+    "url": "https://news.google.com/rss/search?q=%28CPI+OR+inflation+OR+%22consumer+prices%22+OR+%22%EB%AC%BC%EA%B0%80%22+OR+%22%EC%86%8C%EB%B9%84%EC%9E%90%EB%AC%BC%EA%B0%80%22%29+%28China+OR+Korea+OR+Japan+OR+India+OR+eurozone+OR+US%29+when%3A30d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-cpi-inflation"
+  },
+  {
+    "id": "macro-fx-rates",
+    "name": "FX Rates",
+    "url": "https://news.google.com/rss/search?q=%28won+OR+yuan+OR+%22dollar+index%22+OR+%22USD%2FKRW%22+OR+%22USD%2FCNY%22+OR+%ED%99%98%EC%9C%A8+OR+%EC%9B%90%ED%99%94+OR+%EC%9C%84%EC%95%88%ED%99%94%29+when%3A30d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-fx-rates"
+  },
+  {
+    "id": "macro-rates-fed",
+    "name": "Rates Fed Bonds",
+    "url": "https://news.google.com/rss/search?q=%28%2210-year+Treasury%22+OR+%22US+yields%22+OR+Fed+OR+FOMC+OR+%22%EA%B5%AD%EC%B1%84%EA%B8%88%EB%A6%AC%22+OR+%22%EC%97%B0%EC%A4%80%22%29+when%3A30d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-rates-fed"
+  },
+  {
+    "id": "macro-oil-feedstock",
+    "name": "Oil Naphtha Feedstock",
+    "url": "https://news.google.com/rss/search?q=%28%22Brent+crude%22+OR+WTI+OR+%22crude+oil%22+OR+naphtha+OR+feedstock+OR+%EC%9C%A0%EA%B0%80+OR+%EB%82%98%ED%94%84%ED%83%80%29+when%3A30d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-oil-feedstock"
+  },
+  {
+    "id": "macro-official-oecd",
+    "name": "OECD Economic Outlook",
+    "url": "https://news.google.com/rss/search?q=site%3Aoecd.org+%28%22economic+outlook%22+OR+GDP+OR+%22industrial+production%22+OR+PMI%29+when%3A90d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-official-oecd"
+  },
+  {
+    "id": "macro-official-imf",
+    "name": "IMF World Economic Outlook",
+    "url": "https://news.google.com/rss/search?q=site%3Aimf.org+%28%22World+Economic+Outlook%22+OR+GDP+OR+inflation+OR+China+OR+Korea+OR+Japan+OR+India%29+when%3A90d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-official-imf"
+  },
+  {
+    "id": "macro-official-worldbank",
+    "name": "World Bank Macro",
+    "url": "https://news.google.com/rss/search?q=site%3Aworldbank.org+%28GDP+OR+inflation+OR+%22economic+growth%22+OR+China+OR+India+OR+Korea%29+when%3A90d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-official-worldbank"
+  },
+  {
+    "id": "macro-korea-fx",
+    "name": "Korea FX Won",
+    "url": "https://news.google.com/rss/search?q=%28%22Korean+won%22+OR+%22South+Korean+won%22+OR+USD%2FKRW+OR+%22won+exchange+rate%22+OR+%EC%9B%90%EB%8B%AC%EB%9F%AC+OR+%EC%9B%90%ED%99%94+OR+%ED%99%98%EC%9C%A8%29+when%3A30d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-korea-fx"
+  },
+  {
+    "id": "macro-korea-factory",
+    "name": "Korea Factory PMI Output",
+    "url": "https://news.google.com/rss/search?q=%28%22South+Korea+factory+activity%22+OR+%22Korea+manufacturing+PMI%22+OR+%22Korea+factory+output%22+OR+%22%ED%95%9C%EA%B5%AD+%EC%A0%9C%EC%A1%B0%EC%97%85+PMI%22+OR+%22%ED%95%9C%EA%B5%AD+%EC%82%B0%EC%97%85%EC%83%9D%EC%82%B0%22%29+when%3A30d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-korea-factory"
+  },
+  {
+    "id": "macro-korea-economy",
+    "name": "Korea Economy GDP",
+    "url": "https://news.google.com/rss/search?q=%28%22South+Korea+economy%22+OR+%22Korea+GDP%22+OR+%22Korean+economic+growth%22+OR+%22%ED%95%9C%EA%B5%AD+%EA%B2%BD%EC%A0%9C%EC%84%B1%EC%9E%A5%22+OR+%22%ED%95%9C%EA%B5%AD+GDP%22%29+when%3A30d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-korea-economy"
+  },
+  {
+    "id": "macro-bok",
+    "name": "Bank of Korea Macro",
+    "url": "https://news.google.com/rss/search?q=%28%22Bank+of+Korea%22+OR+BOK+OR+%ED%95%9C%EA%B5%AD%EC%9D%80%ED%96%89%29+%28growth+OR+inflation+OR+rates+OR+GDP+OR+%ED%99%98%EC%9C%A8+OR+%EB%AC%BC%EA%B0%80%29+when%3A30d&hl=en&gl=US&ceid=US%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_macro-bok"
+  }
+]

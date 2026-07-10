@@ -1,0 +1,1898 @@
+{
+  "version": "v4.8-india-gdp-dbnomics",
+  "generatedAt": "2026-07-10T22:29:36.373229+00:00",
+  "indicators": [
+    {
+      "id": "fx_usd_krw",
+      "name": "USD/KRW exchange rate",
+      "nameKo": "원/달러 환율(FRED)",
+      "frequency": "daily",
+      "category": "fx",
+      "unit": "KRW per USD",
+      "sourceId": "fred",
+      "sourceUrl": "https://fred.stlouisfed.org/series/DEXKOUS",
+      "epRelevant": true
+    },
+    {
+      "id": "fx_usd_cny",
+      "name": "USD/CNY exchange rate",
+      "nameKo": "위안/달러 환율(FRED)",
+      "frequency": "daily",
+      "category": "fx",
+      "unit": "CNY per USD",
+      "sourceId": "fred",
+      "sourceUrl": "https://fred.stlouisfed.org/series/DEXCHUS",
+      "epRelevant": true
+    },
+    {
+      "id": "oil_brent",
+      "name": "Brent crude oil price",
+      "nameKo": "Brent유 가격(FRED)",
+      "frequency": "daily",
+      "category": "energy",
+      "unit": "USD/bbl",
+      "sourceId": "fred",
+      "sourceUrl": "https://fred.stlouisfed.org/series/DCOILBRENTEU",
+      "epRelevant": true
+    },
+    {
+      "id": "oil_wti",
+      "name": "WTI crude oil price",
+      "nameKo": "WTI유 가격(FRED)",
+      "frequency": "daily",
+      "category": "energy",
+      "unit": "USD/bbl",
+      "sourceId": "fred",
+      "sourceUrl": "https://fred.stlouisfed.org/series/DCOILWTICO",
+      "epRelevant": true
+    },
+    {
+      "id": "rate_us_10y",
+      "name": "US 10-Year Treasury Yield",
+      "nameKo": "미국 10년물 국채금리",
+      "frequency": "daily",
+      "category": "rates",
+      "unit": "percent",
+      "sourceId": "fred",
+      "sourceUrl": "https://fred.stlouisfed.org/series/DGS10",
+      "epRelevant": false
+    },
+    {
+      "id": "industrial_production_us",
+      "name": "US Industrial Production Index",
+      "nameKo": "미국 산업생산지수",
+      "frequency": "monthly",
+      "category": "industry",
+      "unit": "index",
+      "sourceId": "fred",
+      "sourceUrl": "https://fred.stlouisfed.org/series/INDPRO",
+      "epRelevant": true
+    },
+    {
+      "id": "cpi_us",
+      "name": "US CPI All Urban Consumers",
+      "nameKo": "미국 CPI",
+      "frequency": "monthly",
+      "category": "macro",
+      "unit": "index",
+      "sourceId": "fred",
+      "sourceUrl": "https://fred.stlouisfed.org/series/CPIAUCSL",
+      "epRelevant": false
+    },
+    {
+      "id": "gdp_quarterly_us",
+      "name": "US Real GDP Quarterly",
+      "nameKo": "미국 실질GDP(분기)",
+      "frequency": "quarterly",
+      "category": "macro",
+      "unit": "Billion chained 2017 USD",
+      "sourceId": "fred",
+      "sourceUrl": "https://fred.stlouisfed.org/series/GDPC1",
+      "epRelevant": false
+    },
+    {
+      "id": "gdp_current_usd",
+      "name": "US GDP annual current prices",
+      "nameKo": "미국 GDP(연간, 현재가·조 달러)",
+      "frequency": "yearly",
+      "category": "macro",
+      "unit": "Trillion USD",
+      "sourceId": "world_bank",
+      "sourceUrl": "https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation",
+      "epRelevant": false
+    },
+    {
+      "id": "gdp_annual_india",
+      "name": "India GDP annual current prices",
+      "nameKo": "인도 GDP(연간, 현재가·조 달러)",
+      "frequency": "yearly",
+      "category": "macro",
+      "unit": "Trillion USD",
+      "sourceId": "world_bank",
+      "sourceUrl": "https://api.worldbank.org/v2/country/IND/indicator/NY.GDP.MKTP.CD?format=json",
+      "epRelevant": false
+    },
+    {
+      "id": "gdp_annual_eurozone",
+      "name": "Eurozone GDP annual current prices",
+      "nameKo": "유로존 GDP(연간, 현재가·조 달러)",
+      "frequency": "yearly",
+      "category": "macro",
+      "unit": "Trillion USD",
+      "sourceId": "world_bank",
+      "sourceUrl": "https://api.worldbank.org/v2/country/EMU/indicator/NY.GDP.MKTP.CD?format=json",
+      "epRelevant": false
+    },
+    {
+      "id": "gdp_annual_china",
+      "name": "China GDP annual current prices",
+      "nameKo": "중국 GDP(연간, 현재가·조 달러)",
+      "frequency": "yearly",
+      "category": "macro",
+      "unit": "Trillion USD",
+      "sourceId": "world_bank",
+      "sourceUrl": "https://api.worldbank.org/v2/country/CHN/indicator/NY.GDP.MKTP.CD?format=json",
+      "epRelevant": false
+    },
+    {
+      "id": "gdp_annual_japan",
+      "name": "Japan GDP annual current prices",
+      "nameKo": "일본 GDP(연간, 현재가·조 달러)",
+      "frequency": "yearly",
+      "category": "macro",
+      "unit": "Trillion USD",
+      "sourceId": "world_bank",
+      "sourceUrl": "https://api.worldbank.org/v2/country/JPN/indicator/NY.GDP.MKTP.CD?format=json",
+      "epRelevant": false
+    },
+    {
+      "id": "gdp_annual_korea",
+      "name": "Korea GDP annual current prices",
+      "nameKo": "한국 GDP(연간, 현재가·조 달러)",
+      "frequency": "yearly",
+      "category": "macro",
+      "unit": "Trillion USD",
+      "sourceId": "world_bank",
+      "sourceUrl": "https://api.worldbank.org/v2/country/KOR/indicator/NY.GDP.MKTP.CD?format=json",
+      "epRelevant": false
+    },
+    {
+      "id": "gdp_qoq_us",
+      "name": "US GDP quarter-over-quarter growth",
+      "nameKo": "미국 GDP 전분기 성장률",
+      "frequency": "quarterly",
+      "category": "macro",
+      "unit": "QoQ growth (%)",
+      "sourceId": "fred",
+      "sourceUrl": "https://fred.stlouisfed.org/series/NAEXKP01USQ657S",
+      "epRelevant": false
+    },
+    {
+      "id": "gdp_qoq_japan",
+      "name": "Japan GDP quarter-over-quarter growth",
+      "nameKo": "일본 GDP 전분기 성장률",
+      "frequency": "quarterly",
+      "category": "macro",
+      "unit": "QoQ growth (%)",
+      "sourceId": "fred",
+      "sourceUrl": "https://fred.stlouisfed.org/series/NAEXKP01JPQ657S",
+      "epRelevant": false
+    },
+    {
+      "id": "gdp_qoq_india",
+      "name": "India GDP quarter-over-quarter growth",
+      "nameKo": "인도 GDP 전분기 성장률",
+      "frequency": "quarterly",
+      "category": "macro",
+      "unit": "QoQ growth (%)",
+      "sourceId": "fred",
+      "sourceUrl": "https://fred.stlouisfed.org/series/NAEXKP01INQ657S",
+      "epRelevant": false
+    },
+    {
+      "id": "gdp_qoq_korea",
+      "name": "Korea GDP quarter-over-quarter growth",
+      "nameKo": "한국 GDP 전분기 성장률",
+      "frequency": "quarterly",
+      "category": "macro",
+      "unit": "QoQ growth (%)",
+      "sourceId": "fred",
+      "sourceUrl": "https://fred.stlouisfed.org/series/NAEXKP01KRQ657S",
+      "epRelevant": false
+    },
+    {
+      "id": "industrial_production_eurozone",
+      "name": "Eurozone Industrial Production Index",
+      "nameKo": "유로존 산업생산지수",
+      "frequency": "monthly",
+      "category": "industry",
+      "unit": "index",
+      "sourceId": "eurostat_sts_inpr_m",
+      "sourceUrl": "https://fred.stlouisfed.org/series/EA19PRINTO01IXOBSAM",
+      "epRelevant": false
+    },
+    {
+      "id": "industrial_production_japan",
+      "name": "Japan Industrial Production Index",
+      "nameKo": "일본 산업생산지수",
+      "frequency": "monthly",
+      "category": "industry",
+      "unit": "index",
+      "sourceId": "oecd_sdmx_df_indserv",
+      "sourceUrl": "https://fred.stlouisfed.org/series/JPNPROINDQISMEI",
+      "epRelevant": false
+    },
+    {
+      "id": "industrial_production_india",
+      "name": "India Industrial Production Index",
+      "nameKo": "인도 산업생산지수",
+      "frequency": "monthly",
+      "category": "industry",
+      "unit": "index",
+      "sourceId": "oecd_sdmx_df_indserv",
+      "sourceUrl": "https://fred.stlouisfed.org/series/INDPROINDQISMEI",
+      "epRelevant": false
+    },
+    {
+      "id": "industrial_production_korea",
+      "name": "Korea Industrial Production Index",
+      "nameKo": "한국 산업생산지수",
+      "frequency": "monthly",
+      "category": "industry",
+      "unit": "index",
+      "sourceId": "oecd_sdmx_df_indserv",
+      "sourceUrl": "https://fred.stlouisfed.org/series/KORPROINDQISMEI",
+      "epRelevant": true
+    },
+    {
+      "id": "gdp_quarterly_eurozone",
+      "name": "Eurozone Real GDP",
+      "nameKo": "유로존 실질GDP(분기)",
+      "frequency": "quarterly",
+      "category": "macro",
+      "unit": "Million chained 2010 EUR",
+      "sourceId": "fred",
+      "sourceUrl": "https://fred.stlouisfed.org/series/CLVMNACSCAB1GQEA19",
+      "epRelevant": false
+    },
+    {
+      "id": "gdp_quarterly_korea",
+      "name": "Korea Real GDP Quarterly",
+      "nameKo": "한국 실질GDP(분기)",
+      "frequency": "quarterly",
+      "category": "macro",
+      "unit": "Million KRW",
+      "sourceId": "fred",
+      "sourceUrl": "https://fred.stlouisfed.org/series/NGDPRSAXDCKRQ",
+      "epRelevant": true
+    },
+    {
+      "id": "gdp_quarterly_japan",
+      "name": "Japan Real GDP Quarterly",
+      "nameKo": "일본 실질GDP(분기)",
+      "frequency": "quarterly",
+      "category": "macro",
+      "unit": "Million JPY",
+      "sourceId": "fred",
+      "sourceUrl": "https://fred.stlouisfed.org/series/NGDPRSAXDCJPQ",
+      "epRelevant": true
+    },
+    {
+      "id": "gdp_quarterly_china",
+      "name": "China GDP Quarterly",
+      "nameKo": "중국 GDP(분기, 명목)",
+      "frequency": "quarterly",
+      "category": "macro",
+      "unit": "Billion CNY",
+      "sourceId": "dbnomics_oecd",
+      "sourceUrl": "https://api.db.nomics.world/v22/series/OECD/DSD_NAMAIN1%40DF_QNA_BY_ACTIVITY_OUTPUT/Q.N.CHN.S1.S1.B1GQ._Z._Z._Z.XDC.V.N.T0101?observations=1",
+      "epRelevant": true
+    },
+    {
+      "id": "gdp_quarterly_india",
+      "name": "India GDP Quarterly",
+      "nameKo": "인도 GDP(분기, 명목)",
+      "frequency": "quarterly",
+      "category": "macro",
+      "unit": "Billion INR",
+      "sourceId": "dbnomics_oecd",
+      "sourceUrl": "https://api.db.nomics.world/v22/series/OECD/DSD_NAMAIN1%40DF_QNA_BY_ACTIVITY_OUTPUT/Q.N.IND.S1.S1.B1GQ._Z._Z._Z.XDC.V.N.T0101?observations=1",
+      "epRelevant": false
+    },
+    {
+      "id": "pmi_manufacturing_china_te",
+      "name": "China manufacturing PMI",
+      "nameKo": "중국 제조업 PMI(국가통계국)",
+      "frequency": "monthly",
+      "category": "macro",
+      "unit": "points",
+      "sourceId": "nbs_china",
+      "sourceUrl": "https://www.stats.gov.cn/sj/zxfb/",
+      "epRelevant": true
+    },
+    {
+      "id": "gdp_qoq_china_te",
+      "name": "China GDP annual growth proxy",
+      "nameKo": "중국 GDP 성장률(연간 proxy)",
+      "frequency": "yearly",
+      "category": "macro",
+      "unit": "percent yoy",
+      "sourceId": "world_bank",
+      "sourceUrl": "https://api.worldbank.org/v2/country/CHN/indicator/NY.GDP.MKTP.KD.ZG?format=json",
+      "epRelevant": false
+    },
+    {
+      "id": "pmi_manufacturing_us_news",
+      "name": "미국 제조업 PMI(뉴스 추출)",
+      "nameKo": "미국 제조업 PMI(뉴스 추출)",
+      "frequency": "monthly",
+      "category": "demand",
+      "unit": "points",
+      "sourceId": "news_extraction",
+      "sourceUrl": "",
+      "epRelevant": true
+    }
+  ],
+  "observations": [
+    {
+      "indicatorId": "industrial_production_eurozone",
+      "period": "2023-03-01",
+      "value": 104.091325722856,
+      "observedAt": "2023-03-01"
+    },
+    {
+      "indicatorId": "industrial_production_eurozone",
+      "period": "2023-04-01",
+      "value": 105.191234063828,
+      "observedAt": "2023-04-01"
+    },
+    {
+      "indicatorId": "industrial_production_eurozone",
+      "period": "2023-05-01",
+      "value": 105.291225731189,
+      "observedAt": "2023-05-01"
+    },
+    {
+      "indicatorId": "industrial_production_eurozone",
+      "period": "2023-06-01",
+      "value": 105.191234063828,
+      "observedAt": "2023-06-01"
+    },
+    {
+      "indicatorId": "industrial_production_eurozone",
+      "period": "2023-07-01",
+      "value": 103.791350720773,
+      "observedAt": "2023-07-01"
+    },
+    {
+      "indicatorId": "industrial_production_eurozone",
+      "period": "2023-08-01",
+      "value": 104.39130072494,
+      "observedAt": "2023-08-01"
+    },
+    {
+      "indicatorId": "industrial_production_eurozone",
+      "period": "2023-09-01",
+      "value": 103.391384051329,
+      "observedAt": "2023-09-01"
+    },
+    {
+      "indicatorId": "industrial_production_eurozone",
+      "period": "2023-10-01",
+      "value": 102.691442379802,
+      "observedAt": "2023-10-01"
+    },
+    {
+      "indicatorId": "industrial_production_eurozone",
+      "period": "2026-04-01",
+      "value": 99.1,
+      "observedAt": "2026-07-10T08:21:10.986607+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_eurozone",
+      "period": "2026-03-01",
+      "value": 98.9,
+      "observedAt": "2026-07-10T08:21:10.986625+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_eurozone",
+      "period": "2026-02-01",
+      "value": 98.4,
+      "observedAt": "2026-07-10T08:21:10.986629+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_eurozone",
+      "period": "2026-01-01",
+      "value": 97.6,
+      "observedAt": "2026-07-10T08:21:10.986631+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_eurozone",
+      "period": "2025-12-01",
+      "value": 99.2,
+      "observedAt": "2026-07-10T08:21:10.986633+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_eurozone",
+      "period": "2025-11-01",
+      "value": 99.7,
+      "observedAt": "2026-07-10T08:21:10.986635+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_eurozone",
+      "period": "2025-10-01",
+      "value": 99.0,
+      "observedAt": "2026-07-10T08:21:10.986636+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_eurozone",
+      "period": "2025-09-01",
+      "value": 98.9,
+      "observedAt": "2026-07-10T08:21:10.986639+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_japan",
+      "period": "2022-04-01",
+      "value": 94.3176,
+      "observedAt": "2022-04-01"
+    },
+    {
+      "indicatorId": "industrial_production_japan",
+      "period": "2022-07-01",
+      "value": 97.2337,
+      "observedAt": "2022-07-01"
+    },
+    {
+      "indicatorId": "industrial_production_japan",
+      "period": "2022-10-01",
+      "value": 96.29205,
+      "observedAt": "2022-10-01"
+    },
+    {
+      "indicatorId": "industrial_production_japan",
+      "period": "2023-01-01",
+      "value": 94.13535,
+      "observedAt": "2023-01-01"
+    },
+    {
+      "indicatorId": "industrial_production_japan",
+      "period": "2023-04-01",
+      "value": 94.71249,
+      "observedAt": "2023-04-01"
+    },
+    {
+      "indicatorId": "industrial_production_japan",
+      "period": "2023-07-01",
+      "value": 94.16573,
+      "observedAt": "2023-07-01"
+    },
+    {
+      "indicatorId": "industrial_production_japan",
+      "period": "2023-10-01",
+      "value": 95.16813,
+      "observedAt": "2023-10-01"
+    },
+    {
+      "indicatorId": "industrial_production_japan",
+      "period": "2024-01-01",
+      "value": 90.09534,
+      "observedAt": "2024-01-01"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2022-04-01",
+      "value": 119.2389,
+      "observedAt": "2022-04-01"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2022-07-01",
+      "value": 114.9829,
+      "observedAt": "2022-07-01"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2022-10-01",
+      "value": 109.4856,
+      "observedAt": "2022-10-01"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2023-01-01",
+      "value": 109.8757,
+      "observedAt": "2023-01-01"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2023-04-01",
+      "value": 112.8194,
+      "observedAt": "2023-04-01"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2023-07-01",
+      "value": 114.309,
+      "observedAt": "2023-07-01"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2023-10-01",
+      "value": 116.8272,
+      "observedAt": "2023-10-01"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2024-01-01",
+      "value": 116.3661,
+      "observedAt": "2024-01-01"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2026-04-01",
+      "value": 127.0521,
+      "observedAt": "2026-07-10T08:37:39.286390+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2026-04-01",
+      "value": 126.2009,
+      "observedAt": "2026-07-10T08:37:39.286405+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2026-03-01",
+      "value": 131.6277,
+      "observedAt": "2026-07-10T08:37:39.286408+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2026-03-01",
+      "value": 127.1585,
+      "observedAt": "2026-07-10T08:37:39.286411+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2026-02-01",
+      "value": 110.2395,
+      "observedAt": "2026-07-10T08:37:39.286413+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2026-02-01",
+      "value": 126.6265,
+      "observedAt": "2026-07-10T08:37:39.286415+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2026-01-01",
+      "value": 117.901,
+      "observedAt": "2026-07-10T08:37:39.286417+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2026-01-01",
+      "value": 119.4971,
+      "observedAt": "2026-07-10T08:37:39.286419+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_japan",
+      "period": "2026-04-01",
+      "value": 92.4798,
+      "observedAt": "2026-07-10T08:37:41.608310+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_japan",
+      "period": "2026-04-01",
+      "value": 93.02434,
+      "observedAt": "2026-07-10T08:37:41.608324+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_japan",
+      "period": "2026-03-01",
+      "value": 102.2814,
+      "observedAt": "2026-07-10T08:37:41.608326+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_japan",
+      "period": "2026-03-01",
+      "value": 92.66132,
+      "observedAt": "2026-07-10T08:37:41.608329+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_japan",
+      "period": "2026-02-01",
+      "value": 88.84959,
+      "observedAt": "2026-07-10T08:37:41.608331+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_japan",
+      "period": "2026-02-01",
+      "value": 92.93359,
+      "observedAt": "2026-07-10T08:37:41.608334+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_japan",
+      "period": "2026-01-01",
+      "value": 86.21768,
+      "observedAt": "2026-07-10T08:37:41.608335+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_japan",
+      "period": "2026-01-01",
+      "value": 94.93021,
+      "observedAt": "2026-07-10T08:37:41.608337+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_india",
+      "period": "2021-01-01",
+      "value": 116.6904,
+      "observedAt": "2021-01-01"
+    },
+    {
+      "indicatorId": "industrial_production_india",
+      "period": "2021-04-01",
+      "value": 109.3167,
+      "observedAt": "2021-04-01"
+    },
+    {
+      "indicatorId": "industrial_production_india",
+      "period": "2021-07-01",
+      "value": 118.2669,
+      "observedAt": "2021-07-01"
+    },
+    {
+      "indicatorId": "industrial_production_india",
+      "period": "2021-10-01",
+      "value": 118.9722,
+      "observedAt": "2021-10-01"
+    },
+    {
+      "indicatorId": "industrial_production_india",
+      "period": "2022-01-01",
+      "value": 118.7481,
+      "observedAt": "2022-01-01"
+    },
+    {
+      "indicatorId": "industrial_production_india",
+      "period": "2022-04-01",
+      "value": 123.3033,
+      "observedAt": "2022-04-01"
+    },
+    {
+      "indicatorId": "industrial_production_india",
+      "period": "2022-07-01",
+      "value": 120.1351,
+      "observedAt": "2022-07-01"
+    },
+    {
+      "indicatorId": "industrial_production_india",
+      "period": "2022-10-01",
+      "value": 122.3582,
+      "observedAt": "2022-10-01"
+    },
+    {
+      "indicatorId": "industrial_production_india",
+      "period": "2026-04-01",
+      "value": 139.644,
+      "observedAt": "2026-07-10T08:42:22.733718+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_india",
+      "period": "2026-04-01",
+      "value": 143.3294,
+      "observedAt": "2026-07-10T08:42:22.733733+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_india",
+      "period": "2026-03-01",
+      "value": 154.3927,
+      "observedAt": "2026-07-10T08:42:22.733737+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_india",
+      "period": "2026-03-01",
+      "value": 144.8111,
+      "observedAt": "2026-07-10T08:42:22.733739+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_india",
+      "period": "2026-02-01",
+      "value": 140.1123,
+      "observedAt": "2026-07-10T08:42:22.733741+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_india",
+      "period": "2026-02-01",
+      "value": 144.5808,
+      "observedAt": "2026-07-10T08:42:22.733743+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_india",
+      "period": "2026-01-01",
+      "value": 146.3161,
+      "observedAt": "2026-07-10T08:42:22.733745+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_india",
+      "period": "2026-01-01",
+      "value": 140.712,
+      "observedAt": "2026-07-10T08:42:22.733747+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2026-05-01",
+      "value": 122.2637,
+      "observedAt": "2026-07-10T21:08:44.262017+00:00"
+    },
+    {
+      "indicatorId": "industrial_production_korea",
+      "period": "2026-05-01",
+      "value": 121.0932,
+      "observedAt": "2026-07-10T21:08:44.262033+00:00"
+    },
+    {
+      "indicatorId": "pmi_manufacturing_us_news",
+      "period": "2026-06-01",
+      "value": 53.3,
+      "observedAt": "2026-07-10T22:16:29.897456+00:00"
+    },
+    {
+      "indicatorId": "fx_usd_krw",
+      "period": "2026-06-23",
+      "value": 1532.43,
+      "observedAt": "2026-06-23"
+    },
+    {
+      "indicatorId": "fx_usd_krw",
+      "period": "2026-06-24",
+      "value": 1542.53,
+      "observedAt": "2026-06-24"
+    },
+    {
+      "indicatorId": "fx_usd_krw",
+      "period": "2026-06-25",
+      "value": 1541.44,
+      "observedAt": "2026-06-25"
+    },
+    {
+      "indicatorId": "fx_usd_krw",
+      "period": "2026-06-26",
+      "value": 1533.44,
+      "observedAt": "2026-06-26"
+    },
+    {
+      "indicatorId": "fx_usd_krw",
+      "period": "2026-06-29",
+      "value": 1542.07,
+      "observedAt": "2026-06-29"
+    },
+    {
+      "indicatorId": "fx_usd_krw",
+      "period": "2026-06-30",
+      "value": 1548.78,
+      "observedAt": "2026-06-30"
+    },
+    {
+      "indicatorId": "fx_usd_krw",
+      "period": "2026-07-01",
+      "value": 1550.59,
+      "observedAt": "2026-07-01"
+    },
+    {
+      "indicatorId": "fx_usd_krw",
+      "period": "2026-07-02",
+      "value": 1538.05,
+      "observedAt": "2026-07-02"
+    },
+    {
+      "indicatorId": "fx_usd_cny",
+      "period": "2026-06-23",
+      "value": 6.79,
+      "observedAt": "2026-06-23"
+    },
+    {
+      "indicatorId": "fx_usd_cny",
+      "period": "2026-06-24",
+      "value": 6.8106,
+      "observedAt": "2026-06-24"
+    },
+    {
+      "indicatorId": "fx_usd_cny",
+      "period": "2026-06-25",
+      "value": 6.7976,
+      "observedAt": "2026-06-25"
+    },
+    {
+      "indicatorId": "fx_usd_cny",
+      "period": "2026-06-26",
+      "value": 6.798,
+      "observedAt": "2026-06-26"
+    },
+    {
+      "indicatorId": "fx_usd_cny",
+      "period": "2026-06-29",
+      "value": 6.7936,
+      "observedAt": "2026-06-29"
+    },
+    {
+      "indicatorId": "fx_usd_cny",
+      "period": "2026-06-30",
+      "value": 6.7851,
+      "observedAt": "2026-06-30"
+    },
+    {
+      "indicatorId": "fx_usd_cny",
+      "period": "2026-07-01",
+      "value": 6.7942,
+      "observedAt": "2026-07-01"
+    },
+    {
+      "indicatorId": "fx_usd_cny",
+      "period": "2026-07-02",
+      "value": 6.7886,
+      "observedAt": "2026-07-02"
+    },
+    {
+      "indicatorId": "oil_brent",
+      "period": "2026-06-25",
+      "value": 73.74,
+      "observedAt": "2026-06-25"
+    },
+    {
+      "indicatorId": "oil_brent",
+      "period": "2026-06-26",
+      "value": 70.16,
+      "observedAt": "2026-06-26"
+    },
+    {
+      "indicatorId": "oil_brent",
+      "period": "2026-06-29",
+      "value": 71.59,
+      "observedAt": "2026-06-29"
+    },
+    {
+      "indicatorId": "oil_brent",
+      "period": "2026-06-30",
+      "value": 70.46,
+      "observedAt": "2026-06-30"
+    },
+    {
+      "indicatorId": "oil_brent",
+      "period": "2026-07-01",
+      "value": 69.24,
+      "observedAt": "2026-07-01"
+    },
+    {
+      "indicatorId": "oil_brent",
+      "period": "2026-07-02",
+      "value": 68.53,
+      "observedAt": "2026-07-02"
+    },
+    {
+      "indicatorId": "oil_brent",
+      "period": "2026-07-03",
+      "value": 68.68,
+      "observedAt": "2026-07-03"
+    },
+    {
+      "indicatorId": "oil_brent",
+      "period": "2026-07-06",
+      "value": 69.56,
+      "observedAt": "2026-07-06"
+    },
+    {
+      "indicatorId": "oil_wti",
+      "period": "2026-06-24",
+      "value": 71.42,
+      "observedAt": "2026-06-24"
+    },
+    {
+      "indicatorId": "oil_wti",
+      "period": "2026-06-25",
+      "value": 72.67,
+      "observedAt": "2026-06-25"
+    },
+    {
+      "indicatorId": "oil_wti",
+      "period": "2026-06-26",
+      "value": 70.3,
+      "observedAt": "2026-06-26"
+    },
+    {
+      "indicatorId": "oil_wti",
+      "period": "2026-06-29",
+      "value": 71.87,
+      "observedAt": "2026-06-29"
+    },
+    {
+      "indicatorId": "oil_wti",
+      "period": "2026-06-30",
+      "value": 70.56,
+      "observedAt": "2026-06-30"
+    },
+    {
+      "indicatorId": "oil_wti",
+      "period": "2026-07-01",
+      "value": 69.74,
+      "observedAt": "2026-07-01"
+    },
+    {
+      "indicatorId": "oil_wti",
+      "period": "2026-07-02",
+      "value": 69.73,
+      "observedAt": "2026-07-02"
+    },
+    {
+      "indicatorId": "oil_wti",
+      "period": "2026-07-06",
+      "value": 69.6,
+      "observedAt": "2026-07-06"
+    },
+    {
+      "indicatorId": "rate_us_10y",
+      "period": "2026-06-29",
+      "value": 4.38,
+      "observedAt": "2026-06-29"
+    },
+    {
+      "indicatorId": "rate_us_10y",
+      "period": "2026-06-30",
+      "value": 4.44,
+      "observedAt": "2026-06-30"
+    },
+    {
+      "indicatorId": "rate_us_10y",
+      "period": "2026-07-01",
+      "value": 4.48,
+      "observedAt": "2026-07-01"
+    },
+    {
+      "indicatorId": "rate_us_10y",
+      "period": "2026-07-02",
+      "value": 4.49,
+      "observedAt": "2026-07-02"
+    },
+    {
+      "indicatorId": "rate_us_10y",
+      "period": "2026-07-06",
+      "value": 4.48,
+      "observedAt": "2026-07-06"
+    },
+    {
+      "indicatorId": "rate_us_10y",
+      "period": "2026-07-07",
+      "value": 4.55,
+      "observedAt": "2026-07-07"
+    },
+    {
+      "indicatorId": "rate_us_10y",
+      "period": "2026-07-08",
+      "value": 4.56,
+      "observedAt": "2026-07-08"
+    },
+    {
+      "indicatorId": "rate_us_10y",
+      "period": "2026-07-09",
+      "value": 4.54,
+      "observedAt": "2026-07-09"
+    },
+    {
+      "indicatorId": "industrial_production_us",
+      "period": "2025-10-01",
+      "value": 101.2195,
+      "observedAt": "2025-10-01"
+    },
+    {
+      "indicatorId": "industrial_production_us",
+      "period": "2025-11-01",
+      "value": 101.0344,
+      "observedAt": "2025-11-01"
+    },
+    {
+      "indicatorId": "industrial_production_us",
+      "period": "2025-12-01",
+      "value": 101.4941,
+      "observedAt": "2025-12-01"
+    },
+    {
+      "indicatorId": "industrial_production_us",
+      "period": "2026-01-01",
+      "value": 101.1235,
+      "observedAt": "2026-01-01"
+    },
+    {
+      "indicatorId": "industrial_production_us",
+      "period": "2026-02-01",
+      "value": 101.9493,
+      "observedAt": "2026-02-01"
+    },
+    {
+      "indicatorId": "industrial_production_us",
+      "period": "2026-03-01",
+      "value": 101.6273,
+      "observedAt": "2026-03-01"
+    },
+    {
+      "indicatorId": "industrial_production_us",
+      "period": "2026-04-01",
+      "value": 102.509,
+      "observedAt": "2026-04-01"
+    },
+    {
+      "indicatorId": "industrial_production_us",
+      "period": "2026-05-01",
+      "value": 102.6475,
+      "observedAt": "2026-05-01"
+    },
+    {
+      "indicatorId": "cpi_us",
+      "period": "2025-09-01",
+      "value": 324.245,
+      "observedAt": "2025-09-01"
+    },
+    {
+      "indicatorId": "cpi_us",
+      "period": "2025-11-01",
+      "value": 325.063,
+      "observedAt": "2025-11-01"
+    },
+    {
+      "indicatorId": "cpi_us",
+      "period": "2025-12-01",
+      "value": 326.031,
+      "observedAt": "2025-12-01"
+    },
+    {
+      "indicatorId": "cpi_us",
+      "period": "2026-01-01",
+      "value": 326.588,
+      "observedAt": "2026-01-01"
+    },
+    {
+      "indicatorId": "cpi_us",
+      "period": "2026-02-01",
+      "value": 327.46,
+      "observedAt": "2026-02-01"
+    },
+    {
+      "indicatorId": "cpi_us",
+      "period": "2026-03-01",
+      "value": 330.293,
+      "observedAt": "2026-03-01"
+    },
+    {
+      "indicatorId": "cpi_us",
+      "period": "2026-04-01",
+      "value": 332.407,
+      "observedAt": "2026-04-01"
+    },
+    {
+      "indicatorId": "cpi_us",
+      "period": "2026-05-01",
+      "value": 333.979,
+      "observedAt": "2026-05-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_us",
+      "period": "2024-04-01",
+      "value": 23286.508,
+      "observedAt": "2024-04-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_us",
+      "period": "2024-07-01",
+      "value": 23478.57,
+      "observedAt": "2024-07-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_us",
+      "period": "2024-10-01",
+      "value": 23586.542,
+      "observedAt": "2024-10-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_us",
+      "period": "2025-01-01",
+      "value": 23548.21,
+      "observedAt": "2025-01-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_us",
+      "period": "2025-04-01",
+      "value": 23770.976,
+      "observedAt": "2025-04-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_us",
+      "period": "2025-07-01",
+      "value": 24026.834,
+      "observedAt": "2025-07-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_us",
+      "period": "2025-10-01",
+      "value": 24055.749,
+      "observedAt": "2025-10-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_us",
+      "period": "2026-01-01",
+      "value": 24180.419,
+      "observedAt": "2026-01-01"
+    },
+    {
+      "indicatorId": "gdp_current_usd",
+      "period": "2018-01-01",
+      "value": 20.657,
+      "observedAt": "2018-01-01"
+    },
+    {
+      "indicatorId": "gdp_current_usd",
+      "period": "2019-01-01",
+      "value": 21.54,
+      "observedAt": "2019-01-01"
+    },
+    {
+      "indicatorId": "gdp_current_usd",
+      "period": "2020-01-01",
+      "value": 21.375,
+      "observedAt": "2020-01-01"
+    },
+    {
+      "indicatorId": "gdp_current_usd",
+      "period": "2021-01-01",
+      "value": 23.726,
+      "observedAt": "2021-01-01"
+    },
+    {
+      "indicatorId": "gdp_current_usd",
+      "period": "2022-01-01",
+      "value": 26.055,
+      "observedAt": "2022-01-01"
+    },
+    {
+      "indicatorId": "gdp_current_usd",
+      "period": "2023-01-01",
+      "value": 27.812,
+      "observedAt": "2023-01-01"
+    },
+    {
+      "indicatorId": "gdp_current_usd",
+      "period": "2024-01-01",
+      "value": 29.298,
+      "observedAt": "2024-01-01"
+    },
+    {
+      "indicatorId": "gdp_current_usd",
+      "period": "2025-01-01",
+      "value": 30.77,
+      "observedAt": "2025-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_india",
+      "period": "2018-01-01",
+      "value": 2.703,
+      "observedAt": "2018-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_india",
+      "period": "2019-01-01",
+      "value": 2.836,
+      "observedAt": "2019-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_india",
+      "period": "2020-01-01",
+      "value": 2.675,
+      "observedAt": "2020-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_india",
+      "period": "2021-01-01",
+      "value": 3.167,
+      "observedAt": "2021-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_india",
+      "period": "2022-01-01",
+      "value": 3.25,
+      "observedAt": "2022-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_india",
+      "period": "2023-01-01",
+      "value": 3.501,
+      "observedAt": "2023-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_india",
+      "period": "2024-01-01",
+      "value": 3.761,
+      "observedAt": "2024-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_india",
+      "period": "2025-01-01",
+      "value": 3.956,
+      "observedAt": "2025-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_eurozone",
+      "period": "2018-01-01",
+      "value": 13.938,
+      "observedAt": "2018-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_eurozone",
+      "period": "2019-01-01",
+      "value": 13.658,
+      "observedAt": "2019-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_eurozone",
+      "period": "2020-01-01",
+      "value": 13.338,
+      "observedAt": "2020-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_eurozone",
+      "period": "2021-01-01",
+      "value": 15.009,
+      "observedAt": "2021-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_eurozone",
+      "period": "2022-01-01",
+      "value": 14.579,
+      "observedAt": "2022-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_eurozone",
+      "period": "2023-01-01",
+      "value": 15.957,
+      "observedAt": "2023-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_eurozone",
+      "period": "2024-01-01",
+      "value": 16.601,
+      "observedAt": "2024-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_eurozone",
+      "period": "2025-01-01",
+      "value": 18.01,
+      "observedAt": "2025-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_china",
+      "period": "2018-01-01",
+      "value": 14.148,
+      "observedAt": "2018-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_china",
+      "period": "2019-01-01",
+      "value": 14.56,
+      "observedAt": "2019-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_china",
+      "period": "2020-01-01",
+      "value": 14.996,
+      "observedAt": "2020-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_china",
+      "period": "2021-01-01",
+      "value": 18.202,
+      "observedAt": "2021-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_china",
+      "period": "2022-01-01",
+      "value": 18.317,
+      "observedAt": "2022-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_china",
+      "period": "2023-01-01",
+      "value": 18.27,
+      "observedAt": "2023-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_china",
+      "period": "2024-01-01",
+      "value": 18.73,
+      "observedAt": "2024-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_china",
+      "period": "2025-01-01",
+      "value": 19.498,
+      "observedAt": "2025-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_japan",
+      "period": "2018-01-01",
+      "value": 5.154,
+      "observedAt": "2018-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_japan",
+      "period": "2019-01-01",
+      "value": 5.246,
+      "observedAt": "2019-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_japan",
+      "period": "2020-01-01",
+      "value": 5.189,
+      "observedAt": "2020-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_japan",
+      "period": "2021-01-01",
+      "value": 5.226,
+      "observedAt": "2021-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_japan",
+      "period": "2022-01-01",
+      "value": 4.448,
+      "observedAt": "2022-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_japan",
+      "period": "2023-01-01",
+      "value": 4.385,
+      "observedAt": "2023-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_japan",
+      "period": "2024-01-01",
+      "value": 4.19,
+      "observedAt": "2024-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_japan",
+      "period": "2025-01-01",
+      "value": 4.435,
+      "observedAt": "2025-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_korea",
+      "period": "2018-01-01",
+      "value": 1.824,
+      "observedAt": "2018-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_korea",
+      "period": "2019-01-01",
+      "value": 1.751,
+      "observedAt": "2019-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_korea",
+      "period": "2020-01-01",
+      "value": 1.744,
+      "observedAt": "2020-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_korea",
+      "period": "2021-01-01",
+      "value": 1.942,
+      "observedAt": "2021-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_korea",
+      "period": "2022-01-01",
+      "value": 1.799,
+      "observedAt": "2022-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_korea",
+      "period": "2023-01-01",
+      "value": 1.845,
+      "observedAt": "2023-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_korea",
+      "period": "2024-01-01",
+      "value": 1.875,
+      "observedAt": "2024-01-01"
+    },
+    {
+      "indicatorId": "gdp_annual_korea",
+      "period": "2025-01-01",
+      "value": 1.872,
+      "observedAt": "2025-01-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_us",
+      "period": "2024-04-01",
+      "value": 0.8854862923,
+      "observedAt": "2024-04-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_us",
+      "period": "2024-07-01",
+      "value": 0.8247780264,
+      "observedAt": "2024-07-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_us",
+      "period": "2024-10-01",
+      "value": 0.4598746804,
+      "observedAt": "2024-10-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_us",
+      "period": "2025-01-01",
+      "value": -0.1625164071,
+      "observedAt": "2025-01-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_us",
+      "period": "2025-04-01",
+      "value": 0.9459997196,
+      "observedAt": "2025-04-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_us",
+      "period": "2025-07-01",
+      "value": 1.0763462189,
+      "observedAt": "2025-07-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_us",
+      "period": "2025-10-01",
+      "value": 0.1203446004,
+      "observedAt": "2025-10-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_us",
+      "period": "2026-01-01",
+      "value": 0.4028434116,
+      "observedAt": "2026-01-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_japan",
+      "period": "2024-04-01",
+      "value": -0.0209113219,
+      "observedAt": "2024-04-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_japan",
+      "period": "2024-07-01",
+      "value": 0.6834865651,
+      "observedAt": "2024-07-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_japan",
+      "period": "2024-10-01",
+      "value": 0.3481387861,
+      "observedAt": "2024-10-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_japan",
+      "period": "2025-01-01",
+      "value": 0.5073262254,
+      "observedAt": "2025-01-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_japan",
+      "period": "2025-04-01",
+      "value": 0.270451708,
+      "observedAt": "2025-04-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_japan",
+      "period": "2025-07-01",
+      "value": -0.5874929249,
+      "observedAt": "2025-07-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_japan",
+      "period": "2025-10-01",
+      "value": 0.1842364822,
+      "observedAt": "2025-10-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_japan",
+      "period": "2026-01-01",
+      "value": 0.4526321206,
+      "observedAt": "2026-01-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_india",
+      "period": "2024-04-01",
+      "value": 1.8366183722,
+      "observedAt": "2024-04-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_india",
+      "period": "2024-07-01",
+      "value": 1.2881478867,
+      "observedAt": "2024-07-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_india",
+      "period": "2024-10-01",
+      "value": 2.0424396432,
+      "observedAt": "2024-10-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_india",
+      "period": "2025-01-01",
+      "value": 1.7706886671,
+      "observedAt": "2025-01-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_india",
+      "period": "2025-04-01",
+      "value": 1.823812776,
+      "observedAt": "2025-04-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_india",
+      "period": "2025-07-01",
+      "value": 2.1986881461,
+      "observedAt": "2025-07-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_india",
+      "period": "2025-10-01",
+      "value": 1.8208824889,
+      "observedAt": "2025-10-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_india",
+      "period": "2026-01-01",
+      "value": 1.8946472427,
+      "observedAt": "2026-01-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_korea",
+      "period": "2024-04-01",
+      "value": -0.1511897395,
+      "observedAt": "2024-04-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_korea",
+      "period": "2024-07-01",
+      "value": 0.055197472,
+      "observedAt": "2024-07-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_korea",
+      "period": "2024-10-01",
+      "value": 0.2363828387,
+      "observedAt": "2024-10-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_korea",
+      "period": "2025-01-01",
+      "value": -0.1723506295,
+      "observedAt": "2025-01-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_korea",
+      "period": "2025-04-01",
+      "value": 0.649565561,
+      "observedAt": "2025-04-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_korea",
+      "period": "2025-07-01",
+      "value": 1.3617484915,
+      "observedAt": "2025-07-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_korea",
+      "period": "2025-10-01",
+      "value": -0.1084043808,
+      "observedAt": "2025-10-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_korea",
+      "period": "2026-01-01",
+      "value": 1.8309657265,
+      "observedAt": "2026-01-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_eurozone",
+      "period": "2024-04-01",
+      "value": 2830630.0,
+      "observedAt": "2024-04-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_eurozone",
+      "period": "2024-07-01",
+      "value": 2842874.3,
+      "observedAt": "2024-07-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_eurozone",
+      "period": "2024-10-01",
+      "value": 2853317.4,
+      "observedAt": "2024-10-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_eurozone",
+      "period": "2025-01-01",
+      "value": 2871974.9,
+      "observedAt": "2025-01-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_eurozone",
+      "period": "2025-04-01",
+      "value": 2875291.4,
+      "observedAt": "2025-04-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_eurozone",
+      "period": "2025-07-01",
+      "value": 2882766.1,
+      "observedAt": "2025-07-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_eurozone",
+      "period": "2025-10-01",
+      "value": 2887303.4,
+      "observedAt": "2025-10-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_eurozone",
+      "period": "2026-01-01",
+      "value": 2880687.3,
+      "observedAt": "2026-01-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_korea",
+      "period": "2024-04-01",
+      "value": 574301700.0,
+      "observedAt": "2024-04-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_korea",
+      "period": "2024-07-01",
+      "value": 574618700.0,
+      "observedAt": "2024-07-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_korea",
+      "period": "2024-10-01",
+      "value": 575977000.0,
+      "observedAt": "2024-10-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_korea",
+      "period": "2025-01-01",
+      "value": 574984300.0,
+      "observedAt": "2025-01-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_korea",
+      "period": "2025-04-01",
+      "value": 578719200.0,
+      "observedAt": "2025-04-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_korea",
+      "period": "2025-07-01",
+      "value": 586599900.0,
+      "observedAt": "2025-07-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_korea",
+      "period": "2025-10-01",
+      "value": 585964000.0,
+      "observedAt": "2025-10-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_korea",
+      "period": "2026-01-01",
+      "value": 596692800.0,
+      "observedAt": "2026-01-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_japan",
+      "period": "2024-04-01",
+      "value": 145584425.0,
+      "observedAt": "2024-04-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_japan",
+      "period": "2024-07-01",
+      "value": 146579475.0,
+      "observedAt": "2024-07-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_japan",
+      "period": "2024-10-01",
+      "value": 147089775.0,
+      "observedAt": "2024-10-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_japan",
+      "period": "2025-01-01",
+      "value": 147836000.0,
+      "observedAt": "2025-01-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_japan",
+      "period": "2025-04-01",
+      "value": 148235825.0,
+      "observedAt": "2025-04-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_japan",
+      "period": "2025-07-01",
+      "value": 147364950.0,
+      "observedAt": "2025-07-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_japan",
+      "period": "2025-10-01",
+      "value": 147636450.0,
+      "observedAt": "2025-10-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_japan",
+      "period": "2026-01-01",
+      "value": 148304700.0,
+      "observedAt": "2026-01-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_china",
+      "period": "2024-04-01",
+      "value": 32858.54,
+      "observedAt": "2024-04-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_china",
+      "period": "2024-07-01",
+      "value": 34144.32,
+      "observedAt": "2024-07-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_china",
+      "period": "2024-10-01",
+      "value": 37351.24,
+      "observedAt": "2024-10-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_china",
+      "period": "2025-01-01",
+      "value": 31846.64,
+      "observedAt": "2025-01-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_china",
+      "period": "2025-04-01",
+      "value": 34139.53,
+      "observedAt": "2025-04-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_china",
+      "period": "2025-07-01",
+      "value": 35410.62,
+      "observedAt": "2025-07-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_china",
+      "period": "2025-10-01",
+      "value": 38791.13,
+      "observedAt": "2025-10-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_china",
+      "period": "2026-01-01",
+      "value": 33419.29,
+      "observedAt": "2026-01-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_india",
+      "period": "2024-04-01",
+      "value": 74088.06,
+      "observedAt": "2024-04-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_india",
+      "period": "2024-07-01",
+      "value": 73779.38,
+      "observedAt": "2024-07-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_india",
+      "period": "2024-10-01",
+      "value": 83458.9,
+      "observedAt": "2024-10-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_india",
+      "period": "2025-01-01",
+      "value": 86746.74,
+      "observedAt": "2025-01-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_india",
+      "period": "2025-04-01",
+      "value": 80440.6,
+      "observedAt": "2025-04-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_india",
+      "period": "2025-07-01",
+      "value": 80105.39,
+      "observedAt": "2025-07-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_india",
+      "period": "2025-10-01",
+      "value": 91155.99,
+      "observedAt": "2025-10-01"
+    },
+    {
+      "indicatorId": "gdp_quarterly_india",
+      "period": "2026-01-01",
+      "value": 94654.4,
+      "observedAt": "2026-01-01"
+    },
+    {
+      "indicatorId": "pmi_manufacturing_china_te",
+      "period": "2026-06",
+      "value": 50.3,
+      "observedAt": "2026-06"
+    },
+    {
+      "indicatorId": "gdp_qoq_china_te",
+      "period": "2018-01-01",
+      "value": 6.757806142324,
+      "observedAt": "2018-01-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_china_te",
+      "period": "2019-01-01",
+      "value": 6.06737806333672,
+      "observedAt": "2019-01-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_china_te",
+      "period": "2020-01-01",
+      "value": 2.33950385203023,
+      "observedAt": "2020-01-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_china_te",
+      "period": "2021-01-01",
+      "value": 8.57038414981781,
+      "observedAt": "2021-01-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_china_te",
+      "period": "2022-01-01",
+      "value": 3.13385438394069,
+      "observedAt": "2022-01-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_china_te",
+      "period": "2023-01-01",
+      "value": 5.41600334492955,
+      "observedAt": "2023-01-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_china_te",
+      "period": "2024-01-01",
+      "value": 4.95830378788091,
+      "observedAt": "2024-01-01"
+    },
+    {
+      "indicatorId": "gdp_qoq_china_te",
+      "period": "2025-01-01",
+      "value": 4.95994886240992,
+      "observedAt": "2025-01-01"
+    }
+  ]
+}
