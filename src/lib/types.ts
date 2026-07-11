@@ -69,6 +69,8 @@ export interface RelatedNewsItem {
   link: string;
   publishedAt: string;
   sourceName: string;
+  summary?: string;
+  tags?: string[];
 }
 
 export interface IndicatorCard extends IndicatorCatalogItem {

@@ -305,7 +305,10 @@ export default function Dashboard({
       .sort((a, b) => GDP_COUNTRY_ORDER.indexOf(a.country) - GDP_COUNTRY_ORDER.indexOf(b.country));
   }, [allIndicators]);
 
-  const macroHighlight = useMemo(() => {
+  // [v5.3] 시안 반영 — "오늘의 인사이트" 단일 배너를 여러 건 순환하는
+  // 캐러셀로 확장(1/6 페이지네이션). 최근 매크로 뉴스 중 지표와 연결된
+  // 것을 최신순으로 최대 6건 추출.
+  const macroHighlights = useMemo(() => {
     const seen = new Set<string>();
     return indicators
       .flatMap((indicator) => indicator.relatedNews.map((news) => ({ indicator, news })))
@@ -315,8 +318,15 @@ export default function Dashboard({
         seen.add(key);
         return true;
       })
-      .sort((a, b) => +new Date(b.news.publishedAt) - +new Date(a.news.publishedAt))[0] || null;
+      .sort((a, b) => +new Date(b.news.publishedAt) - +new Date(a.news.publishedAt))
+      .slice(0, 6);
   }, [indicators]);
+  const [highlightIdx, setHighlightIdx] = useState(0);
+  // useEffect로 setState하는 대신, 렌더링 중 안전 범위로 clamp — 목록 길이가
+  // 줄어들어(indicators 갱신 등) 이전 인덱스가 범위를 벗어나도 항상 유효한
+  // 항목을 가리키게 함.
+  const safeHighlightIdx = macroHighlights.length > 0 ? highlightIdx % macroHighlights.length : 0;
+  const macroHighlight = macroHighlights[safeHighlightIdx] || null;
 
   const mediumIndicatorGroups = useMemo(() => {
     if (indicatorHorizonKey !== 'recent') return [];
@@ -578,14 +588,25 @@ export default function Dashboard({
           </div>
         </div>
         {macroHighlight && <article className="macroHighlightCard">
-          <div>
-            <span className="macroHighlightLabel">{isTodayKst(macroHighlight.news.publishedAt) ? '오늘의 매크로 브리프' : '최근 매크로 브리프'}</span>
+          <div className="macroHighlightBg" aria-hidden="true"><Sparkline history={macroHighlight.indicator.history} width={420} height={140} className="macroHighlightBgChart" /></div>
+          <div className="macroHighlightMain">
+            <span className="macroHighlightLabel">{isTodayKst(macroHighlight.news.publishedAt) ? '오늘의 인사이트' : '최근 인사이트'}</span>
             <h2>{macroHighlight.news.title}</h2>
-            <p>{macroHighlight.news.sourceName} · {shortDate(macroHighlight.news.publishedAt)} · {macroHighlight.indicator.nameKo}</p>
+            {macroHighlight.news.summary && <p className="macroHighlightSummary">{macroHighlight.news.summary}</p>}
+            <div className="macroHighlightActions">
+              <a href={macroHighlight.news.link} target="_blank" rel="noreferrer">뉴스 원문 보기 →</a>
+              <Link href={`/indicators/${macroHighlight.indicator.id}`} className="ghostLink">관련 지표 보기</Link>
+            </div>
           </div>
-          <div className="macroHighlightActions">
-            <a href={macroHighlight.news.link} target="_blank" rel="noreferrer">뉴스 원문 ↗</a>
-            <Link href={`/indicators/${macroHighlight.indicator.id}`}>지표 보기</Link>
+          <div className="macroHighlightMeta">
+            <div><span>발행처</span><b>{macroHighlight.news.sourceName}</b></div>
+            <div><span>발행일</span><b>{shortDate(macroHighlight.news.publishedAt)}</b></div>
+            {macroHighlight.news.tags && macroHighlight.news.tags.length > 0 && <div className="macroHighlightTags"><span>키워드</span><div>{macroHighlight.news.tags.map((t) => <em key={t}>#{t}</em>)}</div></div>}
+            {macroHighlights.length > 1 && <div className="macroHighlightPager">
+              <button onClick={() => setHighlightIdx((safeHighlightIdx - 1 + macroHighlights.length) % macroHighlights.length)} aria-label="이전 인사이트">‹</button>
+              <span>{safeHighlightIdx + 1} / {macroHighlights.length}</span>
+              <button onClick={() => setHighlightIdx((safeHighlightIdx + 1) % macroHighlights.length)} aria-label="다음 인사이트">›</button>
+            </div>}
           </div>
         </article>}
         {indicatorLoading ? <div className="indicatorGrid" key="macro-loading"><div className="empty"><b>불러오는 중…</b></div></div> : indicators.length === 0 ? <div className="indicatorGrid" key="macro-empty"><div className="empty"><b>이 시간축에 등록된 지표가 없습니다</b></div></div> : indicatorHorizonKey === 'long' ? <div className="indicatorSections" key="macro-gdp-country-grouped">

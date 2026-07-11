@@ -286,18 +286,35 @@ h1{margin:0;font:700 clamp(28px,3.2vw,40px)/1.15 'Noto Sans KR',sans-serif;lette
 .sparklineEmpty{stroke:var(--line);stroke-width:1.5;stroke-dasharray:3 3}
 .gdpCountryCard .indicatorSparkline{margin-left:auto}
 
+/* [v5.3] 시안 반영 — 2단(헤드라인/CTA + 메타패널) 레이아웃, 배경 장식,
+   키워드 태그, 페이지네이션을 갖춘 확장 히어로 카드. */
 .macroHighlightCard{
-  margin:0 0 18px;padding:22px 24px;border-radius:var(--radius);
+  position:relative;overflow:hidden;
+  margin:0 0 18px;padding:26px 28px;border-radius:var(--radius);
   border:1px solid color-mix(in srgb,var(--brand) 28%,var(--line));
   background:linear-gradient(135deg,color-mix(in srgb,var(--brand) 8%,var(--surface)),var(--surface));
-  box-shadow:var(--shadow-sm);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center;
+  box-shadow:var(--shadow-sm);display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:28px;
 }
-.macroHighlightLabel{display:block;margin-bottom:7px;font:800 10.5px 'JetBrains Mono';letter-spacing:.12em;text-transform:uppercase;color:var(--brand)}
-.macroHighlightCard h2{margin:0;font:750 19px/1.45 'Noto Sans KR';letter-spacing:-.015em;color:var(--text)}
-.macroHighlightCard p{margin:7px 0 0;font:600 12px 'Noto Sans KR';color:var(--muted)}
-.macroHighlightActions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
-.macroHighlightActions a{padding:9px 13px;border-radius:var(--radius-pill);font:700 12px 'Noto Sans KR';border:1px solid var(--line);background:var(--surface);color:var(--text-dim)}
-.macroHighlightActions a:last-child{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 11%,var(--surface));color:var(--brand-dim)}
+.macroHighlightBg{position:absolute;right:-30px;top:50%;transform:translateY(-50%);width:440px;height:150px;opacity:.16;pointer-events:none;color:var(--brand)}
+.macroHighlightBgChart{width:100%;height:100%}
+.macroHighlightMain{position:relative;min-width:0}
+.macroHighlightLabel{display:block;margin-bottom:8px;font:800 10.5px 'JetBrains Mono';letter-spacing:.12em;text-transform:uppercase;color:var(--brand)}
+.macroHighlightCard h2{margin:0;font:750 20px/1.45 'Noto Sans KR';letter-spacing:-.015em;color:var(--text)}
+.macroHighlightSummary{margin:9px 0 0;font:500 13px/1.65 'Noto Sans KR';color:var(--text-dim);max-width:58ch;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.macroHighlightActions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:16px}
+.macroHighlightActions a,.macroHighlightActions .ghostLink{padding:9px 15px;border-radius:var(--radius-pill);font:700 12px 'Noto Sans KR';border:1px solid var(--brand);background:var(--brand);color:#FFF8EC}
+.macroHighlightActions .ghostLink{border-color:var(--line);background:var(--surface);color:var(--text-dim)}
+.macroHighlightMeta{position:relative;display:flex;flex-direction:column;gap:14px;padding-left:24px;border-left:1px solid var(--line-soft);font-family:'Noto Sans KR'}
+.macroHighlightMeta > div{display:flex;flex-direction:column;gap:3px}
+.macroHighlightMeta span{font:700 10px 'JetBrains Mono';color:var(--muted-2);text-transform:uppercase;letter-spacing:.05em}
+.macroHighlightMeta b{font:700 13px 'Noto Sans KR';color:var(--text)}
+.macroHighlightTags div{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
+.macroHighlightTags em{font:600 11px 'Noto Sans KR';font-style:normal;color:var(--brand-dim);background:color-mix(in srgb,var(--brand) 12%,var(--surface));border-radius:6px;padding:2px 7px}
+.macroHighlightPager{display:flex;align-items:center;gap:10px;margin-top:auto;padding-top:8px}
+.macroHighlightPager button{width:26px;height:26px;border-radius:50%;background:var(--surface);border:1px solid var(--line);color:var(--text-dim);font-size:14px;display:grid;place-items:center}
+.macroHighlightPager button:hover{border-color:var(--brand);color:var(--brand)}
+.macroHighlightPager span{font:700 11px 'JetBrains Mono';color:var(--muted-2)}
+
 
 .detailPage{width:min(1120px,calc(100% - 36px));margin:0 auto;padding:26px 0 72px}
 .detailTopbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:44px;padding-bottom:18px;border-bottom:1px solid var(--line-soft)}
@@ -355,6 +372,8 @@ h1{margin:0;font:700 clamp(28px,3.2vw,40px)/1.15 'Noto Sans KR',sans-serif;lette
   .indicatorChevron{position:absolute;right:18px;top:18px}
   .indicatorHead{padding-right:26px}
   .macroHighlightCard{grid-template-columns:1fr;padding:19px 20px}
+  .macroHighlightBg{display:none}
+  .macroHighlightMeta{flex-direction:row;flex-wrap:wrap;padding-left:0;border-left:0;border-top:1px solid var(--line-soft);padding-top:14px;gap:14px 20px}
   .macroHighlightActions{justify-content:flex-start}
   .detailPage{width:min(100% - 28px,1120px);padding-top:16px}
   .detailTopbar{margin-bottom:30px}
@@ -621,11 +640,14 @@ h1{margin:0;font:700 clamp(28px,3.2vw,40px)/1.15 'Noto Sans KR',sans-serif;lette
     border-top:3px solid var(--brand);
     background:var(--surface);box-shadow:none;
   }
+  .macroHighlightBg{display:none}
   .macroHighlightLabel{margin-bottom:8px;font-size:9.5px;letter-spacing:.11em}
   .macroHighlightCard h2{font-size:18px;line-height:1.5;letter-spacing:-.025em}
-  .macroHighlightCard p{font-size:10.5px;line-height:1.55}
+  .macroHighlightSummary{font-size:12px;line-height:1.6}
   .macroHighlightActions{justify-content:flex-start;gap:7px}
-  .macroHighlightActions a{padding:8px 11px;font-size:11px;background:var(--bg-1)}
+  .macroHighlightActions a,.macroHighlightActions .ghostLink{padding:8px 11px;font-size:11px}
+  .macroHighlightMeta{flex-direction:row;flex-wrap:wrap;padding-left:0;border-left:0;border-top:1px solid var(--line-soft);padding-top:14px;gap:16px 22px}
+  .macroHighlightPager{width:100%;justify-content:flex-start}
 
   .indicatorSectionHead{margin-top:2px;padding:0 1px 7px}
   .indicatorSectionHead b{font-size:14px}
