@@ -90,6 +90,7 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none}
 .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--brand);box-shadow:0 0 6px rgba(168,99,30,.55)}
 h1{margin:0;font:700 clamp(28px,3.2vw,40px)/1.15 'Noto Sans KR',sans-serif;letter-spacing:-.02em;color:var(--text)}
 .pageHeaderTitle p{margin:0;color:var(--muted);font:500 13px/1.5 'Noto Sans KR'}
+.pageHeaderMeta{display:block;margin-top:6px;font:700 11px 'JetBrains Mono';color:var(--muted-2);letter-spacing:.01em}
 
 .headerActions{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
 .headerActions button{border-radius:var(--radius-pill);padding:11px 18px;font:700 13px 'Noto Sans KR'}
@@ -206,6 +207,9 @@ h1{margin:0;font:700 clamp(28px,3.2vw,40px)/1.15 'Noto Sans KR',sans-serif;lette
 .indicatorSectionHead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:0 2px 2px;border-bottom:1px solid var(--line-soft)}
 .indicatorSectionHead b{font:800 15px 'Noto Sans KR';color:var(--text)}
 .indicatorSectionHead span{font:600 11px 'Noto Sans KR';color:var(--muted-2)}
+.sectionInfoIcon{font:600 12px 'Noto Sans KR';color:var(--muted-2);cursor:help;flex:none}
+.sectionInfoIcon:hover{color:var(--brand)}
+.indicatorSectionTitleGroup{display:flex;align-items:center;gap:6px}
 .indicatorSubMetric{margin:6px 0 2px;font:600 11.5px 'Noto Sans KR';color:var(--text-dim);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .indicatorSubMetric b{color:var(--brand);font-weight:800}
 .indicatorSubMetric span{color:var(--muted-2);font-size:10.5px}

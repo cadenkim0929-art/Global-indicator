@@ -517,8 +517,9 @@ export default function Dashboard({
           <span className="eyebrow">{page === 'macro' ? 'Global Indicators' : 'Live Intelligence Feed'}</span>
           <h1>{page === 'sources' ? '소스 현황' : page === 'macro' ? '매크로 & 전방산업 지표' : 'Engineering Plastics'}</h1>
           <p>{page === 'sources' ? `${feedCounts.length}개 소스가 최근 기여한 기사 수`
-            : page === 'macro' ? `${indicatorMeta.totalIndicators}개 지표 · ${formatDate(indicatorMeta.generatedAt)} 갱신`
+            : page === 'macro' ? '거시경제와 전방산업의 핵심 지표를 모니터링하여, 변화의 흐름을 한눈에 파악하세요.'
             : `${stats.totalArticles.toLocaleString()}건 수집 · 현재 조건 ${filtered.length.toLocaleString()}건 표시`}</p>
+          {page === 'macro' && <span className="pageHeaderMeta">{indicatorMeta.totalIndicators}개 지표 · {formatDate(indicatorMeta.generatedAt)} 갱신</span>}
         </div>
         <div className="headerActions">
           {page === 'macro' && <button className="ghost" onClick={refreshIndicators} disabled={indicatorRefreshing}>{indicatorRefreshing ? '지표 갱신 중…' : '지표 갱신'}</button>}
@@ -611,7 +612,7 @@ export default function Dashboard({
         </article>}
         {indicatorLoading ? <div className="indicatorGrid" key="macro-loading"><div className="empty"><b>불러오는 중…</b></div></div> : indicators.length === 0 ? <div className="indicatorGrid" key="macro-empty"><div className="empty"><b>이 시간축에 등록된 지표가 없습니다</b></div></div> : indicatorHorizonKey === 'long' ? <div className="indicatorSections" key="macro-gdp-country-grouped">
           <section className="indicatorSection">
-            <div className="indicatorSectionHead"><b>국가별 GDP</b></div>
+            <div className="indicatorSectionHead"><span className="indicatorSectionTitleGroup"><b>국가별 GDP</b><span className="sectionInfoIcon" title="분기 GDP·연간 GDP·성장률을 국가별로 묶어 보여줍니다. 성장률은 지표 가용성에 따라 전분기 또는 전년 대비 기준입니다.">ⓘ</span></span></div>
             <div className="indicatorGrid">{longGdpGroups.map((group) => renderGdpCountryCard(group))}</div>
           </section>
         </div> : indicatorHorizonKey === 'recent' ? <div className="indicatorSections" key="macro-medium-grouped">
@@ -619,7 +620,12 @@ export default function Dashboard({
             <div className="indicatorSectionHead"><b>{group.title}</b><span>{group.description}</span></div>
             <div className="indicatorGrid">{group.items.map((ind) => renderIndicatorCard(ind))}</div>
           </section>)}
-        </div> : <div className="indicatorGrid" key={`macro-indicator-grid-${indicatorHorizonKey}`}>{indicators.map((ind) => renderIndicatorCard(ind))}</div>}
+        </div> : <div className="indicatorSections" key={`macro-indicator-grid-${indicatorHorizonKey}`}>
+          <section className="indicatorSection">
+            <div className="indicatorSectionHead"><b>주요 매크로 지표</b></div>
+            <div className="indicatorGrid">{indicators.map((ind) => renderIndicatorCard(ind))}</div>
+          </section>
+        </div>}
       </> : <>
         <div className="filters"><input className="searchInput" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="소스 검색…" /></div>
         <div className="sourceList">{feedCounts.filter(([name]) => !query || name.toLowerCase().includes(query.toLowerCase())).map(([name, info]) => <div className="sourceRow" key={name}><div className="sourceInfo"><b>{name}</b><span>{info.region} · {info.type}</span></div><div className="sourceStats"><strong>{info.count}</strong><span>최근 기여</span></div></div>)}</div>
