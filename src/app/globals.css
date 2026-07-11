@@ -1175,4 +1175,23 @@ body{word-break:keep-all;overflow-wrap:break-word}
   .gdpOverviewGrid{grid-template-columns:1fr!important;gap:10px;width:100%;max-width:100%}
   .gdpOverviewCard{width:100%;max-width:100%;padding:15px}
   .gdpDetailGrid,.mediumIndicatorGrid{grid-template-columns:1fr!important}
+
+  /* v5.6.1 feed mobile hardening: wide-touch mobile Chrome can keep the
+     desktop 2-column feed grid. Force the redesigned feed into one column. */
+  .feedPageHeader{width:100%;max-width:100%;flex-direction:column;align-items:stretch;overflow:hidden}
+  .feedHeaderTools{width:100%;max-width:100%;display:flex;flex-wrap:wrap;align-items:stretch;gap:8px}
+  .feedSearchWrap{min-width:0;width:100%;max-width:100%;flex:1 1 100%;box-sizing:border-box}
+  .feedSortSelect{min-width:0;flex:1 1 calc(100% - 54px);max-width:calc(100% - 54px);box-sizing:border-box}
+  .feedFilterToggle{flex:0 0 42px;width:42px;height:42px}
+  .feedCategoryTabs{width:100%;max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .feedCategoryTabs::-webkit-scrollbar{display:none}
+  .feedCategoryTabs .tabs{display:flex;flex-wrap:nowrap;width:max-content;min-width:100%;max-width:none;overflow:visible}
+  .feedLayout{display:grid;grid-template-columns:minmax(0,1fr)!important;width:100%;max-width:100%;overflow:hidden}
+  .feedMain,.feedSidePanel{width:100%;max-width:100%;min-width:0;overflow:hidden}
+  .feedGrid{display:grid;grid-template-columns:minmax(0,1fr)!important;width:100%;max-width:100%;gap:12px;overflow:hidden}
+  .feedCard,.feedHero,.feedPanelBlock{width:100%;max-width:100%;min-width:0;box-sizing:border-box;overflow:hidden}
+  .feedHeroBg{display:none!important}
+  .feedCardFooter{min-width:0;overflow:hidden}
+  .feedCardFooterLeft{min-width:0;overflow:hidden}
+  .feedCardSource{max-width:42vw}
 }
