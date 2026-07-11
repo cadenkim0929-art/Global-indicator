@@ -17,23 +17,7 @@ interface IndicatorDetailProps {
   defaultSeriesId: string;
 }
 
-type RangeOption = { label: string; count: number | null };
 type StatItem = { label: string; value: string; note?: string };
-
-const RANGE_OPTIONS: Record<IndicatorFrequency, RangeOption[]> = {
-  daily: [
-    { label: '1M', count: 22 }, { label: '3M', count: 66 }, { label: '1Y', count: 252 }, { label: '전체', count: null },
-  ],
-  monthly: [
-    { label: '1Y', count: 12 }, { label: '3Y', count: 36 }, { label: '5Y', count: 60 }, { label: '전체', count: null },
-  ],
-  quarterly: [
-    { label: '2Y', count: 8 }, { label: '5Y', count: 20 }, { label: '10Y', count: 40 }, { label: '전체', count: null },
-  ],
-  yearly: [
-    { label: '5Y', count: 5 }, { label: '10Y', count: 10 }, { label: '20Y', count: 20 }, { label: '전체', count: null },
-  ],
-};
 
 function profileFor(indicator: IndicatorCard): IndicatorProfile {
   if (indicator.id.includes('pmi')) return 'pmi';
@@ -89,6 +73,7 @@ function formatPeriod(period: string | null, frequency: IndicatorFrequency) {
     const month = Number(period.slice(5, 7));
     return Number.isFinite(month) && month > 0 ? `${year}-Q${Math.floor((month - 1) / 3) + 1}` : period;
   }
+  if (frequency === 'monthly') return period.slice(0, 7);
   return period.slice(0, 10);
 }
 
@@ -238,12 +223,7 @@ function TrendChart({ indicator, observations }: { indicator: IndicatorCard; obs
 export default function IndicatorDetail({ title, subtitle, series, defaultSeriesId }: IndicatorDetailProps) {
   const [seriesId, setSeriesId] = useState(defaultSeriesId);
   const active = series.find((item) => item.id === seriesId) || series[0];
-  const options = RANGE_OPTIONS[active.frequency];
-  const defaultRange = options[Math.min(1, options.length - 1)].label;
-  const [rangeBySeries, setRangeBySeries] = useState<Record<string, string>>({});
-  const rangeLabel = rangeBySeries[active.id] || defaultRange;
-  const range = options.find((option) => option.label === rangeLabel) || options[0];
-  const selected = useMemo(() => range.count == null ? active.fullHistory : active.fullHistory.slice(-range.count), [active, range.count]);
+  const selected = active.fullHistory;
   const stats = useMemo(() => buildStats(active, selected, active.fullHistory), [active, selected]);
   const latest = active.latestValue;
   const previous = active.previousValue;
@@ -276,9 +256,6 @@ export default function IndicatorDetail({ title, subtitle, series, defaultSeries
     <section className="detailPanel detailChartPanel">
       <div className="detailPanelHead">
         <div><span>Trend</span><h2>추세</h2></div>
-        <div className="detailRangeTabs">
-          {options.map((option) => <button key={option.label} className={rangeLabel === option.label ? 'active' : ''} onClick={() => setRangeBySeries((current) => ({ ...current, [active.id]: option.label }))}>{option.label}</button>)}
-        </div>
       </div>
       <TrendChart indicator={active} observations={selected} />
     </section>

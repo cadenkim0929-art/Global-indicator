@@ -367,3 +367,333 @@ h1{margin:0;font:700 clamp(28px,3.2vw,40px)/1.15 'Noto Sans KR',sans-serif;lette
 }
 @media(max-width:430px){.detailStatsGrid{grid-template-columns:1fr}.detailChartPanel{padding:18px 14px 10px}.detailCopy,.detailNewsPanel{padding:21px 20px}}
 
+/* v4.13.1 — mobile layout stabilization for macro GDP cards and header */
+
+/* GDP cards are structurally different from generic indicator rows.
+   Give their direct children explicit grid areas so the sparkline, metrics,
+   and status never flow into arbitrary columns. */
+.gdpCountryCard.indicatorListCard {
+  grid-template-columns: minmax(0, 1fr) minmax(120px, 160px);
+  grid-template-areas:
+    "head head"
+    "lead spark"
+    "metrics metrics"
+    "status status";
+  align-items: center;
+  gap: 12px 18px;
+}
+
+.gdpCountryCard > .indicatorHead {
+  grid-area: head;
+  min-width: 0;
+  padding-right: 0;
+}
+
+.gdpCountryCard > .gdpGrowthLead {
+  grid-area: lead;
+  min-width: 0;
+  align-self: center;
+}
+
+.gdpCountryCard > .gdpSparkline {
+  grid-area: spark;
+  justify-self: end;
+  margin: 0;
+}
+
+.gdpCountryCard > .gdpMetricStack {
+  grid-area: metrics;
+  width: 100%;
+  min-width: 0;
+}
+
+.gdpCountryCard > .indicatorChange {
+  grid-area: status;
+  width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 760px) {
+  .gdpCountryCard.indicatorListCard {
+    grid-template-columns: minmax(0, 1fr) 96px;
+    gap: 10px 12px;
+  }
+
+  .gdpCountryCard > .gdpSparkline {
+    width: 88px;
+    height: 32px;
+  }
+
+  .gdpCountryCard > .indicatorHead {
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  /* On mobile, place brand and navigation on separate rows. */
+  .sidebar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px 16px 12px;
+  }
+
+  .logo,
+  .logoText {
+    min-width: 0;
+  }
+
+  .logoText b {
+    white-space: nowrap;
+  }
+
+  .sidebar nav {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    gap: 6px;
+    overflow: visible;
+  }
+
+  .sidebar nav button {
+    min-width: 0;
+    padding: 10px 5px;
+    text-align: center;
+    white-space: nowrap;
+    font-size: 13px;
+  }
+
+  .sidebar nav button.active {
+    box-shadow: inset 0 -2px 0 var(--brand);
+  }
+}
+
+@media (max-width: 430px) {
+  .gdpCountryCard.indicatorListCard {
+    grid-template-columns: minmax(0, 1fr) 84px;
+    padding: 17px 16px;
+    gap: 9px 10px;
+  }
+
+  .gdpCountryCard > .gdpSparkline {
+    width: 80px;
+    height: 30px;
+  }
+
+  .gdpCountryCard .gdpGrowthLead {
+    font-size: 24px;
+    flex-wrap: wrap;
+    row-gap: 3px;
+  }
+
+  .gdpCountryCard .indicatorUnit {
+    font-size: 10px;
+  }
+
+  .gdpMetricLine {
+    grid-template-columns: 76px minmax(0, 1fr);
+    gap: 4px 8px;
+    align-items: baseline;
+  }
+
+  .gdpMetricLine b {
+    min-width: 0;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  .gdpMetricLine small {
+    grid-column: 2;
+    justify-self: start;
+    margin-top: -1px;
+  }
+
+  .gdpCountryCard > .indicatorChange {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+}
+
+/* ── v4.13.1 모바일 에디토리얼 반응형 보정 ─────────────────────────
+   목적: 데스크톱의 정보 구조는 유지하면서 모바일에서 로고/내비게이션,
+   매크로 탭, 인사이트, GDP 카드와 상세 화면을 사람이 편집한 리서치 제품처럼 정돈한다. */
+
+.gdpCountryCard.indicatorListCard{
+  grid-template-columns:minmax(0,1fr) 18px;
+  align-items:start;
+  gap:16px;
+}
+.gdpCardBody{gap:12px}
+.gdpLeadRow{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:end;
+  gap:14px;
+  min-width:0;
+}
+.gdpLeadRow .gdpGrowthLead{min-width:0;flex-wrap:wrap;row-gap:3px}
+.gdpLeadRow .indicatorSparkline{margin:0;flex:none}
+.gdpCountryCard>.indicatorChevron{align-self:start;margin-top:1px}
+.gdpCountryCard .gdpMetricStack{
+  margin-top:2px;
+  padding:12px 0 3px;
+  border-top:1px solid var(--line-soft);
+}
+
+@media(min-width:1180px){
+  .indicatorSection>.indicatorGrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .gdpCountryCard.indicatorListCard{padding:20px;gap:10px}
+  .gdpCountryCard .gdpMetricLine{grid-template-columns:84px minmax(0,1fr);gap:5px 8px}
+  .gdpCountryCard .gdpMetricLine small{grid-column:2;justify-self:start}
+}
+@media(min-width:761px) and (max-width:1179px){
+  .indicatorSection>.indicatorGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+}
+
+@media(max-width:760px){
+  body{
+    background:linear-gradient(180deg,var(--bg-1) 0%,var(--bg-0) 100%);
+    background-attachment:scroll;
+  }
+  .appShell{display:block}
+  .sidebar{
+    position:sticky;top:0;z-index:20;height:auto;
+    display:grid;grid-template-columns:minmax(0,1fr);align-items:stretch;
+    gap:11px;padding:13px 16px 11px;
+    border-right:0;border-bottom:1px solid var(--line-soft);
+    background:color-mix(in srgb,var(--bg-1) 94%,transparent);
+    backdrop-filter:blur(12px);
+  }
+  .logo{min-width:0;gap:10px}
+  .logo>span{width:38px;height:38px;border-radius:11px;font-size:12px;box-shadow:none}
+  .logoText{min-width:0;display:grid;grid-template-columns:auto 1fr;align-items:baseline;column-gap:8px}
+  .logoText b{font-size:14px;white-space:nowrap}
+  .logoText small{
+    min-width:0;margin:0;font-size:9px;line-height:1.2;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .sidebar nav{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+    width:100%;gap:4px;overflow:visible;
+    padding:3px;border:1px solid var(--line-soft);border-radius:12px;background:var(--surface-2);
+  }
+  .sidebar nav button{
+    min-width:0;padding:9px 4px;text-align:center;white-space:nowrap;
+    border-radius:9px;font-size:12.5px;color:var(--muted);
+  }
+  .sidebar nav button:hover{background:transparent}
+  .sidebar nav button.active{
+    background:var(--surface);color:var(--brand-dim);
+    box-shadow:0 1px 4px rgba(70,52,20,.08);border:1px solid color-mix(in srgb,var(--brand) 35%,var(--line));
+  }
+  .content{max-width:none;padding:22px 15px 58px}
+  .pageHeader{margin-bottom:0;gap:15px}
+  .pageHeaderTitle{gap:5px}
+  .eyebrow{font-size:9.5px;letter-spacing:.14em}
+  h1,.pageHeaderTitle h1{font-size:26px;line-height:1.22;letter-spacing:-.035em}
+  .pageHeaderTitle p{font-size:11.5px;line-height:1.55}
+  .headerActions{width:100%;gap:7px}
+  .headerActions button{padding:9px 13px;font-size:11.5px;box-shadow:none!important}
+
+  .macroFilters{
+    position:sticky;top:102px;z-index:12;
+    margin:18px 0 15px;padding:4px;
+    border-radius:13px;background:color-mix(in srgb,var(--surface) 94%,transparent);
+    border:1px solid var(--line);box-shadow:0 4px 12px rgba(70,52,20,.05);
+    backdrop-filter:blur(10px);
+  }
+  .macroFilters .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:0;overflow:visible}
+  .macroFilters .tabs button{
+    width:100%;padding:9px 4px;border:0;border-radius:9px;background:transparent;
+    font-size:12px;text-align:center;
+  }
+  .macroFilters .tabs button.active{
+    background:var(--surface-2);color:var(--brand-dim);
+    box-shadow:inset 0 0 0 1px var(--brand);
+  }
+
+  .macroHighlightCard{
+    margin:0 0 20px;padding:18px 17px 16px;
+    grid-template-columns:1fr;gap:15px;
+    border-radius:14px;border:1px solid var(--line);
+    border-top:3px solid var(--brand);
+    background:var(--surface);box-shadow:none;
+  }
+  .macroHighlightLabel{margin-bottom:8px;font-size:9.5px;letter-spacing:.11em}
+  .macroHighlightCard h2{font-size:18px;line-height:1.5;letter-spacing:-.025em}
+  .macroHighlightCard p{font-size:10.5px;line-height:1.55}
+  .macroHighlightActions{justify-content:flex-start;gap:7px}
+  .macroHighlightActions a{padding:8px 11px;font-size:11px;background:var(--bg-1)}
+
+  .indicatorSectionHead{margin-top:2px;padding:0 1px 7px}
+  .indicatorSectionHead b{font-size:14px}
+  .indicatorGrid{gap:10px}
+  .indicatorCard{
+    border-radius:14px;border-color:var(--line-soft);
+    box-shadow:0 3px 10px rgba(70,52,20,.045);
+  }
+  .indicatorListCard{padding:16px 16px;gap:11px}
+  .indicatorName{font-size:13px}
+  .indicatorValue{font-size:24px;letter-spacing:-.025em}
+  .indicatorUnit{font-size:10px}
+  .indicatorListMeta{font-size:9.5px;letter-spacing:.035em}
+  .indicatorListTrend{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .indicatorListTrend .indicatorChange{font-size:10.5px;text-align:right}
+  .indicatorChevron{right:15px;top:15px;font-size:25px}
+
+  .gdpCountryCard.indicatorListCard{
+    grid-template-columns:minmax(0,1fr) 14px;
+    padding:16px 15px;gap:8px;
+  }
+  .gdpCountryCard .indicatorHead{padding-right:0}
+  .gdpCardBody{gap:10px}
+  .gdpLeadRow{grid-template-columns:minmax(0,1fr) 88px;gap:10px;align-items:center}
+  .gdpLeadRow .indicatorSparkline{width:84px;height:31px}
+  .gdpCountryCard .gdpGrowthLead{font-size:25px;line-height:1.08}
+  .gdpCountryCard .gdpMetricStack{gap:8px;padding-top:11px}
+  .gdpCountryCard .gdpMetricLine{
+    grid-template-columns:82px minmax(0,1fr) auto;
+    gap:5px 7px;align-items:baseline;
+  }
+  .gdpCountryCard .gdpMetricLine span{font-size:10px}
+  .gdpCountryCard .gdpMetricLine b{font-size:12.5px;overflow:visible;text-overflow:clip}
+  .gdpCountryCard .gdpMetricLine small{font-size:9px}
+  .gdpCountryCard .indicatorChange{padding-top:1px;font-size:10.5px;gap:8px;flex-wrap:wrap}
+  .gdpCountryCard>.indicatorChevron{position:static;margin:0;align-self:start}
+
+  .detailPage{width:min(100% - 28px,1120px);padding:14px 0 52px}
+  .detailTopbar{margin-bottom:25px;padding-bottom:12px}
+  .detailBrand{font-size:12.5px}
+  .detailBrand span{width:31px;height:31px;border-radius:9px;box-shadow:none}
+  .detailBack{font-size:11.5px}
+  .detailSeriesTabs{margin-bottom:15px}
+  .detailSeriesTabs button,.detailRangeTabs button{padding:7px 11px;font-size:11px}
+  .detailHero{gap:13px;margin-bottom:18px}
+  .detailHero h1{font-size:29px;line-height:1.25}
+  .detailSeriesName{font-size:11.5px}
+  .detailLeadValue strong{font-size:34px}
+  .detailLeadValue span{font-size:11.5px}
+  .detailChartPanel{padding:17px 13px 10px;border-radius:14px;box-shadow:none}
+  .detailChart{min-height:205px}
+  .detailPanelHead h2,.detailCopy h2,.detailNewsPanel h2{font-size:17px}
+  .detailStatsGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .detailStatsGrid article{padding:14px;border-radius:12px;box-shadow:none}
+  .detailStatsGrid strong{font-size:15px}
+  .detailEditorialGrid{grid-template-columns:1fr;gap:10px}
+  .detailCopy,.detailNewsPanel{padding:19px 17px;border-radius:14px;box-shadow:none}
+  .detailCopy p{font-size:13px;line-height:1.72}
+}
+
+@media(max-width:390px){
+  .content{padding-left:12px;padding-right:12px}
+  .logoText{display:flex;flex-direction:column;align-items:flex-start;gap:1px}
+  .logoText small{max-width:190px}
+  .macroFilters{top:116px}
+  .gdpLeadRow{grid-template-columns:minmax(0,1fr) 76px}
+  .gdpLeadRow .indicatorSparkline{width:74px;height:29px}
+  .gdpCountryCard .gdpMetricLine{grid-template-columns:75px minmax(0,1fr)}
+  .gdpCountryCard .gdpMetricLine small{grid-column:2;justify-self:start;margin-top:-2px}
+  .detailStatsGrid{grid-template-columns:1fr 1fr}
+}
