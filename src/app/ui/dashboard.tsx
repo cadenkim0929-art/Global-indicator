@@ -587,13 +587,23 @@ export default function Dashboard({
 
   return <main className="appShell">
     <aside className="sidebar">
-      <div className="logo"><span>EP</span><div className="logoText"><b>Industry Monitor</b><small>Engineering Plastics Intelligence</small></div></div>
+      <div className="logo"><span>EP</span><div className="logoText"><b>EP Industry Monitor</b><small>Engineering · Plastics · Intelligence</small></div></div>
       <nav>
         <button className={page === 'feed' ? 'active' : ''} onClick={() => setPage('feed')}>피드</button>
         <button className={page === 'macro' ? 'active' : ''} onClick={() => setPage('macro')}>매크로 지표</button>
         <button className={page === 'sources' ? 'active' : ''} onClick={() => setPage('sources')}>소스</button>
+        {/* [디자인 리뉴얼] 보고서/관심 지표/알림 설정은 아직 백엔드가 없는 예정 기능이라
+            실제 페이지 전환 없이 자리만 잡아두고 "Soon" 배지로 준비 중임을 명시.
+            데이터 없는 기능을 있는 것처럼 보이게 하지 않기 위한 의도적 처리. */}
+        <button className="soon" disabled title="준비 중인 기능입니다">보고서<span className="soonBadge">Soon</span></button>
+        <button className="soon" disabled title="준비 중인 기능입니다">관심 지표<span className="soonBadge">Soon</span></button>
+        <button className="soon" disabled title="준비 중인 기능입니다">알림 설정<span className="soonBadge">Soon</span></button>
       </nav>
       <div className="sidebarMeta">
+        <div className="sidebarStatusRow">
+          <b>실시간 수집</b>
+          <span className="statusPill"><i></i>정상</span>
+        </div>
         <button className="sidebarCollect" onClick={collectNow} disabled={collecting} title="RSS 소스에서 새 기사를 실제로 가져옵니다">
           {collecting ? '뉴스 수집 중…' : '뉴스 수집'}
         </button>
@@ -680,6 +690,12 @@ export default function Dashboard({
           })}</div>
       </> : page === 'macro' ? <>
         {macroHighlight && <article className="macroHighlightCard">
+          {/* [디자인 리뉴얼] 순수 장식용 도트-글로브. 실데이터가 아니므로 히어로 카드
+              배경 우측에만 은은하게 깔고, 기존 스파크라인 배경과 함께 겹쳐 "글로벌"
+              톤을 보강한다. */}
+          <div className="macroHighlightGlobe" aria-hidden="true">
+            <span className="globeRing" /><span className="globeRing small" /><span className="globePulse" />
+          </div>
           <div className="macroHighlightBg" aria-hidden="true"><Sparkline history={macroHighlight.indicator.history} width={420} height={140} className="macroHighlightBgChart" /></div>
           <div className="macroHighlightMain">
             <span className="macroHighlightLabel">{isTodayKst(macroHighlight.news.publishedAt) ? '오늘의 인사이트' : '최근 인사이트'}</span>

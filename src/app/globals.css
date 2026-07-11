@@ -69,8 +69,18 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none}
 }
 .sidebar nav button:hover{background:var(--surface-2);color:var(--text-dim)}
 .sidebar nav button.active{background:linear-gradient(90deg, rgba(168,99,30,.12), rgba(168,99,30,.02));color:var(--brand-dim);box-shadow:inset 2px 0 0 var(--brand)}
+/* [디자인 리뉴얼] 아직 붙지 않은 기능(보고서/관심 지표/알림 설정)을 사이드바에
+   미리 배치하되, 클릭 가능한 다른 항목과 확실히 구분되도록 흐리게 처리하고
+   "Soon" 배지로 준비 중임을 밝힌다 — 있지도 않은 기능을 있는 척 하지 않기 위함. */
+.sidebar nav button.soon{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--muted-2);cursor:default}
+.sidebar nav button.soon:hover{background:transparent;color:var(--muted-2)}
+.soonBadge{font:700 8.5px 'JetBrains Mono';letter-spacing:.04em;color:var(--muted-2);background:var(--surface-2);border:1px solid var(--line);border-radius:99px;padding:2px 7px}
 
 .sidebarMeta{margin-top:auto;padding:16px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--line);display:grid;gap:12px;box-shadow:var(--shadow-sm)}
+.sidebarStatusRow{display:flex;align-items:center;justify-content:space-between}
+.sidebarStatusRow b{font:700 12px 'Noto Sans KR';color:var(--text-dim)}
+.statusPill{display:inline-flex;align-items:center;gap:5px;font:700 10px 'Noto Sans KR';color:var(--brand-dim);background:rgba(168,99,30,.1);padding:3px 9px;border-radius:99px}
+.statusPill i{width:6px;height:6px;border-radius:50%;background:#3FAE63;box-shadow:0 0 6px rgba(63,174,99,.6);animation:pulse-dot 2.4s ease-in-out infinite}
 .sidebarCollect{width:100%;border-radius:var(--radius-pill);padding:11px 14px;background:linear-gradient(135deg,var(--brand-bright),var(--brand));color:#FFF8EC;font:700 13px 'Noto Sans KR';box-shadow:0 8px 20px rgba(168,99,30,.20)}
 .sidebarCollect:hover:not(:disabled){box-shadow:0 10px 26px rgba(168,99,30,.30);transform:translateY(-1px)}
 .metaRow{display:grid;gap:3px}
@@ -300,6 +310,20 @@ h1{margin:0;font:700 clamp(28px,3.2vw,40px)/1.15 'Noto Sans KR',sans-serif;lette
   box-shadow:var(--shadow-sm);display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:28px;
 }
 .macroHighlightBg{position:absolute;right:-30px;top:50%;transform:translateY(-50%);width:440px;height:150px;opacity:.16;pointer-events:none;color:var(--brand)}
+/* [디자인 리뉴얼] 추상적인 도트-글로브 장식 — 실제 세계지도가 아니라 "글로벌 신호"를
+   은유하는 절제된 형태. 스파크라인 배경 뒤쪽에 아주 옅게 깔아 카드가 리서치 브리핑처럼
+   보이게 하되, 카피/수치를 가리지 않도록 우측 끝에만 마스킹해서 배치한다. */
+.macroHighlightGlobe{position:absolute;right:160px;top:0;bottom:0;width:260px;pointer-events:none;opacity:.7}
+.macroHighlightGlobe::before{
+  content:"";position:absolute;inset:0;
+  background-image:radial-gradient(color-mix(in srgb,var(--brand) 30%,transparent) 1.3px, transparent 1.3px);
+  background-size:15px 15px;
+  -webkit-mask-image:radial-gradient(ellipse 120px 120px at 50% 50%, #000 55%, transparent 100%);
+  mask-image:radial-gradient(ellipse 120px 120px at 50% 50%, #000 55%, transparent 100%);
+}
+.globeRing{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:176px;height:176px;border-radius:50%;border:1px solid color-mix(in srgb,var(--brand) 22%,transparent)}
+.globeRing.small{width:118px;height:118px;border-color:color-mix(in srgb,var(--brand) 30%,transparent)}
+.globePulse{position:absolute;left:53%;top:46%;width:7px;height:7px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 5px color-mix(in srgb,var(--brand) 18%,transparent)}
 .macroHighlightBgChart{width:100%;height:100%}
 .macroHighlightMain{position:relative;min-width:0}
 .macroHighlightLabel{display:block;margin-bottom:8px;font:800 10.5px 'JetBrains Mono';letter-spacing:.12em;text-transform:uppercase;color:var(--brand)}
@@ -376,7 +400,7 @@ h1{margin:0;font:700 clamp(28px,3.2vw,40px)/1.15 'Noto Sans KR',sans-serif;lette
   .indicatorChevron{position:absolute;right:18px;top:18px}
   .indicatorHead{padding-right:26px}
   .macroHighlightCard{grid-template-columns:1fr;padding:19px 20px}
-  .macroHighlightBg{display:none}
+  .macroHighlightBg,.macroHighlightGlobe{display:none}
   .macroHighlightMeta{flex-direction:row;flex-wrap:wrap;padding-left:0;border-left:0;border-top:1px solid var(--line-soft);padding-top:14px;gap:14px 20px}
   .macroHighlightActions{justify-content:flex-start}
   .detailPage{width:min(100% - 28px,1120px);padding-top:16px}
@@ -644,7 +668,7 @@ h1{margin:0;font:700 clamp(28px,3.2vw,40px)/1.15 'Noto Sans KR',sans-serif;lette
     border-top:3px solid var(--brand);
     background:var(--surface);box-shadow:none;
   }
-  .macroHighlightBg{display:none}
+  .macroHighlightBg,.macroHighlightGlobe{display:none}
   .macroHighlightLabel{margin-bottom:8px;font-size:9.5px;letter-spacing:.11em}
   .macroHighlightCard h2{font-size:18px;line-height:1.5;letter-spacing:-.025em}
   .macroHighlightSummary{font-size:12px;line-height:1.6}
@@ -884,7 +908,7 @@ body{word-break:keep-all;overflow-wrap:break-word}
   .headerUtilityActions button{padding:8px 12px}
 
   .macroHighlightCard{min-height:0;margin-bottom:22px;padding:19px 17px 17px;display:grid;grid-template-columns:1fr;gap:14px}
-  .macroHighlightCard::before,.macroHighlightBg{display:none}
+  .macroHighlightCard::before,.macroHighlightBg,.macroHighlightGlobe{display:none}
   .macroHighlightMain{max-width:none}
   .macroHighlightCard h2{max-width:none;font-size:18px;line-height:1.48;-webkit-line-clamp:3;text-wrap:pretty}
   .macroHighlightSummary{font-size:12px;-webkit-line-clamp:2}
@@ -987,7 +1011,7 @@ body{word-break:keep-all;overflow-wrap:break-word}
   .headerHorizonTabs button{min-width:0;padding:9px 4px;font-size:12px}
   .headerUtilityActions{order:2;justify-content:flex-start;flex-wrap:wrap}
   .macroHighlightCard{min-height:0;margin-bottom:22px;padding:19px 17px 17px;display:grid;grid-template-columns:1fr;gap:14px;max-width:100%;overflow:hidden}
-  .macroHighlightCard::before,.macroHighlightBg{display:none!important}
+  .macroHighlightCard::before,.macroHighlightBg,.macroHighlightGlobe{display:none!important}
   .macroHighlightMain{max-width:none!important;padding-right:0!important;min-width:0}
   .macroHighlightCard h2{max-width:none;font-size:18px;line-height:1.48;-webkit-line-clamp:3;text-wrap:pretty}
   .macroHighlightMeta{padding:13px 0 0;border-left:0;border-top:1px solid var(--line-soft);background:transparent;display:grid;grid-template-columns:1fr 1fr;gap:12px}
