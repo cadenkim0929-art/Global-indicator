@@ -7,7 +7,7 @@ export async function GET() {
   try {
     const feeds = getFeeds();
     return NextResponse.json({ allFeeds: feeds });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Failed to load feeds' }, { status: 500 });
   }
 }

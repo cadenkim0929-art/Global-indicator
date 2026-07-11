@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Sparkline from './indicator-sparkline';
 import type { Article, IndicatorCard, IndicatorFrequency } from '@/lib/types';
 
@@ -38,8 +38,8 @@ const PERIOD_PRESETS = [
 // - 장기: quarterly/yearly growth frame (GDP)
 type IndicatorHorizon = 'now' | 'recent' | 'long';
 const HORIZON_TABS: Array<{ key: IndicatorHorizon; label: string; frequencies: IndicatorFrequency[] }> = [
-  { key: 'now', label: '단기', frequencies: ['daily'] },
-  { key: 'recent', label: '중기', frequencies: ['monthly'] },
+  { key: 'now', label: '지금', frequencies: ['daily'] },
+  { key: 'recent', label: '최근', frequencies: ['monthly'] },
   { key: 'long', label: '장기', frequencies: ['quarterly', 'yearly'] },
 ];
 function indicatorHorizon(ind: IndicatorCard): IndicatorHorizon {
@@ -60,6 +60,9 @@ const GDP_COUNTRY_LABELS: Record<string, string> = {
   us: '미국', korea: '한국', japan: '일본', china: '중국', eurozone: '유로존', india: '인도',
 };
 const GDP_COUNTRY_ORDER = ['us', 'korea', 'japan', 'china', 'eurozone', 'india'];
+const GDP_COUNTRY_FLAGS: Record<string, string> = {
+  us: '🇺🇸', korea: '🇰🇷', japan: '🇯🇵', china: '🇨🇳', eurozone: '🇪🇺', india: '🇮🇳',
+};
 function gdpCountry(id: string) {
   if (id.includes('korea')) return 'korea';
   if (id.includes('japan')) return 'japan';
@@ -68,12 +71,6 @@ function gdpCountry(id: string) {
   if (id.includes('eurozone')) return 'eurozone';
   if (id.includes('_us') || id.endsWith('_usd')) return 'us';
   return id;
-}
-function isGdpGrowthCard(ind: IndicatorCard) {
-  return ind.id.startsWith('gdp_qoq_');
-}
-function isGdpLevelCard(ind: IndicatorCard) {
-  return ind.id.startsWith('gdp_quarterly_') || ind.id.startsWith('gdp_annual_') || ind.id === 'gdp_current_usd';
 }
 type IndicatorImpactBadge = { label: string; tone: 'ep' | 'raw' | 'demand' | 'macro'; title: string };
 function indicatorImpactBadge(ind: Pick<IndicatorCard, 'id' | 'category' | 'epRelevant' | 'frequency'>): IndicatorImpactBadge {
@@ -88,6 +85,27 @@ function formatIndicatorValue(value: number | null, unit?: string) {
   if (value === null) return '—';
   const maxDigits = unit?.toLowerCase().includes('trillion') ? 2 : 4;
   return value.toLocaleString('ko-KR', { maximumFractionDigits: maxDigits });
+}
+function compactIndicatorName(name: string) {
+  return name
+    .replace(/\(FRED\)/gi, '')
+    .replace(/\([^)]*(뉴스 추출|국가통계국)[^)]*\)/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+function editorialHeadline(title: string, sourceName?: string) {
+  let result = title.replace(/^\[매크로\]\s*/, '').trim();
+  if (sourceName) {
+    const escaped = sourceName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    result = result.replace(new RegExp(`\\s[-–—|]\\s${escaped}\\s*$`, 'i'), '').trim();
+  }
+  // 긴 RSS 제목 뒤에 붙는 영문 매체명·프로그램명은 메타 영역에서 이미 보여주므로 제거한다.
+  result = result.replace(/\s[-–—|]\s[A-Za-z0-9][A-Za-z0-9 .&'’/()-]{2,40}$/u, '').trim();
+  if (result.length > 44) {
+    const boundary = result.lastIndexOf(' ', 44);
+    result = `${result.slice(0, boundary >= 30 ? boundary : 44).trim()}…`;
+  }
+  return result;
 }
 // [v4.10] GDP 수준(level) 지표들의 단위가 소스마다 제각각(Million KRW /
 // Billion chained 2017 USD / Million chained 2010 EUR / Trillion USD)이라
@@ -107,10 +125,6 @@ function gdpLevelDisplay(ind: IndicatorCard): { text: string; unitLabel: string 
   if (v === null) return { text: formatIndicatorValue(ind.latestValue, ind.unit), unitLabel: ind.unit };
   const text = Math.abs(v) >= 100 ? v.toLocaleString('ko-KR', { maximumFractionDigits: 0 }) : v.toLocaleString('ko-KR', { maximumFractionDigits: 1 });
   return { text, unitLabel: cur };
-}
-function formatGrowthLine(ind?: IndicatorCard) {
-  if (!ind || ind.latestValue === null) return null;
-  return `${formatIndicatorValue(ind.latestValue, ind.unit)} ${ind.unit}`;
 }
 function formatIndicatorPeriod(ind?: Pick<IndicatorCard, 'frequency' | 'latestPeriod'>) {
   if (!ind?.latestPeriod) return '수집 전';
@@ -153,17 +167,15 @@ function sourceRegion(name: string) {
 }
 
 export default function Dashboard({
-  initialArticles, initialStats, initialIndicators, initialIndicatorMeta, initialIndicatorCounts,
+  initialArticles, initialStats, initialIndicators, initialIndicatorMeta, initialIndicatorCounts, initialPage = 'feed',
 }: {
   initialArticles: Article[]; initialStats: Stats;
   initialIndicators: IndicatorCard[]; initialIndicatorMeta: IndicatorMeta; initialIndicatorCounts: Record<IndicatorFrequency, number>;
+  initialPage?: PageKey;
 }) {
   const [articles, setArticles] = useState(initialArticles);
   const [stats, setStats] = useState(initialStats);
-  const [page, setPage] = useState<PageKey>('feed');
-  useEffect(() => {
-    if (new URLSearchParams(window.location.search).get('view') === 'macro') setPage('macro');
-  }, []);
+  const [page, setPage] = useState<PageKey>(initialPage);
   const [days, setDays] = useState(initialStats.lookbackDays ?? 90);
   const [customDays, setCustomDays] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -183,7 +195,7 @@ export default function Dashboard({
   const [indicatorRefreshing, setIndicatorRefreshing] = useState(false);
   const [indicatorRefreshResult, setIndicatorRefreshResult] = useState<string | null>(null);
 
-  async function loadIndicators(horizon: IndicatorHorizon) {
+  async function loadIndicators() {
     setIndicatorLoading(true);
     try {
       const res = await fetch(`/api/indicators?ts=${Date.now()}`, { cache: 'no-store' });
@@ -196,7 +208,7 @@ export default function Dashboard({
   }
   function changeIndicatorHorizon(horizon: IndicatorHorizon) {
     setIndicatorHorizonKey(horizon);
-    loadIndicators(horizon);
+    loadIndicators();
   }
   async function refreshIndicators() {
     setIndicatorRefreshing(true); setIndicatorRefreshResult(null);
@@ -217,7 +229,7 @@ export default function Dashboard({
   }
 
   const categories = stats.categories || [];
-  const categoryById = new Map(categories.map((c) => [c.id, c]));
+  const categoryById = useMemo(() => new Map((stats.categories || []).map((c) => [c.id, c])), [stats.categories]);
   const visibleCategories = categories.filter((c) =>
     (stats.counts.find((x) => x.category === c.id)?.count || 0) > 0 || selectedCategories.includes(c.id)
   );
@@ -247,7 +259,7 @@ export default function Dashboard({
       map.set(name, existing);
     });
     return Array.from(map.entries()).sort((a, b) => b[1].count - a[1].count);
-  }, [articles, stats.categories]);
+  }, [articles, categoryById]);
 
   async function refresh(nextDays = days) {
     setLoading(true);
@@ -387,7 +399,7 @@ export default function Dashboard({
     return <Link href={`/indicators/${ind.id}`} className="indicatorCard indicatorListCard" key={ind.id} aria-label={`${ind.nameKo} 상세 보기`}>
       <div className="indicatorListMain">
         <div className="indicatorHead">
-          <span className="indicatorName">{ind.nameKo}</span>
+          <span className="indicatorName" title={ind.nameKo}>{ind.nameKo}</span>
           <span className={`epBadge ${badge.tone}`} title={badge.title}>{badge.label}</span>
         </div>
         <span className="indicatorListMeta">{ind.frequency.toUpperCase()} · {formatIndicatorPeriod(ind)}</span>
@@ -401,6 +413,37 @@ export default function Dashboard({
         <span className={`indicatorChange ${changeClass}`}>{changeText}</span>
       </div>
       <span className="indicatorChevron" aria-hidden="true">›</span>
+    </Link>;
+  }
+
+  function renderTapeRow(ind: IndicatorCard) {
+    const isRateIndicator = /%|percent|growth|qoq/i.test(ind.unit);
+    const pointDelta = ind.latestValue !== null && ind.previousValue !== null
+      ? Math.round((ind.latestValue - ind.previousValue) * 100) / 100
+      : null;
+    const changeValue = isRateIndicator ? pointDelta : ind.pctChange;
+    const changeClass = ind.dataStatus === 'stale' ? 'stale' : changeValue !== null && changeValue > 0
+      ? 'up' : changeValue !== null && changeValue < 0 ? 'down' : '';
+    const changeText = ind.dataStatus === 'stale'
+      ? '최신 아님'
+      : changeValue !== null
+        ? `${changeValue > 0 ? '▲' : changeValue < 0 ? '▼' : '–'} ${Math.abs(changeValue)}${isRateIndicator ? 'p' : '%'}`
+        : '—';
+    return <Link href={`/indicators/${ind.id}`} className="macroTapeRow" key={`tape-${ind.id}`} aria-label={`${ind.nameKo} 상세 보기`}>
+      <div className="macroTapeName">
+        <b title={ind.nameKo}>{compactIndicatorName(ind.nameKo)}</b>
+        <small>{ind.frequency.toUpperCase()} · {formatIndicatorPeriod(ind)}</small>
+      </div>
+      <Sparkline history={ind.history} width={82} height={28} />
+      <div className="macroTapeValue">
+        <strong>{formatIndicatorValue(ind.latestValue, ind.unit)}</strong>
+        <small>{ind.unit}</small>
+      </div>
+      <div className="macroTapeDelta">
+        <span className={changeClass}>{changeText}</span>
+        <small>전기 대비</small>
+      </div>
+      <span className="macroTapeChevron" aria-hidden="true">›</span>
     </Link>;
   }
 
@@ -431,6 +474,54 @@ export default function Dashboard({
       </b>
       <small>{formatIndicatorPeriod(ind)}</small>
     </div>;
+  }
+
+  function renderGdpOverviewCard(group: {
+    country: string;
+    quarterly?: IndicatorCard;
+    annual?: IndicatorCard;
+    quarterlyGrowth?: IndicatorCard;
+    annualGrowth?: IndicatorCard;
+  }) {
+    const primary = group.quarterly || group.annual || group.quarterlyGrowth || group.annualGrowth;
+    if (!primary) return null;
+    const isQuarterlyReal = !!group.quarterly && /chained|실질/i.test(`${group.quarterly.unit} ${group.quarterly.nameKo}`);
+    const lead = (() => {
+      if (group.quarterlyGrowth?.latestValue != null)
+        return { v: group.quarterlyGrowth.latestValue, suffix: '전분기 대비', ind: group.quarterlyGrowth };
+      if (group.annualGrowth?.latestValue != null)
+        return { v: group.annualGrowth.latestValue, suffix: '전년 대비', ind: group.annualGrowth };
+      if (isQuarterlyReal && group.quarterly!.pctChange != null)
+        return { v: group.quarterly!.pctChange, suffix: '전분기 대비', ind: group.quarterly! };
+      return null;
+    })();
+    const leadClass = lead && lead.v > 0 ? 'up' : lead && lead.v < 0 ? 'down' : '';
+    const compactLevel = (ind?: IndicatorCard) => {
+      if (!ind) return '—';
+      const value = gdpLevelDisplay(ind);
+      return value ? `${value.text} ${value.unitLabel}` : '—';
+    };
+    const annualGrowth = group.annualGrowth?.latestValue;
+    return <Link href={`/indicators/gdp-${group.country}`} className="gdpOverviewCard" key={`gdp-overview-${group.country}`} aria-label={`${GDP_COUNTRY_LABELS[group.country] || group.country} GDP 상세 보기`}>
+      <div className="gdpOverviewHead">
+        <span className="gdpFlag" aria-hidden="true">{GDP_COUNTRY_FLAGS[group.country] || '•'}</span>
+        <b>{GDP_COUNTRY_LABELS[group.country] || group.country}</b>
+        <span className="gdpOverviewChevron" aria-hidden="true">›</span>
+      </div>
+      <div className="gdpOverviewBody">
+        <div className="gdpOverviewLead">
+          {lead ? <strong className={leadClass}>{lead.v > 0 ? '+' : ''}{lead.v.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}<small>%</small></strong> : <strong>—</strong>}
+          <span>{lead?.suffix || '성장률'}</span>
+          <Sparkline history={(lead?.ind || primary).history} width={104} height={30} />
+        </div>
+        <dl className="gdpOverviewStats">
+          <div><dt>분기 GDP</dt><dd>{compactLevel(group.quarterly)}</dd></div>
+          <div><dt>연간 GDP</dt><dd>{compactLevel(group.annual)}</dd></div>
+          <div><dt>연간 성장률</dt><dd>{annualGrowth == null ? '—' : `${annualGrowth > 0 ? '+' : ''}${annualGrowth.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}%`}</dd></div>
+        </dl>
+      </div>
+      <time>{formatIndicatorPeriod(lead?.ind || primary)}</time>
+    </Link>;
   }
 
   function renderGdpCountryCard(group: {
@@ -467,7 +558,7 @@ export default function Dashboard({
     return <Link href={`/indicators/gdp-${group.country}`} className="indicatorCard gdpCountryCard indicatorListCard" key={`gdp-country-${group.country}`} aria-label={`${GDP_COUNTRY_LABELS[group.country] || group.country} GDP 상세 보기`}>
       <div className="indicatorListMain gdpCardBody">
         <div className="indicatorHead">
-          <span className="indicatorName">{GDP_COUNTRY_LABELS[group.country] || group.country} GDP</span>
+          <span className="indicatorName"><span className="gdpFlag" aria-hidden="true">{GDP_COUNTRY_FLAGS[group.country] || '•'}</span>{GDP_COUNTRY_LABELS[group.country] || group.country} GDP</span>
           <span className={`epBadge ${badge.tone}`} title={badge.title}>{badge.label}</span>
         </div>
         <div className="gdpLeadRow">
@@ -521,10 +612,19 @@ export default function Dashboard({
             : `${stats.totalArticles.toLocaleString()}건 수집 · 현재 조건 ${filtered.length.toLocaleString()}건 표시`}</p>
           {page === 'macro' && <span className="pageHeaderMeta">{indicatorMeta.totalIndicators}개 지표 · {formatDate(indicatorMeta.generatedAt)} 갱신</span>}
         </div>
-        <div className="headerActions">
-          {page === 'macro' && <button className="ghost" onClick={refreshIndicators} disabled={indicatorRefreshing}>{indicatorRefreshing ? '지표 갱신 중…' : '지표 갱신'}</button>}
-          {page !== 'macro' && <button className="ghost" onClick={() => refresh()} disabled={loading}>{loading ? '불러오는 중…' : '새로고침'}</button>}
-          <button className="primary" onClick={collectNow} disabled={collecting} title="RSS 소스에서 새 기사를 실제로 가져옵니다 (새로고침과 다름)">{collecting ? '뉴스 수집 중…' : '뉴스 수집'}</button>
+        <div className={`headerActions ${page === 'macro' ? 'macroHeaderActions' : ''}`}>
+          {page === 'macro' && <div className="headerHorizonTabs" aria-label="지표 기간">
+            {HORIZON_TABS.map((f) => (
+              <button key={f.key} className={indicatorHorizonKey === f.key ? 'active' : ''} onClick={() => changeIndicatorHorizon(f.key)}>
+                {f.label}<span>{horizonCount(indicatorCounts, f.key)}</span>
+              </button>
+            ))}
+          </div>}
+          <div className="headerUtilityActions">
+            {page === 'macro' && <button className="ghost" onClick={refreshIndicators} disabled={indicatorRefreshing}>{indicatorRefreshing ? '갱신 중…' : '지표 갱신'}</button>}
+            {page !== 'macro' && <button className="ghost" onClick={() => refresh()} disabled={loading}>{loading ? '불러오는 중…' : '새로고침'}</button>}
+            <button className="primary" onClick={collectNow} disabled={collecting} title="RSS 소스에서 새 기사를 실제로 가져옵니다 (새로고침과 다름)">{collecting ? '수집 중…' : '뉴스 수집'}</button>
+          </div>
         </div>
       </header>
       {collectResult && <div className="collectResult">{collectResult}</div>}
@@ -579,20 +679,11 @@ export default function Dashboard({
             </article>;
           })}</div>
       </> : page === 'macro' ? <>
-        <div className="filters macroFilters">
-          <div className="tabs">
-            {HORIZON_TABS.map((f) => (
-              <button key={f.key} className={indicatorHorizonKey === f.key ? 'active' : ''} onClick={() => changeIndicatorHorizon(f.key)}>
-                {f.label} <span>{horizonCount(indicatorCounts, f.key)}</span>
-              </button>
-            ))}
-          </div>
-        </div>
         {macroHighlight && <article className="macroHighlightCard">
           <div className="macroHighlightBg" aria-hidden="true"><Sparkline history={macroHighlight.indicator.history} width={420} height={140} className="macroHighlightBgChart" /></div>
           <div className="macroHighlightMain">
             <span className="macroHighlightLabel">{isTodayKst(macroHighlight.news.publishedAt) ? '오늘의 인사이트' : '최근 인사이트'}</span>
-            <h2>{macroHighlight.news.title}</h2>
+            <h2>{editorialHeadline(macroHighlight.news.title, macroHighlight.news.sourceName)}</h2>
             {macroHighlight.news.summary && <p className="macroHighlightSummary">{macroHighlight.news.summary}</p>}
             <div className="macroHighlightActions">
               <a href={macroHighlight.news.link} target="_blank" rel="noreferrer">뉴스 원문 보기 →</a>
@@ -610,21 +701,28 @@ export default function Dashboard({
             </div>}
           </div>
         </article>}
-        {indicatorLoading ? <div className="indicatorGrid" key="macro-loading"><div className="empty"><b>불러오는 중…</b></div></div> : indicators.length === 0 ? <div className="indicatorGrid" key="macro-empty"><div className="empty"><b>이 시간축에 등록된 지표가 없습니다</b></div></div> : indicatorHorizonKey === 'long' ? <div className="indicatorSections" key="macro-gdp-country-grouped">
+        {indicatorLoading ? <div className="indicatorGrid" key="macro-loading"><div className="empty"><b>불러오는 중…</b></div></div> : indicators.length === 0 ? <div className="indicatorGrid" key="macro-empty"><div className="empty"><b>이 시간축에 등록된 지표가 없습니다</b></div></div> : indicatorHorizonKey === 'now' ? <div className="macroOverviewGrid" key="macro-overview-now">
+          <section className="indicatorSection macroTapeSection">
+            <div className="indicatorSectionHead"><b>주요 매크로 지표</b><span>환율·유가·금리의 단기 흐름</span></div>
+            <div className="macroTapeList">{indicators.map((ind) => renderTapeRow(ind))}</div>
+          </section>
+          <section className="indicatorSection gdpOverviewSection">
+            <div className="indicatorSectionHead">
+              <span className="indicatorSectionTitleGroup"><b>국가별 GDP 성장률</b><span className="sectionInfoIcon" title="분기 GDP·연간 GDP·성장률을 국가별로 묶어 보여줍니다.">ⓘ</span></span>
+              <button className="sectionMore" onClick={() => changeIndicatorHorizon('long')}>더보기 ›</button>
+            </div>
+            <div className="gdpOverviewGrid">{longGdpGroups.map((group) => renderGdpOverviewCard(group))}</div>
+          </section>
+        </div> : indicatorHorizonKey === 'long' ? <div className="indicatorSections" key="macro-gdp-country-grouped">
           <section className="indicatorSection">
             <div className="indicatorSectionHead"><span className="indicatorSectionTitleGroup"><b>국가별 GDP</b><span className="sectionInfoIcon" title="분기 GDP·연간 GDP·성장률을 국가별로 묶어 보여줍니다. 성장률은 지표 가용성에 따라 전분기 또는 전년 대비 기준입니다.">ⓘ</span></span></div>
-            <div className="indicatorGrid">{longGdpGroups.map((group) => renderGdpCountryCard(group))}</div>
+            <div className="indicatorGrid gdpDetailGrid">{longGdpGroups.map((group) => renderGdpCountryCard(group))}</div>
           </section>
-        </div> : indicatorHorizonKey === 'recent' ? <div className="indicatorSections" key="macro-medium-grouped">
+        </div> : <div className="indicatorSections" key="macro-medium-grouped">
           {mediumIndicatorGroups.map((group) => <section className="indicatorSection" key={group.key}>
             <div className="indicatorSectionHead"><b>{group.title}</b><span>{group.description}</span></div>
-            <div className="indicatorGrid">{group.items.map((ind) => renderIndicatorCard(ind))}</div>
+            <div className="indicatorGrid mediumIndicatorGrid">{group.items.map((ind) => renderIndicatorCard(ind))}</div>
           </section>)}
-        </div> : <div className="indicatorSections" key={`macro-indicator-grid-${indicatorHorizonKey}`}>
-          <section className="indicatorSection">
-            <div className="indicatorSectionHead"><b>주요 매크로 지표</b></div>
-            <div className="indicatorGrid">{indicators.map((ind) => renderIndicatorCard(ind))}</div>
-          </section>
         </div>}
       </> : <>
         <div className="filters"><input className="searchInput" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="소스 검색…" /></div>

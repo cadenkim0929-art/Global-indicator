@@ -723,3 +723,248 @@ h1{margin:0;font:700 clamp(28px,3.2vw,40px)/1.15 'Noto Sans KR',sans-serif;lette
   .gdpCountryCard .gdpMetricLine small{grid-column:2;justify-self:start;margin-top:-2px}
   .detailStatsGrid{grid-template-columns:1fr 1fr}
 }
+
+/* ── v5.5 목표 시안 정렬: desktop editorial dashboard ───────────────────── */
+html{font-size:16px}
+body{word-break:keep-all;overflow-wrap:break-word}
+
+@media(min-width:1081px){
+  .appShell{grid-template-columns:232px minmax(0,1fr)}
+  .sidebar{padding:30px 18px 26px;gap:34px}
+  .content{width:100%;max-width:1480px;margin:0 auto;padding:40px 48px 72px}
+  .sidebarMeta{padding:4px 8px;background:transparent;border:0;box-shadow:none;gap:11px}
+  .sidebarCollect{display:none}
+}
+
+.pageHeader{margin-bottom:26px;align-items:flex-end}
+.pageHeaderTitle{max-width:660px}
+.pageHeaderTitle h1{text-wrap:balance;word-break:keep-all}
+.pageHeaderTitle p{max-width:56ch}
+
+.macroHeaderActions{margin-left:auto;display:grid;justify-items:end;gap:10px}
+.headerHorizonTabs{
+  display:grid;grid-template-columns:repeat(3,minmax(72px,1fr));
+  overflow:hidden;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.45)
+}
+.headerHorizonTabs button{
+  min-width:76px;padding:10px 14px;border-left:1px solid var(--line-soft);
+  background:transparent;color:var(--muted);font:700 12.5px 'Noto Sans KR';white-space:nowrap
+}
+.headerHorizonTabs button:first-child{border-left:0}
+.headerHorizonTabs button.active{color:var(--brand-dim);background:var(--surface);box-shadow:inset 0 0 0 1px var(--brand)}
+.headerHorizonTabs button span{margin-left:5px;color:var(--muted-2);font-size:10px}
+.headerUtilityActions{display:flex;justify-content:flex-end;gap:8px}
+.headerUtilityActions button{padding:8px 13px;font-size:11.5px;box-shadow:none!important}
+
+/* Hero: copy left, chart in the middle, facts on the right. */
+.macroHighlightCard{
+  min-height:248px;margin:0 0 28px;padding:28px 30px;
+  grid-template-columns:minmax(0,1fr) 216px;gap:28px;align-items:stretch;
+  border-radius:14px;background:linear-gradient(120deg,#fffdf8 0%,#fff 72%);
+  box-shadow:0 9px 28px rgba(70,52,20,.07)
+}
+.macroHighlightCard::before{
+  content:"";position:absolute;left:46%;top:20px;width:240px;height:210px;border-radius:50%;
+  background:
+    radial-gradient(circle at center,rgba(168,99,30,.08) 0 22%,transparent 23%),
+    repeating-radial-gradient(circle at center,rgba(168,99,30,.10) 0 1px,transparent 1px 7px);
+  opacity:.42;pointer-events:none
+}
+.macroHighlightMain{z-index:1;align-self:center;max-width:52%}
+.macroHighlightCard h2{
+  max-width:23ch;font-size:23px;line-height:1.42;letter-spacing:-.03em;
+  text-wrap:balance;word-break:keep-all;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden
+}
+.macroHighlightSummary{max-width:47ch;font-size:13px;line-height:1.72;-webkit-line-clamp:3}
+.macroHighlightBg{
+  right:224px;left:44%;top:50%;width:auto;height:168px;opacity:.58;color:var(--brand)
+}
+.macroHighlightBg .sparklineLine{stroke-width:1.7}
+.macroHighlightMeta{z-index:2;padding-left:24px;gap:15px;background:linear-gradient(90deg,rgba(255,255,255,.18),rgba(255,255,255,.82))}
+.macroHighlightActions{margin-top:18px}
+.macroHighlightPager{justify-content:center}
+
+.indicatorSectionHead{min-height:34px;padding:0 2px 9px;align-items:center}
+.indicatorSectionHead b{font-size:15px;letter-spacing:-.02em}
+.indicatorSectionHead>span:not(.indicatorSectionTitleGroup){max-width:34ch;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.indicatorSectionTitleGroup{display:flex;align-items:center;gap:5px}
+.sectionInfoIcon{color:var(--muted-2);font-size:11px}
+.sectionMore{background:transparent;color:var(--muted);font:700 11.5px 'Noto Sans KR';white-space:nowrap}
+.sectionMore:hover{color:var(--brand)}
+
+/* Default dashboard composition: compact market tape + six GDP cards. */
+.macroOverviewGrid{
+  display:grid;grid-template-columns:minmax(330px,390px) minmax(0,1fr);gap:18px;align-items:start
+}
+.macroTapeSection,.gdpOverviewSection{min-width:0}
+.macroTapeList{
+  overflow:hidden;border:1px solid var(--line);border-radius:12px;background:var(--surface);box-shadow:var(--shadow-sm)
+}
+.macroTapeList .indicatorListCard{
+  grid-template-columns:minmax(0,1fr) 155px 12px;gap:14px;padding:13px 15px;
+  border:0;border-bottom:1px solid var(--line-soft);border-radius:0;box-shadow:none;background:transparent
+}
+.macroTapeList .indicatorListCard:last-child{border-bottom:0}
+.macroTapeList .indicatorListCard:hover{transform:none;background:var(--bg-1);box-shadow:none}
+.macroTapeList .indicatorListMain{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"head value" "meta value";
+  column-gap:12px;row-gap:3px;align-items:center
+}
+.macroTapeList .indicatorHead{grid-area:head;min-width:0}
+.macroTapeList .indicatorListMeta{grid-area:meta}
+.macroTapeList .indicatorValue{grid-area:value;font-size:16px;justify-self:end;white-space:nowrap}
+.macroTapeList .indicatorUnit{font-size:9px}
+.macroTapeList .indicatorName{max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.macroTapeList .epBadge{display:none}
+.macroTapeList .indicatorListTrend{display:grid;grid-template-columns:82px minmax(0,1fr);align-items:center;justify-items:end;gap:8px}
+.macroTapeList .indicatorSparkline{width:82px;height:28px}
+.macroTapeList .indicatorChange{font-size:9.5px!important;white-space:nowrap}
+.macroTapeList .indicatorChevron{font-size:21px}
+
+.gdpOverviewGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.gdpOverviewCard{
+  min-width:0;padding:15px 16px 13px;border:1px solid var(--line);border-radius:11px;background:var(--surface);
+  box-shadow:0 4px 14px rgba(70,52,20,.055);transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease
+}
+.gdpOverviewCard:hover{transform:translateY(-1px);border-color:#d7c39d;box-shadow:0 10px 24px rgba(70,52,20,.09)}
+.gdpOverviewHead{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:7px;margin-bottom:10px}
+.gdpOverviewHead b{font:750 13px 'Noto Sans KR';white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gdpFlag{display:inline-flex;align-items:center;justify-content:center;font-size:14px;line-height:1}
+.gdpOverviewChevron{color:var(--muted-2);font-size:20px}
+.gdpOverviewBody{display:grid;grid-template-columns:minmax(92px,.8fr) minmax(0,1fr);gap:13px;align-items:start}
+.gdpOverviewLead{min-width:0;display:grid;align-content:start;gap:4px}
+.gdpOverviewLead strong{font:800 25px/1 'Noto Sans KR';letter-spacing:-.04em;color:var(--text)}
+.gdpOverviewLead strong.up{color:#B5473A}.gdpOverviewLead strong.down{color:#2E6B8A}
+.gdpOverviewLead strong small{margin-left:2px;font-size:11px;font-weight:600}
+.gdpOverviewLead>span{font:600 9.5px 'Noto Sans KR';color:var(--muted)}
+.gdpOverviewLead .indicatorSparkline{margin-top:6px;width:96px;height:27px}
+.gdpOverviewStats{display:grid;gap:6px;margin:0;min-width:0}
+.gdpOverviewStats div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px;align-items:baseline}
+.gdpOverviewStats dt{min-width:0;font:600 9.5px 'Noto Sans KR';color:var(--muted-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gdpOverviewStats dd{margin:0;font:750 10.5px 'Noto Sans KR';color:var(--text);white-space:nowrap}
+.gdpOverviewCard>time{display:block;margin-top:8px;text-align:center;font:600 8.5px 'JetBrains Mono';color:var(--muted-2)}
+
+/* Long and monthly views: prevent narrow cards and broken words. */
+.gdpDetailGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:13px!important}
+.mediumIndicatorGrid{grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.indicatorName{min-width:0;word-break:keep-all;overflow-wrap:normal}
+.mediumIndicatorGrid .indicatorName{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mediumIndicatorGrid .indicatorListCard{grid-template-columns:minmax(0,1fr) 130px 16px;gap:14px}
+.mediumIndicatorGrid .indicatorListTrend{min-width:0}
+
+/* ── tablet: collapse sidebar before content becomes cramped ─────────────── */
+@media(max-width:1080px){
+  .appShell{display:block}
+  .sidebar{
+    position:sticky;top:0;z-index:30;height:auto;padding:14px 20px;
+    display:flex;flex-direction:row;align-items:center;gap:20px;border-right:0;border-bottom:1px solid var(--line-soft)
+  }
+  .sidebar nav{margin-left:auto;display:flex;flex-direction:row;gap:5px;overflow:visible}
+  .sidebar nav button{padding:10px 13px;white-space:nowrap}
+  .sidebarMeta{display:none}
+  .content{width:100%;max-width:none;padding:28px 24px 64px}
+  .macroOverviewGrid{grid-template-columns:1fr}
+  .macroTapeList .indicatorListCard{grid-template-columns:minmax(0,1fr) 190px 14px}
+  .gdpOverviewGrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .gdpDetailGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+
+/* ── mobile: real device viewport, no scaled desktop layout ─────────────── */
+@media(max-width:760px){
+  .sidebar{display:grid;grid-template-columns:1fr;align-items:stretch;gap:10px;padding:12px 14px 10px}
+  .sidebar nav{margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:3px}
+  .content{padding:20px 14px 56px}
+  .pageHeader{margin-bottom:20px;gap:15px}
+  .pageHeaderTitle h1{font-size:27px}
+  .pageHeaderTitle p{font-size:12px}
+  .macroHeaderActions{width:100%;justify-items:stretch;gap:8px}
+  .headerHorizonTabs{width:100%;grid-template-columns:repeat(3,minmax(0,1fr));order:1}
+  .headerHorizonTabs button{min-width:0;padding:9px 4px}
+  .headerUtilityActions{order:2;justify-content:flex-start}
+  .headerUtilityActions button{padding:8px 12px}
+
+  .macroHighlightCard{min-height:0;margin-bottom:22px;padding:19px 17px 17px;display:grid;grid-template-columns:1fr;gap:14px}
+  .macroHighlightCard::before,.macroHighlightBg{display:none}
+  .macroHighlightMain{max-width:none}
+  .macroHighlightCard h2{max-width:none;font-size:18px;line-height:1.48;-webkit-line-clamp:3;text-wrap:pretty}
+  .macroHighlightSummary{font-size:12px;-webkit-line-clamp:2}
+  .macroHighlightMeta{padding:13px 0 0;border-left:0;border-top:1px solid var(--line-soft);background:transparent;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .macroHighlightTags,.macroHighlightPager{grid-column:1/-1}
+  .macroHighlightPager{justify-content:flex-start}
+
+  .macroOverviewGrid{display:grid;grid-template-columns:1fr;gap:22px}
+  .macroTapeList .indicatorListCard{grid-template-columns:minmax(0,1fr) 102px 12px;padding:13px 13px;gap:10px}
+  .macroTapeList .indicatorListMain{grid-template-columns:minmax(0,1fr);grid-template-areas:"head" "meta" "value";gap:3px}
+  .macroTapeList .indicatorValue{justify-self:start;font-size:20px;margin-top:3px}
+  .macroTapeList .indicatorListTrend{grid-template-columns:70px minmax(0,1fr);gap:5px}
+  .macroTapeList .indicatorSparkline{width:68px;height:27px}
+  .macroTapeList .indicatorName{max-width:none}
+
+  .gdpOverviewGrid{grid-template-columns:1fr;gap:10px}
+  .gdpOverviewCard{padding:15px}
+  .gdpOverviewBody{grid-template-columns:118px minmax(0,1fr)}
+  .gdpOverviewLead strong{font-size:27px}
+  .gdpOverviewLead .indicatorSparkline{width:104px}
+
+  .mediumIndicatorGrid,.gdpDetailGrid{grid-template-columns:1fr!important}
+  .mediumIndicatorGrid .indicatorListCard{grid-template-columns:minmax(0,1fr) 102px 13px;gap:10px}
+  .mediumIndicatorGrid .indicatorName{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.45}
+  .indicatorSectionHead>span:not(.indicatorSectionTitleGroup){max-width:45%;font-size:9.5px}
+}
+
+@media(max-width:390px){
+  .logoText b{white-space:nowrap}
+  .macroHighlightCard h2{font-size:17px}
+  .gdpOverviewBody{grid-template-columns:105px minmax(0,1fr);gap:10px}
+  .gdpOverviewStats dt{font-size:9px}.gdpOverviewStats dd{font-size:10px}
+  .macroTapeList .indicatorListCard{grid-template-columns:minmax(0,1fr) 94px 10px}
+}
+
+/* v5.5.1 market tape row — dedicated structure avoids title/value collisions */
+.macroHighlightCard h2{-webkit-line-clamp:2}
+.macroTapeRow{
+  display:grid;grid-template-columns:minmax(120px,1.25fr) 82px minmax(72px,.7fr) minmax(54px,.55fr) 10px;
+  align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line-soft);
+  transition:background-color .15s ease
+}
+.macroTapeRow:last-child{border-bottom:0}
+.macroTapeRow:hover{background:var(--bg-1)}
+.macroTapeName{min-width:0;display:grid;gap:3px}
+.macroTapeName b{font:700 12.5px/1.35 'Noto Sans KR';color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.macroTapeName small{font:600 8.5px 'JetBrains Mono';letter-spacing:.03em;color:var(--muted-2);white-space:nowrap}
+.macroTapeRow>.indicatorSparkline{width:82px;height:28px;color:var(--brand)}
+.macroTapeValue{min-width:0;display:flex;align-items:baseline;justify-content:flex-end;gap:4px;white-space:nowrap}
+.macroTapeValue strong{font:800 14px/1 'Noto Sans KR';color:var(--text)}
+.macroTapeValue small{max-width:52px;font:500 8px 'Noto Sans KR';color:var(--muted);overflow:hidden;text-overflow:ellipsis}
+.macroTapeDelta{display:grid;justify-items:end;gap:2px;white-space:nowrap}
+.macroTapeDelta span{font:700 9px 'JetBrains Mono';color:var(--muted)}
+.macroTapeDelta span.up{color:#B5473A}.macroTapeDelta span.down{color:#2E6B8A}.macroTapeDelta span.stale{color:var(--brand)}
+.macroTapeDelta small{font:600 7.5px 'Noto Sans KR';color:var(--muted-2)}
+.macroTapeChevron{font:400 18px/1 'Noto Sans KR';color:var(--muted-2)}
+
+@media(max-width:1080px){
+  .macroTapeRow{grid-template-columns:minmax(150px,1.3fr) 100px minmax(90px,.7fr) minmax(65px,.55fr) 10px;padding:13px 15px}
+  .macroTapeRow>.indicatorSparkline{width:96px}
+}
+@media(max-width:760px){
+  .macroTapeRow{
+    grid-template-columns:minmax(0,1fr) 82px 10px;
+    grid-template-areas:"name spark chevron" "value delta chevron";
+    row-gap:7px;padding:13px
+  }
+  .macroTapeName{grid-area:name}
+  .macroTapeRow>.indicatorSparkline{grid-area:spark;width:78px;justify-self:end}
+  .macroTapeValue{grid-area:value;justify-content:flex-start}
+  .macroTapeValue strong{font-size:18px}
+  .macroTapeDelta{grid-area:delta;justify-items:end}
+  .macroTapeChevron{grid-area:chevron;align-self:center}
+}
+
+/* v5.5.2 tablet alignment */
+@media(min-width:761px) and (max-width:1080px){
+  .pageHeader{align-items:flex-start}
+  .macroHeaderActions{width:100%;justify-items:end}
+  .macroHighlightMain{max-width:none;padding-right:190px}
+  .macroHighlightCard h2{max-width:22ch}
+  .macroHighlightSummary{max-width:42ch}
+}
