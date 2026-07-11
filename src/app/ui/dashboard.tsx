@@ -4,8 +4,15 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import Sparkline from './indicator-sparkline';
 import type { Article, IndicatorCard, IndicatorFrequency } from '@/lib/types';
+import { formatDate, isTodayKst, rankByScoreThenDate, shortDate, buildKeywordList } from './format-utils';
+import type { PageKey, SortKey } from './format-utils';
+import FeedHeader from './feed/feed-header';
+import FeedCategoryTabs from './feed/feed-filters';
+import FeedHero from './feed/feed-hero';
+import FeedCard from './feed/feed-card';
+import FeedSidePanel from './feed/feed-side-panel';
 
-interface Stats {
+export interface Stats {
   totalArticles: number;
   filteredArticles: number;
   totalFeeds: number;
@@ -17,8 +24,6 @@ interface Stats {
 }
 interface IndicatorMeta { version: string; generatedAt: string; totalIndicators: number }
 
-type PageKey = 'feed' | 'sources' | 'macro';
-type SortKey = 'latest' | 'score' | 'category';
 const LANGUAGE_LABELS: Record<string, string> = { ko: '한', en: '영', ja: '일', zh: '중', de: '독', other: '기타' };
 // [v1.3] Daily/Weekly/Archive 3분할을 폐지하고 하나의 연속 피드 + 기간 프리셋으로 통합.
 // 이메일 다이제스트의 발송 주기 개념을 그대로 옮겨온 구분이라 웹 대시보드에선 실익이
@@ -29,6 +34,7 @@ const PERIOD_PRESETS = [
   { label: '최근 7일', days: 7 },
   { label: '최근 30일', days: 30 },
   { label: '최근 90일', days: 90 },
+  { label: '최근 180일', days: 180 },
   { label: '전체', days: 365 },
 ];
 // [v4.0] 데이터 주기(daily/monthly/quarterly/yearly)는 내부 메타로 유지하되,
@@ -138,25 +144,6 @@ function formatIndicatorPeriod(ind?: Pick<IndicatorCard, 'frequency' | 'latestPe
   return ind.latestPeriod;
 }
 
-function shortDate(value: string) {
-  const d = new Date(value);
-  const kst = new Date(d.getTime() + 9 * 60 * 60 * 1000);
-  return `${kst.getUTCFullYear()}.${String(kst.getUTCMonth() + 1).padStart(2, '0')}.${String(kst.getUTCDate()).padStart(2, '0')}`;
-}
-function formatDate(value: string | null) {
-  if (!value) return '수집 전';
-  const d = new Date(value);
-  const kst = new Date(d.getTime() + 9 * 60 * 60 * 1000);
-  return `${kst.getUTCFullYear()}-${String(kst.getUTCMonth() + 1).padStart(2, '0')}-${String(kst.getUTCDate()).padStart(2, '0')} ${String(kst.getUTCHours()).padStart(2, '0')}:${String(kst.getUTCMinutes()).padStart(2, '0')} KST`;
-}
-function isTodayKst(value: string) {
-  const now = new Date(Date.now() + 9 * 60 * 60 * 1000);
-  const published = new Date(new Date(value).getTime() + 9 * 60 * 60 * 1000);
-  return now.getUTCFullYear() === published.getUTCFullYear()
-    && now.getUTCMonth() === published.getUTCMonth()
-    && now.getUTCDate() === published.getUTCDate();
-}
-
 function sourceRegion(name: string) {
   if (/[가-힣]|\.kr|korea/i.test(name)) return '한국';
   if (/[ぁ-ヿ一-龯]|japan|\.jp/i.test(name)) return '일본';
@@ -186,6 +173,10 @@ export default function Dashboard({
   const [loading, setLoading] = useState(false);
   const [collecting, setCollecting] = useState(false);
   const [collectResult, setCollectResult] = useState<string | null>(null);
+  // [피드 리디자인] 고급 필터(언어/최소 Impact) 서랍 토글, 일반 기사 그리드의
+  // "더 보기" 표시 개수. 필터가 바뀌면 12개로 리셋해서 항상 첫 페이지부터 보여준다.
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(12);
   // [v1.0] Global Indicators 통합 — 매크로 지표 상태
   const [allIndicators, setAllIndicators] = useState(initialIndicators);
   const [indicatorMeta, setIndicatorMeta] = useState(initialIndicatorMeta);
@@ -249,6 +240,25 @@ export default function Dashboard({
       return +new Date(b.publishedAt) - +new Date(a.publishedAt);
     });
   }, [articles, selectedCategories, selectedLanguages, minScore, query, sort]);
+
+  // [피드 리디자인] 대표 기사(오늘의 핵심 인사이트)와 "오늘의 브리프"는 사용자가 고른
+  // 정렬(sort) 기준과 무관하게 항상 score→최신순으로 뽑는다(섹션9 데이터 매핑 규칙).
+  // 일반 기사 그리드는 계속 사용자가 고른 sort 기준(filtered)을 따른다.
+  const scoreRanked = useMemo(() => rankByScoreThenDate(filtered), [filtered]);
+  const heroArticle = scoreRanked[0] || null;
+  const briefItems = useMemo(
+    () => scoreRanked.filter((a) => a.id !== heroArticle?.id).slice(0, 4),
+    [scoreRanked, heroArticle],
+  );
+  const generalArticles = useMemo(
+    () => filtered.filter((a) => a.id !== heroArticle?.id),
+    [filtered, heroArticle],
+  );
+  const visibleGeneralArticles = generalArticles.slice(0, visibleCount);
+  const keywordList = useMemo(
+    () => buildKeywordList(stats.topTags, filtered, 10),
+    [stats.topTags, filtered],
+  );
 
   const feedCounts = useMemo(() => {
     const map = new Map<string, { count: number; region: string; type: string }>();
@@ -613,13 +623,12 @@ export default function Dashboard({
       </div>
     </aside>
     <section className="content">
-      <header className="pageHeader">
+      {page !== 'feed' && <header className="pageHeader">
         <div className="pageHeaderTitle">
-          <span className="eyebrow">{page === 'macro' ? 'Global Indicators' : 'Live Intelligence Feed'}</span>
-          <h1>{page === 'sources' ? '소스 현황' : page === 'macro' ? '매크로 & 전방산업 지표' : 'Engineering Plastics'}</h1>
+          <span className="eyebrow">{page === 'macro' ? 'Global Indicators' : 'Source Directory'}</span>
+          <h1>{page === 'sources' ? '소스 현황' : '매크로 & 전방산업 지표'}</h1>
           <p>{page === 'sources' ? `${feedCounts.length}개 소스가 최근 기여한 기사 수`
-            : page === 'macro' ? '거시경제와 전방산업의 핵심 지표를 모니터링하여, 변화의 흐름을 한눈에 파악하세요.'
-            : `${stats.totalArticles.toLocaleString()}건 수집 · 현재 조건 ${filtered.length.toLocaleString()}건 표시`}</p>
+            : '거시경제와 전방산업의 핵심 지표를 모니터링하여, 변화의 흐름을 한눈에 파악하세요.'}</p>
           {page === 'macro' && <span className="pageHeaderMeta">{indicatorMeta.totalIndicators}개 지표 · {formatDate(indicatorMeta.generatedAt)} 갱신</span>}
         </div>
         <div className={`headerActions ${page === 'macro' ? 'macroHeaderActions' : ''}`}>
@@ -632,62 +641,104 @@ export default function Dashboard({
           </div>}
           <div className="headerUtilityActions">
             {page === 'macro' && <button className="ghost" onClick={refreshIndicators} disabled={indicatorRefreshing}>{indicatorRefreshing ? '갱신 중…' : '지표 갱신'}</button>}
-            {page !== 'macro' && <button className="ghost" onClick={() => refresh()} disabled={loading}>{loading ? '불러오는 중…' : '새로고침'}</button>}
+            {page === 'sources' && <button className="ghost" onClick={() => refresh()} disabled={loading}>{loading ? '불러오는 중…' : '새로고침'}</button>}
             <button className="primary" onClick={collectNow} disabled={collecting} title="RSS 소스에서 새 기사를 실제로 가져옵니다 (새로고침과 다름)">{collecting ? '수집 중…' : '뉴스 수집'}</button>
           </div>
         </div>
-      </header>
+      </header>}
       {collectResult && <div className="collectResult">{collectResult}</div>}
       {indicatorRefreshResult && <div className="collectResult">{indicatorRefreshResult}</div>}
 
       {page === 'feed' ? <>
-        <div className="filters">
-          <div className="filterRow">
-            <input className="searchInput" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="회사명·소재명 검색: PC, PA66, PEEK, LG Chem…" />
-            <select value={sort} onChange={(e) => setSort(e.target.value as SortKey)}>
-              <option value="latest">최신순</option>
-              <option value="score">스코어 높은순</option>
-              <option value="category">카테고리순</option>
-            </select>
-          </div>
-          <div className="filterRow periodImpactRow">
-            <div className="periodGroup">
-              {PERIOD_PRESETS.map((p) => (
-                <button key={p.days} className={!customDays && days === p.days ? 'active' : ''} onClick={() => changePeriod(p.days)}>{p.label}</button>
+        <FeedHeader
+          lastCollectedAt={stats.lastCollectedAt}
+          resultsCount={filtered.length}
+          query={query}
+          onQueryChange={(v) => { setQuery(v); setVisibleCount(12); }}
+          sort={sort}
+          onSortChange={(v) => { setSort(v); setVisibleCount(12); }}
+          advancedOpen={showAdvanced}
+          onToggleAdvanced={() => setShowAdvanced((v) => !v)}
+        />
+
+        {showAdvanced && <div id="feedAdvancedPanel" className="feedAdvancedPanel">
+          <div className="feedAdvancedRow">
+            <span className="feedAdvancedLabel">언어</span>
+            <div className="tabs smallTabs">
+              {Object.entries(LANGUAGE_LABELS).map(([k, v]) => (
+                <button key={k} className={selectedLanguages.includes(k) ? 'active' : ''} onClick={() => { toggle(selectedLanguages, k, setSelectedLanguages); setVisibleCount(12); }}>{v}</button>
               ))}
-              <label className={`customDays ${customDays ? 'active' : ''}`}>
-                직접입력
-                <input type="number" min={1} max={730} value={customDays ? days : ''} placeholder="일수"
-                  onChange={(e) => { const v = Number(e.target.value); if (v > 0) { setCustomDays(true); setDays(v); } }}
-                  onBlur={() => refresh()} onKeyDown={(e) => { if (e.key === 'Enter') refresh(); }} />
-              </label>
             </div>
-            <label className="scoreSlider">최소 Impact {minScore}<input type="range" min="0" max="100" step="5" value={minScore} onChange={(e) => setMinScore(Number(e.target.value))} /></label>
           </div>
-          <div className="tabs">
-            <button className={!selectedCategories.length ? 'active' : ''} onClick={() => setSelectedCategories([])}>전체 <span>{stats.filteredArticles}</span></button>
-            {visibleCategories.map((c) => <button key={c.id} className={selectedCategories.includes(c.id) ? 'active' : ''} style={{ ['--chip' as string]: c.color }} onClick={() => toggle(selectedCategories, c.id, setSelectedCategories)}>{c.label} <span>{stats.counts.find((x) => x.category === c.id)?.count || 0}</span></button>)}
+          <div className="feedAdvancedRow">
+            <label className="scoreSlider">최소 Impact {minScore}
+              <input type="range" min="0" max="100" step="5" value={minScore} onChange={(e) => { setMinScore(Number(e.target.value)); setVisibleCount(12); }} />
+            </label>
+            <label className={`customDays ${customDays ? 'active' : ''}`}>
+              직접 입력(일)
+              <input type="number" min={1} max={730} value={customDays ? days : ''} placeholder="일수"
+                onChange={(e) => { const v = Number(e.target.value); if (v > 0) { setCustomDays(true); setDays(v); } }}
+                onBlur={() => refresh()} onKeyDown={(e) => { if (e.key === 'Enter') refresh(); }} />
+            </label>
           </div>
-          <div className="tabs smallTabs">{Object.entries(LANGUAGE_LABELS).map(([k, v]) => <button key={k} className={selectedLanguages.includes(k) ? 'active' : ''} onClick={() => toggle(selectedLanguages, k, setSelectedLanguages)}>{v}</button>)}</div>
+        </div>}
+
+        <FeedCategoryTabs
+          categories={visibleCategories}
+          selected={selectedCategories}
+          counts={stats.counts}
+          totalCount={stats.filteredArticles}
+          onToggle={(id) => { toggle(selectedCategories, id, setSelectedCategories); setVisibleCount(12); }}
+          onSelectAll={() => { setSelectedCategories([]); setVisibleCount(12); }}
+        />
+
+        <div className="feedLayout">
+          <div className="feedMain" id="feedArticles">
+            {heroArticle && <FeedHero
+              article={heroArticle}
+              categoryLabel={categoryById.get(heroArticle.category)?.label || heroArticle.category}
+              categoryColor={categoryById.get(heroArticle.category)?.color || '#E8A63C'}
+            />}
+            {visibleGeneralArticles.length === 0 ? <div className="empty"><b>조건에 맞는 기사가 없습니다</b><span>검색어를 지우거나 기간을 늘려보세요. 데이터가 오래됐다면 &ldquo;뉴스 수집&rdquo;을 눌러 새 기사를 가져오세요.</span></div> : <>
+              <div className="feedGrid">
+                {visibleGeneralArticles.map((a, i) => (
+                  <FeedCard
+                    key={a.id}
+                    article={a}
+                    index={i}
+                    categoryLabel={categoryById.get(a.category)?.label || a.category}
+                    categoryColor={categoryById.get(a.category)?.color || '#E8A63C'}
+                  />
+                ))}
+              </div>
+              {generalArticles.length > visibleGeneralArticles.length && (
+                <button type="button" className="feedMoreBtn" onClick={() => setVisibleCount((v) => v + 12)}>
+                  더 많은 기사 보기 ({(generalArticles.length - visibleGeneralArticles.length).toLocaleString()}건 더)
+                </button>
+              )}
+            </>}
+          </div>
+
+          <FeedSidePanel
+            briefItems={briefItems}
+            keywords={keywordList}
+            activeKeyword={query}
+            onKeywordClick={(t) => { setQuery(t); setVisibleCount(12); }}
+            categories={visibleCategories}
+            selectedCategories={selectedCategories}
+            onToggleCategory={(id) => { toggle(selectedCategories, id, setSelectedCategories); setVisibleCount(12); }}
+            onSelectAllCategories={() => { setSelectedCategories([]); setVisibleCount(12); }}
+            periodPresets={PERIOD_PRESETS}
+            days={days}
+            customDays={customDays}
+            onChangePeriod={(d) => { changePeriod(d); setVisibleCount(12); }}
+            onReset={() => {
+              setQuery(''); setSelectedCategories([]); setSelectedLanguages([]); setMinScore(0);
+              setVisibleCount(12); changePeriod(30);
+            }}
+            resultCount={filtered.length}
+          />
         </div>
-        <div className="newsList" key="feed-news-list">{filtered.length === 0 ? <div className="empty"><b>조건에 맞는 기사가 없습니다</b><span>검색어를 지우거나 기간을 늘려보세요. 데이터가 오래됐다면 &ldquo;뉴스 수집&rdquo;을 눌러 새 기사를 가져오세요.</span></div> : filtered.map((a, i) => {
-            const cat = categoryById.get(a.category); const color = cat?.color || '#E8A63C';
-            // [v1.4] 엄격한 문자열 비교(!==)는 "[매크로] X - 출처" vs "X 출처"처럼
-            // 접두사/구두점만 다른 사실상 동일한 텍스트를 서로 다르다고 판단해
-            // 번역이 실패했을 때도 영문이 두 줄로 중복 표시되는 버그가 있었음
-            // (스크린샷에서 확인: 번역 안 된 영문 제목이 위아래로 거의 그대로 반복).
-            // 정규화(소문자·공백·구두점 제거) 후 비교해 진짜 다른 내용일 때만 부제로 노출.
-            const normText = (s: string) => s.toLowerCase().replace(/^\[매크로\]\s*/,'').replace(/[^\p{L}\p{N}]+/gu,'').trim();
-            const titleKo = a.titleKo || a.title; const titleEn = a.titleEn && normText(a.titleEn) !== normText(titleKo) ? a.titleEn : null;
-            const rawSummary = a.summaryKo || a.summary; const titleCore = a.title.replace(/\s[-–—|]\s.*$/,'').trim(); const summaryCore = (rawSummary || '').replace(/\s[-–—|]\s.*$/,'').trim();
-            const summary = rawSummary && summaryCore !== titleCore && !summaryCore.includes(titleCore.slice(0, 24)) ? rawSummary : `${cat?.label || 'EP 산업'} 관련 신호입니다. 원문 확인이 필요한 항목으로 분류·중복 병합·스코어링을 통과했습니다.`;
-            return <article className="newsCard" key={a.id} style={{ ['--accent' as string]: color, ['--i' as string]: Math.min(i, 12) }}>
-              <div className="meta"><span className="cat">{cat?.label || a.category}</span><time>{shortDate(a.publishedAt)}</time><span className="impact">Impact {Math.round(a.score || 0)}</span><span>{LANGUAGE_LABELS[a.language || 'other'] || '기타'}</span>{(a.duplicateCount || 1) > 1 && <span className="merged">{a.duplicateCount}개 매체 보도</span>}</div>
-              <h3>{titleKo}{titleEn && <span className="titleEn">{titleEn}</span>}</h3>
-              <p>{summary || '요약 없음'}</p>
-              <div className="cardFooter"><span>{(a.duplicateSources || []).slice(0, 3).join(' · ')}</span><a href={a.link} target="_blank" rel="noreferrer">[{a.sourceName || a.feedName}] ↗</a></div>
-            </article>;
-          })}</div>
       </> : page === 'macro' ? <>
         {macroHighlight && <article className="macroHighlightCard">
           {/* [디자인 리뉴얼] 순수 장식용 도트-글로브. 실데이터가 아니므로 히어로 카드
