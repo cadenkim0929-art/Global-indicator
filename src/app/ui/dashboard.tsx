@@ -44,8 +44,8 @@ const PERIOD_PRESETS = [
 // - 장기: quarterly/yearly growth frame (GDP)
 type IndicatorHorizon = 'now' | 'recent' | 'long';
 const HORIZON_TABS: Array<{ key: IndicatorHorizon; label: string; frequencies: IndicatorFrequency[] }> = [
-  { key: 'now', label: '지금', frequencies: ['daily'] },
-  { key: 'recent', label: '최근', frequencies: ['monthly'] },
+  { key: 'now', label: '단기', frequencies: ['daily'] },
+  { key: 'recent', label: '중기', frequencies: ['monthly'] },
   { key: 'long', label: '장기', frequencies: ['quarterly', 'yearly'] },
 ];
 function indicatorHorizon(ind: IndicatorCard): IndicatorHorizon {
