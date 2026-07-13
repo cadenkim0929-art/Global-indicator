@@ -88,27 +88,27 @@ def parse_us_10y(desc: str) -> tuple[float, str]:
 
 PAGES: dict[str, dict[str, Any]] = {
     "fx_usd_krw": {
-        "name_ko": "원/달러 환율(TradingEconomics 보강)",
+        "name_ko": "원/달러 환율",
         "url": "https://tradingeconomics.com/south-korea/currency",
         "parser": lambda desc: parse_usd_pair(desc, "USD/KRW"),
     },
     "fx_usd_cny": {
-        "name_ko": "위안/달러 환율(TradingEconomics 보강)",
+        "name_ko": "위안/달러 환율",
         "url": "https://tradingeconomics.com/china/currency",
         "parser": lambda desc: parse_usd_pair(desc, "USD/CNY"),
     },
     "oil_brent": {
-        "name_ko": "Brent유 가격(TradingEconomics 보강)",
+        "name_ko": "Brent유 가격",
         "url": "https://tradingeconomics.com/commodity/brent-crude-oil",
         "parser": lambda desc: parse_commodity(desc, "Brent"),
     },
     "oil_wti": {
-        "name_ko": "WTI유 가격(TradingEconomics 보강)",
+        "name_ko": "WTI유 가격",
         "url": "https://tradingeconomics.com/commodity/crude-oil",
         "parser": lambda desc: parse_commodity(desc, "Crude Oil"),
     },
     "rate_us_10y": {
-        "name_ko": "미국 10년물 국채금리(TradingEconomics 보강)",
+        "name_ko": "미국 10년물 국채금리",
         "url": "https://tradingeconomics.com/united-states/government-bond-yield",
         "parser": parse_us_10y,
     },

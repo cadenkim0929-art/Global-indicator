@@ -1,49 +1,49 @@
 {
-  "version": "v5.8-pmi-tradingeconomics",
-  "generatedAt": "2026-07-13T04:17:04.751259+00:00",
+  "version": "v5.15-short-macro-tradingeconomics",
+  "generatedAt": "2026-07-13T14:40:38.445014+00:00",
   "indicators": [
     {
       "id": "fx_usd_krw",
       "name": "USD/KRW exchange rate",
-      "nameKo": "원/달러 환율(FRED)",
+      "nameKo": "원/달러 환율",
       "frequency": "daily",
       "category": "fx",
       "unit": "KRW per USD",
-      "sourceId": "fred",
-      "sourceUrl": "https://fred.stlouisfed.org/series/DEXKOUS",
+      "sourceId": "fred+tradingeconomics_public_web",
+      "sourceUrl": "https://tradingeconomics.com/south-korea/currency",
       "epRelevant": true
     },
     {
       "id": "fx_usd_cny",
       "name": "USD/CNY exchange rate",
-      "nameKo": "위안/달러 환율(FRED)",
+      "nameKo": "위안/달러 환율",
       "frequency": "daily",
       "category": "fx",
       "unit": "CNY per USD",
-      "sourceId": "fred",
-      "sourceUrl": "https://fred.stlouisfed.org/series/DEXCHUS",
+      "sourceId": "fred+tradingeconomics_public_web",
+      "sourceUrl": "https://tradingeconomics.com/china/currency",
       "epRelevant": true
     },
     {
       "id": "oil_brent",
       "name": "Brent crude oil price",
-      "nameKo": "Brent유 가격(FRED)",
+      "nameKo": "Brent유 가격",
       "frequency": "daily",
       "category": "energy",
       "unit": "USD/bbl",
-      "sourceId": "fred",
-      "sourceUrl": "https://fred.stlouisfed.org/series/DCOILBRENTEU",
+      "sourceId": "fred+tradingeconomics_public_web",
+      "sourceUrl": "https://tradingeconomics.com/commodity/brent-crude-oil",
       "epRelevant": true
     },
     {
       "id": "oil_wti",
       "name": "WTI crude oil price",
-      "nameKo": "WTI유 가격(FRED)",
+      "nameKo": "WTI유 가격",
       "frequency": "daily",
       "category": "energy",
       "unit": "USD/bbl",
-      "sourceId": "fred",
-      "sourceUrl": "https://fred.stlouisfed.org/series/DCOILWTICO",
+      "sourceId": "fred+tradingeconomics_public_web",
+      "sourceUrl": "https://tradingeconomics.com/commodity/crude-oil",
       "epRelevant": true
     },
     {
@@ -53,8 +53,8 @@
       "frequency": "daily",
       "category": "rates",
       "unit": "percent",
-      "sourceId": "fred",
-      "sourceUrl": "https://fred.stlouisfed.org/series/DGS10",
+      "sourceId": "fred+tradingeconomics_public_web",
+      "sourceUrl": "https://tradingeconomics.com/united-states/government-bond-yield",
       "epRelevant": false
     },
     {
@@ -775,6 +775,54 @@
       "observedAt": "2026-07-10T21:08:44.262033+00:00"
     },
     {
+      "indicatorId": "rate_us_10y",
+      "period": "2026-06-29",
+      "value": 4.38,
+      "observedAt": "2026-06-29"
+    },
+    {
+      "indicatorId": "rate_us_10y",
+      "period": "2026-06-30",
+      "value": 4.44,
+      "observedAt": "2026-06-30"
+    },
+    {
+      "indicatorId": "rate_us_10y",
+      "period": "2026-07-01",
+      "value": 4.48,
+      "observedAt": "2026-07-01"
+    },
+    {
+      "indicatorId": "rate_us_10y",
+      "period": "2026-07-02",
+      "value": 4.49,
+      "observedAt": "2026-07-02"
+    },
+    {
+      "indicatorId": "rate_us_10y",
+      "period": "2026-07-06",
+      "value": 4.48,
+      "observedAt": "2026-07-06"
+    },
+    {
+      "indicatorId": "rate_us_10y",
+      "period": "2026-07-07",
+      "value": 4.55,
+      "observedAt": "2026-07-07"
+    },
+    {
+      "indicatorId": "rate_us_10y",
+      "period": "2026-07-08",
+      "value": 4.56,
+      "observedAt": "2026-07-08"
+    },
+    {
+      "indicatorId": "rate_us_10y",
+      "period": "2026-07-09",
+      "value": 4.54,
+      "observedAt": "2026-07-09"
+    },
+    {
       "indicatorId": "fx_usd_krw",
       "period": "2026-06-23",
       "value": 1532.43,
@@ -965,54 +1013,6 @@
       "period": "2026-07-06",
       "value": 69.6,
       "observedAt": "2026-07-06"
-    },
-    {
-      "indicatorId": "rate_us_10y",
-      "period": "2026-06-29",
-      "value": 4.38,
-      "observedAt": "2026-06-29"
-    },
-    {
-      "indicatorId": "rate_us_10y",
-      "period": "2026-06-30",
-      "value": 4.44,
-      "observedAt": "2026-06-30"
-    },
-    {
-      "indicatorId": "rate_us_10y",
-      "period": "2026-07-01",
-      "value": 4.48,
-      "observedAt": "2026-07-01"
-    },
-    {
-      "indicatorId": "rate_us_10y",
-      "period": "2026-07-02",
-      "value": 4.49,
-      "observedAt": "2026-07-02"
-    },
-    {
-      "indicatorId": "rate_us_10y",
-      "period": "2026-07-06",
-      "value": 4.48,
-      "observedAt": "2026-07-06"
-    },
-    {
-      "indicatorId": "rate_us_10y",
-      "period": "2026-07-07",
-      "value": 4.55,
-      "observedAt": "2026-07-07"
-    },
-    {
-      "indicatorId": "rate_us_10y",
-      "period": "2026-07-08",
-      "value": 4.56,
-      "observedAt": "2026-07-08"
-    },
-    {
-      "indicatorId": "rate_us_10y",
-      "period": "2026-07-09",
-      "value": 4.54,
-      "observedAt": "2026-07-09"
     },
     {
       "indicatorId": "industrial_production_us",
@@ -1933,34 +1933,64 @@
       "observedAt": "2025-01-01"
     },
     {
+      "indicatorId": "fx_usd_cny",
+      "period": "2026-07-13",
+      "value": 6.7799,
+      "observedAt": "2026-07-13T12:45:04.223465+00:00"
+    },
+    {
       "indicatorId": "pmi_manufacturing_us_te",
       "period": "2026-06-01",
       "value": 53.9,
-      "observedAt": "2026-07-13T04:17:03.852939+00:00"
+      "observedAt": "2026-07-13T12:45:05.429186+00:00"
     },
     {
       "indicatorId": "pmi_manufacturing_korea_te",
       "period": "2026-06-01",
       "value": 52.1,
-      "observedAt": "2026-07-13T04:17:04.153595+00:00"
+      "observedAt": "2026-07-13T12:45:05.750281+00:00"
     },
     {
       "indicatorId": "pmi_manufacturing_japan_te",
       "period": "2026-06-01",
       "value": 54.8,
-      "observedAt": "2026-07-13T04:17:04.477061+00:00"
+      "observedAt": "2026-07-13T12:45:06.077981+00:00"
     },
     {
       "indicatorId": "pmi_manufacturing_india_te",
       "period": "2026-06-01",
       "value": 54.5,
-      "observedAt": "2026-07-13T04:17:04.714742+00:00"
+      "observedAt": "2026-07-13T12:45:06.749302+00:00"
     },
     {
       "indicatorId": "pmi_manufacturing_eurozone_te",
       "period": "2026-06-01",
       "value": 51.4,
-      "observedAt": "2026-07-13T04:17:04.751244+00:00"
+      "observedAt": "2026-07-13T12:45:07.067669+00:00"
+    },
+    {
+      "indicatorId": "fx_usd_krw",
+      "period": "2026-07-13",
+      "value": 1495.7,
+      "observedAt": "2026-07-13T14:40:37.316887+00:00"
+    },
+    {
+      "indicatorId": "oil_brent",
+      "period": "2026-07-13",
+      "value": 79.58,
+      "observedAt": "2026-07-13T14:40:37.892826+00:00"
+    },
+    {
+      "indicatorId": "oil_wti",
+      "period": "2026-07-13",
+      "value": 74.62,
+      "observedAt": "2026-07-13T14:40:38.120956+00:00"
+    },
+    {
+      "indicatorId": "rate_us_10y",
+      "period": "2026-07-13",
+      "value": 4.59,
+      "observedAt": "2026-07-13T14:40:38.444993+00:00"
     }
   ]
 }
