@@ -737,14 +737,14 @@ export default function Dashboard({
           </section>
           <section className="indicatorSection gdpOverviewSection">
             <div className="indicatorSectionHead">
-              <span className="indicatorSectionTitleGroup"><b>국가별 GDP 성장률</b><span className="sectionInfoIcon" title="분기 GDP·연간 GDP·성장률을 국가별로 묶어 보여줍니다.">ⓘ</span></span>
+              <span className="indicatorSectionTitleGroup"><b>주요국 성장률 요약</b><span className="sectionInfoIcon" title="GDP 기반 경기 속도만 요약 표시합니다. 자세한 GDP 규모와 성장률은 장기 탭에서 확인하세요.">ⓘ</span></span>
               <button className="sectionMore" onClick={() => changeIndicatorHorizon('long')}>더보기 ›</button>
             </div>
             <div className="gdpOverviewGrid">{longGdpGroups.map((group) => renderGdpOverviewCard(group))}</div>
           </section>
         </div> : indicatorHorizonKey === 'long' ? <div className="indicatorSections" key="macro-gdp-country-grouped">
           <section className="indicatorSection">
-            <div className="indicatorSectionHead"><span className="indicatorSectionTitleGroup"><b>국가별 GDP</b><span className="sectionInfoIcon" title="분기 GDP·연간 GDP·성장률을 국가별로 묶어 보여줍니다. 성장률은 지표 가용성에 따라 전분기 또는 전년 대비 기준입니다.">ⓘ</span></span></div>
+            <div className="indicatorSectionHead"><span className="indicatorSectionTitleGroup"><b>국가별 GDP 규모와 성장률</b><span className="sectionInfoIcon" title="경제 규모, 분기 흐름, 연간 성장률을 국가별로 비교합니다. 성장률은 지표 가용성에 따라 전분기 또는 전년 대비 기준입니다.">ⓘ</span></span><span>경제 규모, 분기 흐름, 연간 성장률을 국가별로 비교</span></div>
             <div className="indicatorGrid gdpDetailGrid">{longGdpGroups.map((group) => renderGdpCountryCard(group))}</div>
           </section>
         </div> : <div className="indicatorSections" key="macro-medium-grouped">
