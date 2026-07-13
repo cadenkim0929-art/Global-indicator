@@ -1205,3 +1205,35 @@ body{word-break:keep-all;overflow-wrap:break-word}
   .feedCardFooterLeft{min-width:0;overflow:hidden}
   .feedCardSource{max-width:42vw}
 }
+
+/* ── v5.19 LLM-less deterministic reports ───────────────────────────── */
+.reportTabs{display:flex;gap:8px;flex-wrap:wrap;margin:-8px 0 22px}
+.reportTabs button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 15px;font:700 12px 'Noto Sans KR';color:var(--muted);box-shadow:var(--shadow-sm);cursor:pointer}
+.reportTabs button.active{background:var(--brand);border-color:var(--brand);color:#fff}
+.reportPage{display:grid;gap:16px}
+.reportSummaryGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.reportSummaryGrid article,.reportInsightCard,.reportPanel,.themeReportCard{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+.reportSummaryGrid article{padding:18px;display:grid;gap:5px}
+.reportSummaryGrid span,.reportInsightCard span{font:800 10px 'JetBrains Mono';letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2)}
+.reportSummaryGrid b{font:800 28px/1 'Noto Sans KR';color:var(--text)}
+.reportSummaryGrid small{font:600 11px 'Noto Sans KR';color:var(--muted)}
+.reportInsightCard{padding:22px 24px}
+.reportInsightCard h2{margin:5px 0 12px;font:800 22px/1.25 'Noto Sans KR';color:var(--text)}
+.reportInsightCard ul{margin:0;padding-left:18px;color:var(--text-dim);font:500 13.5px/1.75 'Noto Sans KR'}
+.reportTwoCol{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:16px}
+.reportPanel{padding:18px;min-width:0}
+.reportPanelHead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:13px}
+.reportPanelHead b{font:800 15px 'Noto Sans KR';color:var(--text)}
+.reportPanelHead span{font:700 10.5px 'Noto Sans KR';color:var(--muted-2)}
+.reportArticleList{display:grid;gap:8px}
+.reportArticleRow{display:grid;grid-template-columns:26px minmax(0,1fr) 42px;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--line-soft);border-radius:14px;color:inherit;background:color-mix(in srgb,var(--surface) 78%,var(--surface-2));text-decoration:none}
+.reportArticleRow>span{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--surface-2);font:800 11px 'JetBrains Mono';color:var(--muted)}
+.reportArticleRow b{display:block;font:700 13px/1.35 'Noto Sans KR';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.reportArticleRow small{display:block;margin-top:3px;font:600 10.5px 'Noto Sans KR';color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.reportArticleRow strong{font:800 15px 'JetBrains Mono';color:var(--brand);text-align:right}
+.reportBars{display:grid;gap:10px}.reportBar{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 34px;gap:8px;align-items:center;padding-bottom:8px;border-bottom:1px solid var(--line-soft);overflow:hidden}
+.reportBar span{font:700 12px 'Noto Sans KR';color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.reportBar b{font:800 12px 'JetBrains Mono';color:var(--brand);text-align:right}.reportBar i{position:absolute;left:0;bottom:0;height:3px;border-radius:99px;background:var(--brand)}
+.reportChips{display:flex;gap:7px;flex-wrap:wrap}.reportChips span{display:inline-flex;gap:5px;align-items:center;border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:7px 10px;font:700 11.5px 'Noto Sans KR';color:var(--text-dim)}.reportChips b{font:800 10px 'JetBrains Mono';color:var(--brand)}
+.reportMetricList{display:grid;gap:8px}.reportMetricList a{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line-soft);color:inherit;text-decoration:none}.reportMetricList b{font:700 12.5px 'Noto Sans KR';color:var(--text-dim)}.reportMetricList span{font:800 12px 'JetBrains Mono'}.reportMetricList .up{color:#B5473A}.reportMetricList .down{color:#2E6B8A}
+.themeReportGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.themeReportCard{padding:16px}.themeReportCard>span{font:800 14px 'Noto Sans KR';color:var(--text)}.themeReportCard>b{display:block;margin-top:8px;font:800 24px 'Noto Sans KR';color:var(--brand)}.themeReportCard>small{display:block;margin-bottom:12px;color:var(--muted);font:600 11px 'Noto Sans KR'}
+@media(max-width:900px){.reportSummaryGrid,.reportTwoCol,.themeReportGrid{grid-template-columns:1fr}.reportTabs{margin-top:0}.reportSummaryGrid article{padding:15px}.reportInsightCard,.reportPanel{padding:16px}.reportArticleRow{grid-template-columns:24px minmax(0,1fr) 38px}.reportArticleRow b{white-space:normal}.reportArticleRow small{white-space:normal}}

@@ -1,6 +1,6 @@
 import type { Article } from '@/lib/types';
 
-export type PageKey = 'feed' | 'sources' | 'macro';
+export type PageKey = 'feed' | 'sources' | 'macro' | 'reports';
 export type SortKey = 'latest' | 'score' | 'category';
 
 // [피드 리디자인] 날짜/텍스트 가공 유틸을 dashboard.tsx에서 분리 —

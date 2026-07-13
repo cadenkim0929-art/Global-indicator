@@ -182,6 +182,7 @@ export default function Dashboard({
   const [indicatorCounts, setIndicatorCounts] = useState(initialIndicatorCounts);
   const [indicatorHorizonKey, setIndicatorHorizonKey] = useState<IndicatorHorizon>('now');
   const [indicatorLoading, setIndicatorLoading] = useState(false);
+  const [reportTab, setReportTab] = useState<'daily' | 'weekly' | 'monthly' | 'theme'>('daily');
 
 
   async function loadIndicators() {
@@ -252,6 +253,57 @@ export default function Dashboard({
     });
     return Array.from(map.entries()).sort((a, b) => b[1].count - a[1].count);
   }, [articles, categoryById]);
+
+  const reportModel = useMemo(() => {
+    const validArticles = articles.filter((a) => Number.isFinite(+new Date(a.publishedAt)));
+    const anchor = validArticles.reduce((max, a) => Math.max(max, +new Date(a.publishedAt)), 0);
+    const rangeArticles = (rangeDays: number) => validArticles.filter((a) => anchor > 0 && anchor - +new Date(a.publishedAt) <= rangeDays * 86400000);
+    const makeReport = (rangeDays: number) => {
+      const scope = rangeArticles(rangeDays);
+      const topArticles = rankByScoreThenDate(scope).slice(0, 6);
+      const categoryMap = new Map<string, { label: string; count: number; scoreSum: number }>();
+      const tagMap = new Map<string, number>();
+      const sourceMap = new Map<string, number>();
+      scope.forEach((a) => {
+        const meta = categoryById.get(a.category);
+        const row = categoryMap.get(a.category) || { label: meta?.label || a.category, count: 0, scoreSum: 0 };
+        row.count += 1; row.scoreSum += a.score || 0; categoryMap.set(a.category, row);
+        (a.tags || []).forEach((t) => { if (t && t.length <= 18) tagMap.set(t, (tagMap.get(t) || 0) + 1); });
+        const src = a.sourceName || a.feedName || 'Unknown';
+        sourceMap.set(src, (sourceMap.get(src) || 0) + 1);
+      });
+      const categoryRows = Array.from(categoryMap.entries())
+        .map(([id, v]) => ({ id, ...v, avgScore: v.count ? Math.round(v.scoreSum / v.count) : 0 }))
+        .sort((a, b) => b.count - a.count || b.avgScore - a.avgScore);
+      const indicatorMovers = [...allIndicators]
+        // 보고서 변동 랭킹에서는 GDP 계열 전체를 제외한다. GDP level은 단위·계절성,
+        // GDP growth는 '성장률 값의 증감률'이라 보고서 신호를 왜곡할 수 있다.
+        .filter((ind) => ind.latestValue !== null && ind.pctChange !== null)
+        .filter((ind) => !ind.id.startsWith('gdp_'))
+        .sort((a, b) => Math.abs(b.pctChange || 0) - Math.abs(a.pctChange || 0))
+        .slice(0, 6);
+      return {
+        rangeDays,
+        articles: scope,
+        topArticles,
+        categoryRows,
+        topTags: Array.from(tagMap.entries()).sort((a, b) => b[1] - a[1]).slice(0, 10),
+        topSources: Array.from(sourceMap.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5),
+        highImpact: scope.filter((a) => (a.score || 0) >= 80).length,
+        avgScore: scope.length ? Math.round(scope.reduce((sum, a) => sum + (a.score || 0), 0) / scope.length) : 0,
+        indicatorMovers,
+      };
+    };
+    const themeRows = (stats.categories || []).map((cat) => {
+      const scope = validArticles.filter((a) => a.category === cat.id);
+      const top = rankByScoreThenDate(scope).slice(0, 3);
+      return { ...cat, count: scope.length, avgScore: scope.length ? Math.round(scope.reduce((sum, a) => sum + (a.score || 0), 0) / scope.length) : 0, top };
+    }).filter((x) => x.count > 0).sort((a, b) => b.count - a.count || b.avgScore - a.avgScore).slice(0, 8);
+    return {
+      generatedAt: anchor ? new Date(anchor).toISOString() : null,
+      daily: makeReport(1), weekly: makeReport(7), monthly: makeReport(30), themeRows,
+    };
+  }, [articles, allIndicators, categoryById, stats.categories]);
 
   async function refresh(nextDays = days) {
     setLoading(true);
@@ -562,6 +614,46 @@ export default function Dashboard({
     </Link>;
   }
 
+
+  function renderReportArticle(a: Article, index: number) {
+    const cat = categoryById.get(a.category);
+    return <a className="reportArticleRow" href={a.link} target="_blank" rel="noreferrer" key={a.id}>
+      <span>{index + 1}</span>
+      <div><b>{editorialHeadline(a.titleKo || a.title, a.sourceName || a.feedName)}</b><small>{cat?.label || a.category} · {a.sourceName || a.feedName} · {shortDate(a.publishedAt)}</small></div>
+      <strong>{a.score || 0}</strong>
+    </a>;
+  }
+
+  function renderReportBlock(title: string, report: typeof reportModel.daily) {
+    const topCategory = report.categoryRows[0];
+    const topMover = report.indicatorMovers[0];
+    return <div className="reportPage">
+      <section className="reportSummaryGrid">
+        <article><span>기사 수</span><b>{report.articles.length.toLocaleString()}</b><small>{report.rangeDays}일 기준</small></article>
+        <article><span>High Impact</span><b>{report.highImpact.toLocaleString()}</b><small>Impact 80 이상</small></article>
+        <article><span>평균 Impact</span><b>{report.avgScore}</b><small>단순 평균</small></article>
+        <article><span>최다 카테고리</span><b>{topCategory?.label.replace(/^\S+\s*/, '') || '—'}</b><small>{topCategory?.count || 0}건</small></article>
+      </section>
+      <section className="reportInsightCard">
+        <span>Rule-based brief</span>
+        <h2>{title} 핵심 신호</h2>
+        <ul>
+          <li>최근 {report.rangeDays}일 기준 기사는 {report.articles.length.toLocaleString()}건, High Impact 기사는 {report.highImpact.toLocaleString()}건입니다.</li>
+          <li>가장 많이 관측된 영역은 {topCategory ? `${topCategory.label} ${topCategory.count}건` : '아직 충분한 데이터 없음'}입니다.</li>
+          <li>가장 큰 지표 변동은 {topMover ? `${topMover.nameKo} ${topMover.pctChange! > 0 ? '+' : ''}${topMover.pctChange}%` : '수집 대기 중'}입니다.</li>
+        </ul>
+      </section>
+      <div className="reportTwoCol">
+        <section className="reportPanel"><div className="reportPanelHead"><b>Impact Top 기사</b><span>점수·최신순</span></div><div className="reportArticleList">{report.topArticles.length ? report.topArticles.map(renderReportArticle) : <div className="empty small">기사 없음</div>}</div></section>
+        <section className="reportPanel"><div className="reportPanelHead"><b>카테고리 분포</b><span>건수 기준</span></div><div className="reportBars">{report.categoryRows.slice(0, 8).map((row) => <div className="reportBar" key={row.id}><span>{row.label}</span><b>{row.count}</b><i style={{ width: `${Math.max(8, Math.round((row.count / Math.max(1, report.articles.length)) * 100))}%` }} /></div>)}</div></section>
+      </div>
+      <div className="reportTwoCol">
+        <section className="reportPanel"><div className="reportPanelHead"><b>반복 키워드</b><span>빈도순</span></div><div className="reportChips">{report.topTags.map(([tag, count]) => <span key={tag}>#{tag}<b>{count}</b></span>)}</div></section>
+        <section className="reportPanel"><div className="reportPanelHead"><b>주요 지표 변동</b><span>절대변동률순</span></div><div className="reportMetricList">{report.indicatorMovers.map((ind) => <Link href={`/indicators/${ind.id}`} key={ind.id}><b>{ind.nameKo}</b><span className={(ind.pctChange || 0) >= 0 ? 'up' : 'down'}>{ind.pctChange! > 0 ? '+' : ''}{ind.pctChange}%</span></Link>)}</div></section>
+      </div>
+    </div>;
+  }
+
   return <main className="appShell">
     <aside className="sidebar">
       <div className="logo"><span>EP</span><div className="logoText"><b>EP Industry Monitor</b><small>Engineering · Plastics · Intelligence</small></div></div>
@@ -572,7 +664,7 @@ export default function Dashboard({
         {/* [디자인 리뉴얼] 보고서/관심 지표/알림 설정은 아직 백엔드가 없는 예정 기능이라
             실제 페이지 전환 없이 자리만 잡아두고 "Soon" 배지로 준비 중임을 명시.
             데이터 없는 기능을 있는 것처럼 보이게 하지 않기 위한 의도적 처리. */}
-        <button className="soon" disabled title="준비 중인 기능입니다">보고서<span className="soonBadge">Soon</span></button>
+        <button className={page === 'reports' ? 'active' : ''} onClick={() => setPage('reports')}>보고서</button>
         <button className="soon" disabled title="준비 중인 기능입니다">관심 지표<span className="soonBadge">Soon</span></button>
         <button className="soon" disabled title="준비 중인 기능입니다">알림 설정<span className="soonBadge">Soon</span></button>
       </nav>
@@ -594,11 +686,13 @@ export default function Dashboard({
     <section className="content">
       {page !== 'feed' && <header className="pageHeader">
         <div className="pageHeaderTitle">
-          <span className="eyebrow">{page === 'macro' ? 'Global Indicators' : 'Source Directory'}</span>
-          <h1>{page === 'sources' ? '소스 현황' : '매크로 & 전방산업 지표'}</h1>
+          <span className="eyebrow">{page === 'macro' ? 'Global Indicators' : page === 'reports' ? 'Deterministic Reports' : 'Source Directory'}</span>
+          <h1>{page === 'sources' ? '소스 현황' : page === 'reports' ? '보고서' : '매크로 & 전방산업 지표'}</h1>
           <p>{page === 'sources' ? `${feedCounts.length}개 소스가 최근 기여한 기사 수`
+            : page === 'reports' ? 'LLM 없이 기사·지표 데이터를 규칙 기반으로 집계한 자동 보고서입니다.'
             : '거시경제와 전방산업의 핵심 지표를 모니터링하여, 변화의 흐름을 한눈에 파악하세요.'}</p>
           {page === 'macro' && <span className="pageHeaderMeta">{indicatorMeta.totalIndicators}개 지표 · {formatDate(indicatorMeta.generatedAt)} 갱신</span>}
+          {page === 'reports' && <span className="pageHeaderMeta">기준 데이터 · {formatDate(reportModel.generatedAt)}</span>}
         </div>
         <div className={`headerActions ${page === 'macro' ? 'macroHeaderActions' : ''}`}>
           {page === 'macro' && <div className="headerHorizonTabs" aria-label="지표 기간">
@@ -755,6 +849,17 @@ export default function Dashboard({
             <div className="indicatorGrid mediumIndicatorGrid">{group.items.map((ind) => renderIndicatorCard(ind))}</div>
           </section>)}
         </div>}
+      </> : page === 'reports' ? <>
+        <div className="reportTabs" aria-label="보고서 유형">
+          <button className={reportTab === 'daily' ? 'active' : ''} onClick={() => setReportTab('daily')}>데일리 브리프</button>
+          <button className={reportTab === 'weekly' ? 'active' : ''} onClick={() => setReportTab('weekly')}>주간 인사이트</button>
+          <button className={reportTab === 'monthly' ? 'active' : ''} onClick={() => setReportTab('monthly')}>월간 리뷰</button>
+          <button className={reportTab === 'theme' ? 'active' : ''} onClick={() => setReportTab('theme')}>테마 리포트</button>
+        </div>
+        {reportTab === 'daily' && renderReportBlock('데일리 브리프', reportModel.daily)}
+        {reportTab === 'weekly' && renderReportBlock('주간 인사이트', reportModel.weekly)}
+        {reportTab === 'monthly' && renderReportBlock('월간 리뷰', reportModel.monthly)}
+        {reportTab === 'theme' && <div className="reportPage"><section className="reportPanel"><div className="reportPanelHead"><b>테마 리포트</b><span>카테고리별 자동 묶음</span></div><div className="themeReportGrid">{reportModel.themeRows.map((theme) => <article className="themeReportCard" key={theme.id}><span>{theme.label}</span><b>{theme.count.toLocaleString()}건</b><small>평균 Impact {theme.avgScore}</small><div>{theme.top.map((a, i) => renderReportArticle(a, i))}</div></article>)}</div></section></div>}
       </> : <>
         <div className="filters"><input className="searchInput" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="소스 검색…" /></div>
         <div className="sourceList">{feedCounts.filter(([name]) => !query || name.toLowerCase().includes(query.toLowerCase())).map(([name, info]) => <div className="sourceRow" key={name}><div className="sourceInfo"><b>{name}</b><span>{info.region} · {info.type}</span></div><div className="sourceStats"><strong>{info.count}</strong><span>최근 기여</span></div></div>)}</div>
