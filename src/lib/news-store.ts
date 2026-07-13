@@ -88,6 +88,11 @@ const RESEARCH_COMPANIES = [
 const TITLE_KILL_REGEX = /(market size|share, trends|market analysis|market growth driven|forecast\s*(to|203|202)|,\s*forecast\s*,|cagr|industry analysis|research report|시장\s*규모|시장\s*보고서|시장\s*전망\s*보고서|시장\s?조사\s?보고서|市場規模|分析レポート|調査レポート|무료 샘플|샘플 요청|press release distribution|students capture|honors\b|contracts for [a-z]+ \d{1,2}, \d{4}|pnas|市场规模|市场报告|市场研究报告|市场调研|调研报告|市场调查|行业调研)/i;
 const KILL_PATTERNS = [
   /tradingview/i,
+  // [v5.11] ICIS/Google News가 로그인 차단 페이지를 기사처럼 내보내는 경우
+  // 예: "article - login - ICIS". 원문 접근이 막힌 placeholder라 정보 가치가 없어 원천 배제.
+  /(^|\s|\[)(article|기사)\s*[-–—|:]\s*(login|로그인)\s*[-–—|:]/i,
+  /\b(login|sign\s?in|subscribe|subscription required|access denied|paywall)\b\s*[-–—|:]\s*(icis|article)/i,
+  /로그인\s*[-–—|:]\s*(icis|기사)/i,
   // [v2.2] "Untitled - United States Trade Representative (.gov)"처럼 제목
   // 자체가 빈 플레이스홀더인 경우 — 정보 가치가 전혀 없어 원천 배제.
   /^\[?(매크로|공시|커뮤니티)?\]?\s*untitled\s*[-–—|]/i,
