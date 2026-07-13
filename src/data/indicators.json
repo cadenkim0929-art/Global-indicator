@@ -1,6 +1,6 @@
 {
-  "version": "v4.8-india-gdp-dbnomics",
-  "generatedAt": "2026-07-10T22:29:36.373229+00:00",
+  "version": "v5.8-pmi-tradingeconomics",
+  "generatedAt": "2026-07-13T04:17:04.751259+00:00",
   "indicators": [
     {
       "id": "fx_usd_krw",
@@ -322,14 +322,58 @@
       "epRelevant": false
     },
     {
-      "id": "pmi_manufacturing_us_news",
-      "name": "미국 제조업 PMI(뉴스 추출)",
-      "nameKo": "미국 제조업 PMI(뉴스 추출)",
+      "id": "pmi_manufacturing_us_te",
+      "name": "United States Manufacturing PMI",
+      "nameKo": "미국 제조업 PMI(TradingEconomics)",
       "frequency": "monthly",
       "category": "demand",
       "unit": "points",
-      "sourceId": "news_extraction",
-      "sourceUrl": "",
+      "sourceId": "tradingeconomics_public_web",
+      "sourceUrl": "https://tradingeconomics.com/united-states/manufacturing-pmi",
+      "epRelevant": true
+    },
+    {
+      "id": "pmi_manufacturing_korea_te",
+      "name": "South Korea Manufacturing PMI",
+      "nameKo": "한국 제조업 PMI(TradingEconomics)",
+      "frequency": "monthly",
+      "category": "demand",
+      "unit": "points",
+      "sourceId": "tradingeconomics_public_web",
+      "sourceUrl": "https://tradingeconomics.com/south-korea/manufacturing-pmi",
+      "epRelevant": true
+    },
+    {
+      "id": "pmi_manufacturing_japan_te",
+      "name": "Japan Manufacturing PMI",
+      "nameKo": "일본 제조업 PMI(TradingEconomics)",
+      "frequency": "monthly",
+      "category": "demand",
+      "unit": "points",
+      "sourceId": "tradingeconomics_public_web",
+      "sourceUrl": "https://tradingeconomics.com/japan/manufacturing-pmi",
+      "epRelevant": true
+    },
+    {
+      "id": "pmi_manufacturing_india_te",
+      "name": "India Manufacturing PMI",
+      "nameKo": "인도 제조업 PMI(TradingEconomics)",
+      "frequency": "monthly",
+      "category": "demand",
+      "unit": "points",
+      "sourceId": "tradingeconomics_public_web",
+      "sourceUrl": "https://tradingeconomics.com/india/manufacturing-pmi",
+      "epRelevant": true
+    },
+    {
+      "id": "pmi_manufacturing_eurozone_te",
+      "name": "Euro Area Manufacturing PMI",
+      "nameKo": "유로존 제조업 PMI(TradingEconomics)",
+      "frequency": "monthly",
+      "category": "demand",
+      "unit": "points",
+      "sourceId": "tradingeconomics_public_web",
+      "sourceUrl": "https://tradingeconomics.com/euro-area/manufacturing-pmi",
       "epRelevant": true
     }
   ],
@@ -729,12 +773,6 @@
       "period": "2026-05-01",
       "value": 121.0932,
       "observedAt": "2026-07-10T21:08:44.262033+00:00"
-    },
-    {
-      "indicatorId": "pmi_manufacturing_us_news",
-      "period": "2026-06-01",
-      "value": 53.3,
-      "observedAt": "2026-07-10T22:16:29.897456+00:00"
     },
     {
       "indicatorId": "fx_usd_krw",
@@ -1893,6 +1931,36 @@
       "period": "2025-01-01",
       "value": 4.95994886240992,
       "observedAt": "2025-01-01"
+    },
+    {
+      "indicatorId": "pmi_manufacturing_us_te",
+      "period": "2026-06-01",
+      "value": 53.9,
+      "observedAt": "2026-07-13T04:17:03.852939+00:00"
+    },
+    {
+      "indicatorId": "pmi_manufacturing_korea_te",
+      "period": "2026-06-01",
+      "value": 52.1,
+      "observedAt": "2026-07-13T04:17:04.153595+00:00"
+    },
+    {
+      "indicatorId": "pmi_manufacturing_japan_te",
+      "period": "2026-06-01",
+      "value": 54.8,
+      "observedAt": "2026-07-13T04:17:04.477061+00:00"
+    },
+    {
+      "indicatorId": "pmi_manufacturing_india_te",
+      "period": "2026-06-01",
+      "value": 54.5,
+      "observedAt": "2026-07-13T04:17:04.714742+00:00"
+    },
+    {
+      "indicatorId": "pmi_manufacturing_eurozone_te",
+      "period": "2026-06-01",
+      "value": 51.4,
+      "observedAt": "2026-07-13T04:17:04.751244+00:00"
     }
   ]
 }

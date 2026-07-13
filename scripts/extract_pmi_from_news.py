@@ -45,6 +45,15 @@ COUNTRY_SPECS = [
     ("eurozone", ["유로존", "유럽", "eurozone", "euro area", "hcob"], "pmi_manufacturing_eurozone_news", "유로존 제조업 PMI(뉴스 추출)"),
 ]
 
+# [v5.8] TradingEconomics public-web PMI가 있으면 뉴스 추출 PMI는 fallback으로만
+# 동작해야 한다. 같은 국가/월 TE 값이 이미 있으면 *_news 카드를 다시 만들지 않는다.
+TE_PRIMARY_BY_NEWS_ID = {
+    "pmi_manufacturing_korea_news": "pmi_manufacturing_korea_te",
+    "pmi_manufacturing_us_news": "pmi_manufacturing_us_te",
+    "pmi_manufacturing_japan_news": "pmi_manufacturing_japan_te",
+    "pmi_manufacturing_eurozone_news": "pmi_manufacturing_eurozone_te",
+}
+
 MONTH_EN = {m: i + 1 for i, m in enumerate(
     ["january", "february", "march", "april", "may", "june",
      "july", "august", "september", "october", "november", "december"])}
@@ -176,6 +185,11 @@ def main():
         return (indicator_id, (period or "")[:7])
 
     existing = {month_key(o["indicatorId"], o["period"]) for o in data.get("observations", [])}
+    te_existing = {
+        month_key(o["indicatorId"], o["period"])
+        for o in data.get("observations", [])
+        if o.get("indicatorId") in set(TE_PRIMARY_BY_NEWS_ID.values())
+    }
     known_indicators = {i["id"] for i in data.get("indicators", [])}
     # 같은 (지표, 월)에 여러 기사가 있으면 첫 값만 채택
     candidates: dict[tuple[str, str], dict] = {}
@@ -188,6 +202,9 @@ def main():
     added, details = 0, []
     for key, r in sorted(candidates.items()):
         indicator_id = r["indicatorId"]
+        te_primary_id = TE_PRIMARY_BY_NEWS_ID.get(indicator_id)
+        if te_primary_id and (te_primary_id, key[1]) in te_existing:
+            continue  # TradingEconomics public-web PMI 우선 — 뉴스 fallback 중복 생성 금지
         if key in existing:
             continue  # 공식 데이터/기존 추출값 우선 — 절대 덮어쓰지 않음
         if indicator_id not in known_indicators:

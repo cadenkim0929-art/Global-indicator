@@ -171,8 +171,7 @@ export default function Dashboard({
   const [sort, setSort] = useState<SortKey>('latest');
   const [minScore, setMinScore] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [collecting, setCollecting] = useState(false);
-  const [collectResult, setCollectResult] = useState<string | null>(null);
+
   // [피드 리디자인] 고급 필터(언어/최소 Impact) 서랍 토글, 일반 기사 그리드의
   // "더 보기" 표시 개수. 필터가 바뀌면 12개로 리셋해서 항상 첫 페이지부터 보여준다.
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -183,8 +182,7 @@ export default function Dashboard({
   const [indicatorCounts, setIndicatorCounts] = useState(initialIndicatorCounts);
   const [indicatorHorizonKey, setIndicatorHorizonKey] = useState<IndicatorHorizon>('now');
   const [indicatorLoading, setIndicatorLoading] = useState(false);
-  const [indicatorRefreshing, setIndicatorRefreshing] = useState(false);
-  const [indicatorRefreshResult, setIndicatorRefreshResult] = useState<string | null>(null);
+
 
   async function loadIndicators() {
     setIndicatorLoading(true);
@@ -201,23 +199,7 @@ export default function Dashboard({
     setIndicatorHorizonKey(horizon);
     loadIndicators();
   }
-  async function refreshIndicators() {
-    setIndicatorRefreshing(true); setIndicatorRefreshResult(null);
-    try {
-      const res = await fetch('/api/indicators/refresh', { method: 'POST' });
-      const data = await res.json();
-      if (!res.ok || !data.ok) { setIndicatorRefreshResult(`지표 갱신 오류: ${data.error || res.status}`); return; }
-      const cards = (data.cards || []) as IndicatorCard[];
-      setAllIndicators(cards);
-      setIndicatorMeta(data.meta);
-      setIndicatorCounts(data.counts);
-      const r = data.result || {};
-      const d = r.derived || {};
-      setIndicatorRefreshResult(`지표 갱신 완료: 데이터 ${d.withData ?? r.withData ?? 0}/${r.totalIndicators ?? 0}개, 신규 관측 ${(r.addedObservations ?? 0) + (d.addedObservations ?? 0)}개`);
-    } catch (e) {
-      setIndicatorRefreshResult(`지표 갱신 실패: ${e instanceof Error ? e.message : String(e)}`);
-    } finally { setIndicatorRefreshing(false); }
-  }
+
 
   const categories = stats.categories || [];
   const categoryById = useMemo(() => new Map((stats.categories || []).map((c) => [c.id, c])), [stats.categories]);
@@ -280,19 +262,7 @@ export default function Dashboard({
       setStats(data.stats);
     } finally { setLoading(false); }
   }
-  async function collectNow() {
-    setCollecting(true); setCollectResult(null);
-    try {
-      const res = await fetch('/api/collect', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ maxFeeds: 124, concurrency: 8 }) });
-      const data = await res.json();
-      if (!res.ok) { setCollectResult(`오류: ${data.error || res.status}`); return; }
-      const r = data.result || {};
-      setCollectResult(`${r.inserted ?? 0}건 신규 수집 (${r.durationMs ? Math.round(r.durationMs / 1000) + '초' : ''}${r.errors?.length ? `, 실패 ${r.errors.length}건` : ''})`);
-      await refresh();
-    } catch (e) {
-      setCollectResult(`실패: ${e instanceof Error ? e.message : String(e)}`);
-    } finally { setCollecting(false); }
-  }
+
   function toggle(list: string[], value: string, setter: (v: string[]) => void) {
     setter(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
   }
@@ -614,9 +584,6 @@ export default function Dashboard({
           <b>실시간 수집</b>
           <span className="statusPill"><i></i>정상</span>
         </div>
-        <button className="sidebarCollect" onClick={collectNow} disabled={collecting} title="RSS 소스에서 새 기사를 실제로 가져옵니다">
-          {collecting ? '뉴스 수집 중…' : '뉴스 수집'}
-        </button>
         <div className="metaRow"><span>최종 수집</span><b>{formatDate(stats.lastCollectedAt)}</b></div>
         <div className="metaRow"><span>파이프라인</span><b>{stats.totalArticles.toLocaleString()}건 수집 → {stats.filteredArticles.toLocaleString()}건 표시</b></div>
         <div className="metaRow"><span>소스</span><b>{stats.totalFeeds}개</b></div>
@@ -640,15 +607,10 @@ export default function Dashboard({
             ))}
           </div>}
           <div className="headerUtilityActions">
-            {page === 'macro' && <button className="ghost" onClick={refreshIndicators} disabled={indicatorRefreshing}>{indicatorRefreshing ? '갱신 중…' : '지표 갱신'}</button>}
             {page === 'sources' && <button className="ghost" onClick={() => refresh()} disabled={loading}>{loading ? '불러오는 중…' : '새로고침'}</button>}
-            <button className="primary" onClick={collectNow} disabled={collecting} title="RSS 소스에서 새 기사를 실제로 가져옵니다 (새로고침과 다름)">{collecting ? '수집 중…' : '뉴스 수집'}</button>
           </div>
         </div>
       </header>}
-      {collectResult && <div className="collectResult">{collectResult}</div>}
-      {indicatorRefreshResult && <div className="collectResult">{indicatorRefreshResult}</div>}
-
       {page === 'feed' ? <>
         <FeedHeader
           lastCollectedAt={stats.lastCollectedAt}
@@ -699,7 +661,7 @@ export default function Dashboard({
               categoryLabel={categoryById.get(heroArticle.category)?.label || heroArticle.category}
               categoryColor={categoryById.get(heroArticle.category)?.color || '#E8A63C'}
             />}
-            {visibleGeneralArticles.length === 0 ? <div className="empty"><b>조건에 맞는 기사가 없습니다</b><span>검색어를 지우거나 기간을 늘려보세요. 데이터가 오래됐다면 &ldquo;뉴스 수집&rdquo;을 눌러 새 기사를 가져오세요.</span></div> : <>
+            {visibleGeneralArticles.length === 0 ? <div className="empty"><b>조건에 맞는 기사가 없습니다</b><span>검색어를 지우거나 기간을 늘려보세요. 뉴스와 지표는 스케줄러가 자동으로 갱신합니다.</span></div> : <>
               <div className="feedGrid">
                 {visibleGeneralArticles.map((a, i) => (
                   <FeedCard
