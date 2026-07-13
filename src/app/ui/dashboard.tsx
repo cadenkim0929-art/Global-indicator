@@ -517,22 +517,19 @@ export default function Dashboard({
     const badge = indicatorImpactBadge(group.quarterly || group.quarterlyGrowth || primary);
     const hasStale = [group.quarterly, group.annual, group.quarterlyGrowth, group.annualGrowth]
       .some((x) => x?.dataStatus === 'stale');
-    // [v4.11] 메인 성장률 숫자를 모든 국가에 보장 — QoQ 지표가 없는 나라(중국·
-    // 유로존)는 카드에 성장률이 아예 안 떠서 "성장/정체 판별"이 불가능했음.
-    // 폴백 체인: ① 분기 QoQ 지표 → ② 연간 YoY 지표 → ③ 실질(연쇄) 분기
-    // 수준값의 전기 대비(계절조정된 실질이라 QoQ로 쓰기에 타당; 명목은 제외).
+    // [v5.17] 장기 탭의 대표 숫자는 장기 컨셉에 맞춰 연간 기준으로 통일한다.
+    // 공식 연간 성장률이 있으면 우선 사용하고, 없으면 연간 GDP level의 전년 대비 변동률을 사용한다.
+    // 분기 QoQ는 장기 카드의 보조 정보로만 남긴다.
     const lead = (() => {
-      if (group.quarterlyGrowth?.latestValue != null)
-        return { v: group.quarterlyGrowth.latestValue, suffix: '% 전분기 대비', qoq: true, ind: group.quarterlyGrowth };
-      // [v5.16] 대표 성장률 기준 통일 — 전년동기/연간 성장률을 메인 숫자로 올리지 않는다.
-      // QoQ 지표가 없는 국가는 분기 GDP level의 전기 대비 변화율을 사용한다.
-      if (group.quarterly?.pctChange != null)
-        return { v: group.quarterly.pctChange, suffix: '% 전분기 대비', qoq: true, ind: group.quarterly };
+      if (group.annualGrowth?.latestValue != null)
+        return { v: group.annualGrowth.latestValue, suffix: '% 전년 대비', annual: true, ind: group.annualGrowth };
+      if (group.annual?.pctChange != null)
+        return { v: group.annual.pctChange, suffix: '% 전년 대비', annual: true, ind: group.annual };
       return null;
     })();
     const gClass = lead && lead.v > 0 ? 'up' : lead && lead.v < 0 ? 'down' : '';
-    // 판정 임계값은 기준이 다름: QoQ는 0.5% 이상이면 성장세, YoY는 2% 이상.
-    const judgment = lead === null ? '' : lead.v < 0 ? '역성장' : (lead.qoq ? lead.v > 0.5 : lead.v > 2) ? '성장세' : '정체';
+    // 장기 탭 대표 지표는 연간 기준: 2% 이상이면 성장세, 0 미만이면 역성장.
+    const judgment = lead === null ? '' : lead.v < 0 ? '역성장' : lead.v > 2 ? '성장세' : '정체';
     // 명목(비계절조정) 분기 수준값의 전기 대비 화살표는 계절 노이즈라 숨김.
     const quarterlyIsNominal = !!group.quarterly?.nameKo.includes('명목');
     return <Link href={`/indicators/gdp-${group.country}`} className="indicatorCard gdpCountryCard indicatorListCard" key={`gdp-country-${group.country}`} aria-label={`${GDP_COUNTRY_LABELS[group.country] || group.country} GDP 상세 보기`}>
