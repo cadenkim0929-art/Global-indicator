@@ -107,6 +107,10 @@ const KILL_PATTERNS = [
   // [v2.1] TradingView류 순수 주가지표 콘텐츠 — "OOO 예측 - 가격 목표 - N년 예측",
   // "수익 대비 가격"(forward P/E) 등. 도메인 킬과 별개로 텍스트 패턴으로도 방어.
   /수익\s?대비\s?가격|price\s+to\s+earnings\s+forward|forward\s+p\/?e\b|\bp\/e\s+forward\b/i,
+  // [v5.13] ad-hoc-news.de 등에서 회사명+소재 키워드를 끼워 넣은 종목/주식 해설 기사 배제.
+  /\b[A-Z][A-Za-z0-9-]{2,}(?:\s+[A-Z][A-Za-z0-9-]{2,}){0,2}\s+stock\s+(reflects|stays|remains|is|looks|trades|gains|falls|drops|rises|surges|slumps)\b/i,
+  /\b(stock|shares?)\b.{0,80}\b(specialty polymers?|manufacturing demand|supported by|focus amid)\b/i,
+  /(주식|주가).{0,60}(특수\s*폴리머|제조\s*수요|수요에 의해|초점을 반영|유지)/,
   /\d{5,6}\s*(예측|forecast)\s*[-—–]\s*가격\s?목표/i,
   // [v2.1] "composite-helmet weight"처럼 일반 composite 키워드가 방탄장비 등
   // EP와 무관한 산업까지 잡던 문제 — 방탄/전투장비 콘텐츠 원천 배제.
