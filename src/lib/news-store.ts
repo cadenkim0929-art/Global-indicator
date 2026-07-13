@@ -98,6 +98,11 @@ const KILL_PATTERNS = [
   /\bchart\s+(usd\/krw|usdkrw|eur\/usd|usd\/jpy|usd\/cny)\s+update\b/i,
   /\b(usd\/krw|usdkrw)\b.{0,80}\b(consolidating|support|resistance|losses|breakout)\b/i,
   /차트\s*(usd\/krw|usdkrw|원\/달러|원달러)\s*업데이트/i,
+  // [v5.22] Google News FX 검색어의 won이 스포츠 문장 "We Won Today"를 오탐한 사례 차단.
+  // 예: "We Won Today - Kansas State University Athletics".
+  /\bwe\s+won\s+today\b/i,
+  /\b(kansas\s+state\s+university\s+athletics|university\s+athletics|college\s+athletics)\b/i,
+  /\b(athletics|basketball|football|baseball|softball|soccer|track\s+and\s+field|volleyball)\b.{0,80}\b(won|defeated|victory|game|match|season)\b/i,
   // [v2.2] "Untitled - United States Trade Representative (.gov)"처럼 제목
   // 자체가 빈 플레이스홀더인 경우 — 정보 가치가 전혀 없어 원천 배제.
   /^\[?(매크로|공시|커뮤니티)?\]?\s*untitled\s*[-–—|]/i,
