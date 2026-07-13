@@ -587,6 +587,11 @@ export default function Dashboard({
         <div className="metaRow"><span>최종 수집</span><b>{formatDate(stats.lastCollectedAt)}</b></div>
         <div className="metaRow"><span>파이프라인</span><b>{stats.totalArticles.toLocaleString()}건 수집 → {stats.filteredArticles.toLocaleString()}건 표시</b></div>
         <div className="metaRow"><span>소스</span><b>{stats.totalFeeds}개</b></div>
+        <div className="productCredit">
+          <span>제작</span>
+          <b>LG화학 엔지니어링소재 사업부 마케팅전략팀</b>
+          <a href="mailto:qdong@lgchem.com">문의 qdong@lgchem.com</a>
+        </div>
       </div>
     </aside>
     <section className="content">
@@ -757,6 +762,10 @@ export default function Dashboard({
         <div className="filters"><input className="searchInput" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="소스 검색…" /></div>
         <div className="sourceList">{feedCounts.filter(([name]) => !query || name.toLowerCase().includes(query.toLowerCase())).map(([name, info]) => <div className="sourceRow" key={name}><div className="sourceInfo"><b>{name}</b><span>{info.region} · {info.type}</span></div><div className="sourceStats"><strong>{info.count}</strong><span>최근 기여</span></div></div>)}</div>
       </>}
+      <footer className="contentCredit">
+        <span>LG화학 엔지니어링소재 사업부 마케팅전략팀 제작</span>
+        <a href="mailto:qdong@lgchem.com">문의 qdong@lgchem.com</a>
+      </footer>
     </section>
   </main>;
 }

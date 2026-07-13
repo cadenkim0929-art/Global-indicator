@@ -82,6 +82,12 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none}
 .statusPill{display:inline-flex;align-items:center;gap:5px;font:700 10px 'Noto Sans KR';color:var(--brand-dim);background:rgba(168,99,30,.1);padding:3px 9px;border-radius:99px}
 .statusPill i{width:6px;height:6px;border-radius:50%;background:#3FAE63;box-shadow:0 0 6px rgba(63,174,99,.6);animation:pulse-dot 2.4s ease-in-out infinite}
 .sidebarCollect{width:100%;border-radius:var(--radius-pill);padding:11px 14px;background:linear-gradient(135deg,var(--brand-bright),var(--brand));color:#FFF8EC;font:700 13px 'Noto Sans KR';box-shadow:0 8px 20px rgba(168,99,30,.20)}
+.productCredit{margin-top:4px;padding-top:12px;border-top:1px solid var(--line-soft);display:grid;gap:5px;color:var(--muted);font:500 10.5px/1.45 'Noto Sans KR'}
+.productCredit span{font:700 9px 'JetBrains Mono';letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2)}
+.productCredit b{font:700 11px/1.45 'Noto Sans KR';color:var(--text-dim);word-break:keep-all}
+.productCredit a{font:700 10.5px 'JetBrains Mono';color:var(--brand);word-break:break-all}
+.contentCredit{margin-top:38px;padding:18px 4px 0;border-top:1px solid var(--line-soft);display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--muted);font:600 12px/1.5 'Noto Sans KR'}
+.contentCredit a{color:var(--brand);font:700 12px 'JetBrains Mono'}
 .sidebarCollect:hover:not(:disabled){box-shadow:0 10px 26px rgba(168,99,30,.30);transform:translateY(-1px)}
 .metaRow{display:grid;gap:3px}
 .metaRow span{color:var(--muted-2);font:700 10px 'JetBrains Mono';text-transform:uppercase;letter-spacing:.07em}
@@ -420,6 +426,8 @@ h1{margin:0;font:700 clamp(28px,3.2vw,40px)/1.15 'Noto Sans KR',sans-serif;lette
   .sidebarMeta{display:none}
   .content{padding:24px 18px 60px}
   .pageHeader{flex-direction:column;align-items:flex-start}
+  .contentCredit{flex-direction:column;align-items:flex-start;margin-top:28px;font-size:11px}
+  .contentCredit a{font-size:11px}
   .filterRow{grid-template-columns:1fr}
   .periodImpactRow{grid-template-columns:1fr}
   .scoreSlider{width:100%;justify-content:space-between}
