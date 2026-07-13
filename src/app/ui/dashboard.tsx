@@ -466,14 +466,14 @@ export default function Dashboard({
   }) {
     const primary = group.quarterly || group.annual || group.quarterlyGrowth || group.annualGrowth;
     if (!primary) return null;
-    const isQuarterlyReal = !!group.quarterly && /chained|실질/i.test(`${group.quarterly.unit} ${group.quarterly.nameKo}`);
     const lead = (() => {
       if (group.quarterlyGrowth?.latestValue != null)
         return { v: group.quarterlyGrowth.latestValue, suffix: '전분기 대비', ind: group.quarterlyGrowth };
-      if (group.annualGrowth?.latestValue != null)
-        return { v: group.annualGrowth.latestValue, suffix: '전년 대비', ind: group.annualGrowth };
-      if (isQuarterlyReal && group.quarterly!.pctChange != null)
-        return { v: group.quarterly!.pctChange, suffix: '전분기 대비', ind: group.quarterly! };
+      // [v5.16] 대표 성장률은 국가 간 기준을 통일한다.
+      // QoQ 지표가 없는 국가(중국·유로존 등)도 분기 GDP의 전기 대비 변화율을 우선 사용하고,
+      // 연간/전년동기 성장률은 보조 항목에만 둔다.
+      if (group.quarterly?.pctChange != null)
+        return { v: group.quarterly.pctChange, suffix: '전분기 대비', ind: group.quarterly };
       return null;
     })();
     const leadClass = lead && lead.v > 0 ? 'up' : lead && lead.v < 0 ? 'down' : '';
@@ -521,14 +521,13 @@ export default function Dashboard({
     // 유로존)는 카드에 성장률이 아예 안 떠서 "성장/정체 판별"이 불가능했음.
     // 폴백 체인: ① 분기 QoQ 지표 → ② 연간 YoY 지표 → ③ 실질(연쇄) 분기
     // 수준값의 전기 대비(계절조정된 실질이라 QoQ로 쓰기에 타당; 명목은 제외).
-    const isQuarterlyReal = !!group.quarterly && /chained|실질/i.test(`${group.quarterly.unit} ${group.quarterly.nameKo}`);
     const lead = (() => {
       if (group.quarterlyGrowth?.latestValue != null)
         return { v: group.quarterlyGrowth.latestValue, suffix: '% 전분기 대비', qoq: true, ind: group.quarterlyGrowth };
-      if (group.annualGrowth?.latestValue != null)
-        return { v: group.annualGrowth.latestValue, suffix: '% 전년 대비', qoq: false, ind: group.annualGrowth };
-      if (isQuarterlyReal && group.quarterly!.pctChange != null)
-        return { v: group.quarterly!.pctChange, suffix: '% 전분기 대비', qoq: true, ind: group.quarterly! };
+      // [v5.16] 대표 성장률 기준 통일 — 전년동기/연간 성장률을 메인 숫자로 올리지 않는다.
+      // QoQ 지표가 없는 국가는 분기 GDP level의 전기 대비 변화율을 사용한다.
+      if (group.quarterly?.pctChange != null)
+        return { v: group.quarterly.pctChange, suffix: '% 전분기 대비', qoq: true, ind: group.quarterly };
       return null;
     })();
     const gClass = lead && lead.v > 0 ? 'up' : lead && lead.v < 0 ? 'down' : '';
