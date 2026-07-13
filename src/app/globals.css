@@ -453,6 +453,8 @@ h1{margin:0;font:700 clamp(28px,3.2vw,40px)/1.15 'Noto Sans KR',sans-serif;lette
 .indicatorListMeta{font:700 10.5px 'JetBrains Mono';letter-spacing:.05em;color:var(--muted-2);text-transform:uppercase}
 .indicatorListTrend{display:grid;justify-items:end;gap:4px;color:var(--brand)}
 .indicatorListTrend .indicatorChange{display:block;font-size:11.5px}
+.pmiNoChartCard .indicatorListTrend{align-self:center;justify-content:end;min-height:30px}
+.pmiNoChartCard .indicatorListTrend .indicatorChange{font-size:12px}
 .indicatorChevron{font:400 28px/1 'Noto Sans KR';color:var(--muted-2);transition:transform .18s ease,color .18s ease}
 .indicatorListCard:hover .indicatorChevron{transform:translateX(2px);color:var(--brand)}
 .indicatorSparkline{display:block;overflow:visible;color:var(--brand)}

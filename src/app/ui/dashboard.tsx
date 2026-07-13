@@ -375,8 +375,9 @@ export default function Dashboard({
     const changeClass = ind.dataStatus === 'stale' ? 'stale' : isRateIndicator
       ? (rateUp ? 'up' : rateDown ? 'down' : '')
       : up ? 'up' : down ? 'down' : '';
+    const isPmiIndicator = ind.id.includes('pmi');
 
-    return <Link href={`/indicators/${ind.id}`} className="indicatorCard indicatorListCard" key={ind.id} aria-label={`${ind.nameKo} 상세 보기`}>
+    return <Link href={`/indicators/${ind.id}`} className={`indicatorCard indicatorListCard ${isPmiIndicator ? 'pmiNoChartCard' : ''}`} key={ind.id} aria-label={`${ind.nameKo} 상세 보기`}>
       <div className="indicatorListMain">
         <div className="indicatorHead">
           <span className="indicatorName" title={ind.nameKo}>{ind.nameKo}</span>
@@ -389,7 +390,7 @@ export default function Dashboard({
         </div> : <div className="indicatorEmpty">데이터 수집 대기 중</div>}
       </div>
       <div className="indicatorListTrend">
-        <Sparkline history={ind.history} />
+        {!isPmiIndicator && <Sparkline history={ind.history} />}
         <span className={`indicatorChange ${changeClass}`}>{changeText}</span>
       </div>
       <span className="indicatorChevron" aria-hidden="true">›</span>

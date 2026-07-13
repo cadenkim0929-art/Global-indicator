@@ -253,12 +253,12 @@ export default function IndicatorDetail({ title, subtitle, series, defaultSeries
       </div>
     </section>
 
-    <section className="detailPanel detailChartPanel">
+    {profile !== 'pmi' && <section className="detailPanel detailChartPanel">
       <div className="detailPanelHead">
         <div><span>Trend</span><h2>추세</h2></div>
       </div>
       <TrendChart indicator={active} observations={selected} />
-    </section>
+    </section>}
 
     <section className="detailStatsGrid" aria-label="핵심 통계">
       {stats.map((stat) => <article key={stat.label}>
