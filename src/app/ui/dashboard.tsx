@@ -771,7 +771,7 @@ export default function Dashboard({
               </div>
               {generalArticles.length > visibleGeneralArticles.length && (
                 <button type="button" className="feedMoreBtn" onClick={() => setVisibleCount((v) => v + 12)}>
-                  더 많은 기사 보기 ({(generalArticles.length - visibleGeneralArticles.length).toLocaleString()}건 더)
+                  {Math.min(12, generalArticles.length - visibleGeneralArticles.length).toLocaleString()}건 더 보기 · 남은 {(generalArticles.length - visibleGeneralArticles.length).toLocaleString()}건
                 </button>
               )}
             </>}
