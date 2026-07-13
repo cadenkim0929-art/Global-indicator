@@ -93,6 +93,11 @@ const KILL_PATTERNS = [
   /(^|\s|\[)(article|기사)\s*[-–—|:]\s*(login|로그인)\s*[-–—|:]/i,
   /\b(login|sign\s?in|subscribe|subscription required|access denied|paywall)\b\s*[-–—|:]\s*(icis|article)/i,
   /로그인\s*[-–—|:]\s*(icis|기사)/i,
+  // [v5.20] FX 차트/기술적 분석 업데이트(Continuum Economics 등)는 산업 뉴스가 아니라
+  // 단기 트레이딩 코멘트라 매크로 피드에서 제외. 예: "Chart USD/KRW Update: Consolidating... support".
+  /\bchart\s+(usd\/krw|usdkrw|eur\/usd|usd\/jpy|usd\/cny)\s+update\b/i,
+  /\b(usd\/krw|usdkrw)\b.{0,80}\b(consolidating|support|resistance|losses|breakout)\b/i,
+  /차트\s*(usd\/krw|usdkrw|원\/달러|원달러)\s*업데이트/i,
   // [v2.2] "Untitled - United States Trade Representative (.gov)"처럼 제목
   // 자체가 빈 플레이스홀더인 경우 — 정보 가치가 전혀 없어 원천 배제.
   /^\[?(매크로|공시|커뮤니티)?\]?\s*untitled\s*[-–—|]/i,
