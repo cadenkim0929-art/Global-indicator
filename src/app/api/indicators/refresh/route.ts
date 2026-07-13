@@ -14,6 +14,7 @@ export async function POST() {
   const refreshScript = path.join(process.cwd(), 'scripts', 'update_indicators_all.py');
   const industrialProductionScript = path.join(process.cwd(), 'scripts', 'update_industrial_production_intl.py');
   const deriveScript = path.join(process.cwd(), 'scripts', 'derive_indicator_proxies.py');
+  const shortMacroTeScript = path.join(process.cwd(), 'scripts', 'update_short_macro_tradingeconomics.py');
   const tePmiScript = path.join(process.cwd(), 'scripts', 'update_pmi_tradingeconomics.py');
   const pmiScript = path.join(process.cwd(), 'scripts', 'extract_pmi_from_news.py');
   try {
@@ -30,6 +31,13 @@ export async function POST() {
     const derive = await execFileAsync('python3', [deriveScript], {
       cwd: process.cwd(),
       timeout: 60_000,
+      maxBuffer: 1024 * 1024,
+    });
+    // [v5.15] 단기 주요 매크로(환율·유가·미국 10년물)는 FRED가 며칠 늦을 수 있어
+    // TradingEconomics 공개 웹 meta description을 보조 소스로 사용해 최신값을 보강한다.
+    const shortMacroTe = await execFileAsync('python3', [shortMacroTeScript], {
+      cwd: process.cwd(),
+      timeout: 90_000,
       maxBuffer: 1024 * 1024,
     });
     // [v5.8] 국가별 제조업 PMI — TradingEconomics 공개 웹 meta description에서
@@ -58,11 +66,12 @@ export async function POST() {
       return JSON.parse(lines[lines.length - 1] || '{}');
     })();
     const tePmiSummary = JSON.parse(tePmi.stdout || '{}');
+    const shortMacroTeSummary = JSON.parse(shortMacroTe.stdout || '{}');
     clearIndicatorCache();
     return NextResponse.json({
       ok: true,
-      result: { ...parsed, industrialProduction: industrialProductionSummary, derived, tePmi: tePmiSummary, pmi: pmiSummary },
-      stderr: [refresh.stderr, industrialProduction.stderr, derive.stderr, tePmi.stderr, pmi.stderr].filter(Boolean).join('\n') || undefined,
+      result: { ...parsed, industrialProduction: industrialProductionSummary, derived, shortMacroTe: shortMacroTeSummary, tePmi: tePmiSummary, pmi: pmiSummary },
+      stderr: [refresh.stderr, industrialProduction.stderr, derive.stderr, shortMacroTe.stderr, tePmi.stderr, pmi.stderr].filter(Boolean).join('\n') || undefined,
       cards: getIndicatorCards(),
       meta: getIndicatorMeta(),
       counts: getFrequencyCounts(),
