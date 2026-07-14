@@ -121,6 +121,12 @@ const KILL_PATTERNS = [
   /\b[A-Z][A-Za-z0-9-]{2,}(?:\s+[A-Z][A-Za-z0-9-]{2,}){0,2}\s+stock\s+(reflects|stays|remains|is|looks|trades|gains|falls|drops|rises|surges|slumps)\b/i,
   /\b(stock|shares?)\b.{0,80}\b(specialty polymers?|manufacturing demand|supported by|focus amid)\b/i,
   /(주식|주가).{0,60}(특수\s*폴리머|제조\s*수요|수요에 의해|초점을 반영|유지)/,
+  // [v5.23] 한국어 증시 마감/종가 해설 기사 배제. 회사명·업황이 있어도 주가 마감분석은 산업 뉴스가 아님.
+  /\[(마감\s*분석|종가\s*분석|장마감\s*분석)\]/,
+  /(전\s*거래일\s*대비|장\s*마감\s*기준).{0,80}(하락|상승|거래를\s*마감|원에\s*거래)/,
+  /\d{1,3}\s*만\s*원선\s*(위협|붕괴|돌파|회복)/,
+  /closing\s+analysis.{0,80}(won\s+level|trading|shares?|stock)/i,
+  /\d{1,3},?\d{3}\s*won\s+level.{0,80}(threatened|support|break)/i,
   /\d{5,6}\s*(예측|forecast)\s*[-—–]\s*가격\s?목표/i,
   // [v2.1] "composite-helmet weight"처럼 일반 composite 키워드가 방탄장비 등
   // EP와 무관한 산업까지 잡던 문제 — 방탄/전투장비 콘텐츠 원천 배제.
