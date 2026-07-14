@@ -649,7 +649,7 @@ export default function Dashboard({
       </div>
       <div className="reportTwoCol">
         <section className="reportPanel"><div className="reportPanelHead"><b>반복 키워드</b><span>빈도순</span></div><div className="reportChips">{report.topTags.map(([tag, count]) => <span key={tag}>#{tag}<b>{count}</b></span>)}</div></section>
-        <section className="reportPanel"><div className="reportPanelHead"><b>주요 지표 변동</b><span>절대변동률순</span></div><div className="reportMetricList">{report.indicatorMovers.map((ind) => <Link href={`/indicators/${ind.id}`} key={ind.id}><b>{ind.nameKo}</b><span className={(ind.pctChange || 0) >= 0 ? 'up' : 'down'}>{ind.pctChange! > 0 ? '+' : ''}{ind.pctChange}%</span></Link>)}</div></section>
+        <section className="reportPanel"><div className="reportPanelHead"><b>주요 지표 변동</b><span>최근 발표 기준</span></div><p className="reportPanelNote">지표별 발표주기가 달라 이 기간 안에 새 발표가 없을 수 있습니다.</p><div className="reportMetricList">{report.indicatorMovers.map((ind) => <Link href={`/indicators/${ind.id}`} key={ind.id}><b>{ind.nameKo}</b><span className={(ind.pctChange || 0) >= 0 ? 'up' : 'down'}>{ind.pctChange! > 0 ? '+' : ''}{ind.pctChange}%</span></Link>)}</div></section>
       </div>
     </div>;
   }

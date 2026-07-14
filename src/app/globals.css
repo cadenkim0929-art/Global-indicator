@@ -1225,6 +1225,7 @@ body{word-break:keep-all;overflow-wrap:break-word}
 .reportPanelHead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:13px}
 .reportPanelHead b{font:800 15px 'Noto Sans KR';color:var(--text)}
 .reportPanelHead span{font:700 10.5px 'Noto Sans KR';color:var(--muted-2)}
+.reportPanelNote{margin:-4px 0 12px;color:var(--muted);font:600 11.5px/1.55 'Noto Sans KR'}
 .reportArticleList{display:grid;gap:8px}
 .reportArticleRow{display:grid;grid-template-columns:26px minmax(0,1fr) 42px;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--line-soft);border-radius:14px;color:inherit;background:color-mix(in srgb,var(--surface) 78%,var(--surface-2));text-decoration:none}
 .reportArticleRow>span{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--surface-2);font:800 11px 'JetBrains Mono';color:var(--muted)}
