@@ -104,6 +104,11 @@ const KILL_PATTERNS = [
   /\b(kansas\s+state\s+university\s+athletics|university\s+athletics|college\s+athletics)\b/i,
   /\b(athletics|basketball|football|baseball|softball|soccer|track\s+and\s+field|volleyball|tennis|golf)\b.{0,80}\b(won|defeated|victory|game|match|season|tournament|championship)\b/i,
   /\b(jannik\s+sinner|wimbledon|u\.s\.\s+open|us\s+open|wyndham\s+clark|espn)\b.{0,100}\b(won|wimbledon|open|tournament|championship)\b/i,
+  // [v5.25] FX won 검색어가 "won't" 같은 일반 문장까지 잡는 교육/대학입시 오탐 차단.
+  // 예: "Reviving SAT requirements won’t fix California's university admissions problems".
+  /\b(sat\s+requirements?|university\s+admissions?|college\s+admissions?|california'?s\s+university\s+admissions?|calmatters)\b/i,
+  /(대학\s*입학|대학\s*입시|입학\s*요건|SAT\s*요건)/i,
+  /\bopinion\b.{0,80}\b(sat|university|college|admissions?)\b/i,
   // [v2.2] "Untitled - United States Trade Representative (.gov)"처럼 제목
   // 자체가 빈 플레이스홀더인 경우 — 정보 가치가 전혀 없어 원천 배제.
   /^\[?(매크로|공시|커뮤니티)?\]?\s*untitled\s*[-–—|]/i,
