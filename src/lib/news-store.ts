@@ -133,6 +133,9 @@ const KILL_PATTERNS = [
   /\d{1,3}\s*만\s*원선\s*(위협|붕괴|돌파|회복)/,
   /closing\s+analysis.{0,80}(won\s+level|trading|shares?|stock)/i,
   /\d{1,3},?\d{3}\s*won\s+level.{0,80}(threatened|support|break)/i,
+  // [v5.26] KOSPI/증시지수 약세장·투매 해설은 산업 뉴스가 아니라 금융시장 코멘트라 제외.
+  /\b(kospi|korean\s+stocks?|south\s+korea'?s\s+kospi)\b.{0,100}\b(bear\s+market|selloff|sell-off|stock\s+market|equities)\b/i,
+  /(코스피|한국\s*증시|국내\s*증시).{0,80}(약세장|투매|급락|하락장|매도세)/,
   /\d{5,6}\s*(예측|forecast)\s*[-—–]\s*가격\s?목표/i,
   // [v2.1] "composite-helmet weight"처럼 일반 composite 키워드가 방탄장비 등
   // EP와 무관한 산업까지 잡던 문제 — 방탄/전투장비 콘텐츠 원천 배제.
