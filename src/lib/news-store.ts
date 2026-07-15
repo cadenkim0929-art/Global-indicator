@@ -41,6 +41,7 @@ export const CATEGORY_META = [
   { id: 'upstream', label: '🛢️ 원료 & 업스트림', color: '#D6A15B', keywords: ['caprolactam','bpa','bisphenol','naphtha','benzene','butadiene','mdi','tdi','monomer','원료','나프타','카프로락탐'] },
   { id: 'regulation', label: '📜 규제 & 컴플라이언스', color: '#A8B3C7', keywords: ['regulation','compliance','tariff','antidumping','epa','reach','tsca','lawsuit','fine','규제','관세','공정위','고발','제재','訴訟'] },
   { id: 'signals', label: '📡 공시 & 시그널', color: '#E8A63C', keywords: ['earnings','guidance','filing','contract','notice','disclosure','공시','실적','계약','발표','신호'] },
+  { id: 'financial-risk', label: '🚨 재무리스크 & 구조조정', color: '#FF6B6B', keywords: ['insolvency','bankruptcy','default','liquidity','debt covenant','credit downgrade','restructuring','going concern','파산','부도','유동성','채무불이행','재무위험','구조조정','信用不安','債務不履行'] },
   // [v1.0] n8n v5.5 이식: 매크로/전방산업/주요국 통상규제. EP 수지명 없이도
   // 전방산업 경기·관세·CBAM 등 사업환경 신호로 진입(별도 게이트, 아래 macro 처리 참고).
   { id: 'macro-trade', label: '🌐 매크로 & 전방산업', color: '#7FE0D6', keywords: ['petrochemical','downstream demand','feedstock','naphtha','tariff','anti-dumping','cbam','carbon border','trade war','wto','석유화학','전방산업','경기전망','관세','반덤핑','탄소국경','통상마찰'] },
@@ -57,7 +58,12 @@ const FUTURE_GROWTH_TERMS = /(humanoid|humanoid robot|service robot|industrial r
 const CORE_GENERIC = /(resin|compound|polymer|composite|plastics?|thermoplastic|chemical products?|수지|화합물|樹脂|プラスチック|ポリマー|化学品|素材)/i;
 function hasCoreSignal(text: string) { return CORE_SPECIFIC.test(text) || CORE_GENERIC.test(text); }
 
-const EVENT_REGEX = /(launch|unveil|introduc|debut|develop|advanc|expansion|capacity|investment|acqui|partnership|merger|agreement|distribution|distribut|appointment|appoint|exclusive|portfolio|digital\s?commerce|transaction|complete[sd]?|regulation|tariff|antidumping|lawsuit|fine|recall|contract|price|supply|supplies|demand|shortage|plant|facility|factory|unit|compounding|recycling|split|reorganization|insolven|bankrupt|files? for|adopt|selected for|chosen for|qualifies for|qualified for|names?\s+(?:new\s+)?|showcase|showcasing|exhibit|attend|award|recogniz|certification|certified|opens?|commission|inaugurat|출시|개발|증설|투자|인수|합병|제휴|거래|완료|규제|관세|고발|제재|계약|가격|수급|공장|설비|파산|분할|조직개편|선적|출하|납품|공급|채택|선정|扩产|擴產|投产|投產|产能|產能|投资|投資|收购|收購|并购|併購|合作|协议|協議|开发|開發|推出|发布|發布|获批|獲批|专利|專利|涨价|漲價|价格|價格|供应|供應|短缺|工厂|工廠|基地|项目|項目|完了|発表|買収|提携|規制|販売|代理店|供給|拡大|契約|覚書|合意|設立)/i;
+const EVENT_REGEX = /(launch|unveil|introduc|debut|develop|advanc|expansion|capacity|investment|acqui|partnership|merger|agreement|distribution|distribut|appointment|appoint|exclusive|portfolio|digital\s?commerce|transaction|complete[sd]?|regulation|tariff|antidumping|lawsuit|fine|recall|contract|price|supply|supplies|demand|shortage|plant|facility|factory|unit|compounding|recycling|split|reorganization|insolven|bankrupt|default|liquidity|covenant|downgrade|restructur|going\s?concern|files? for|adopt|selected for|chosen for|qualifies for|qualified for|names?\s+(?:new\s+)?|showcase|showcasing|exhibit|attend|award|recogniz|certification|certified|opens?|commission|inaugurat|출시|개발|증설|투자|인수|합병|제휴|거래|완료|규제|관세|고발|제재|계약|가격|수급|공장|설비|파산|부도|채무불이행|유동성|구조조정|회생절차|분할|조직개편|선적|출하|납품|공급|채택|선정|扩产|擴產|投产|投產|产能|產能|投资|投資|收购|收購|并购|併購|合作|协议|協議|开发|開發|推出|发布|發布|获批|獲批|专利|專利|涨价|漲價|价格|價格|供应|供應|短缺|工厂|工廠|基地|项目|項目|完了|発表|買収|提携|規制|販売|代理店|供給|拡大|契約|覚書|合意|設立)/i;
+
+// [v5.39] 재무리스크 키워드 이식: 단순 bankruptcy/insolvency뿐 아니라
+// liquidity crunch, covenant breach, default, going concern, refinancing stress 등
+// 공급망 리스크로 이어지는 재무 이벤트를 별도 신호로 포착한다.
+const FINANCIAL_RISK_REGEX = /(insolven(?:cy|t)?|bankrupt(?:cy)?|chapter\s?(?:11|7)|default(?:ed|s|ing)?|debt\s+default|payment\s+default|miss(?:ed|es)?\s+payment|liquidity\s+(?:crunch|crisis|shortfall|pressure|concern)|cash\s+(?:crunch|shortfall|burn)|going\s+concern|debt\s+covenant|covenant\s+(?:breach|violation|waiver)|credit\s+(?:downgrade|watch|negative)|refinanc(?:e|ing)\s+(?:risk|pressure|talks)|restructur(?:e|ing)|turnaround\s+plan|distress(?:ed)?|administration|liquidat(?:e|ion)|receivership|파산|부도|채무불이행|디폴트|유동성\s*(?:위기|우려|압박|부족)|자금난|현금\s*부족|계속기업\s*불확실|채무\s*약정|신용등급\s*강등|구조조정|워크아웃|회생절차|法的整理|破産|倒産|債務不履行|流動性(?:危機|不足|懸念)|信用不安|事業再生|私的整理)/i;
 // [v0.3] 사건성 없는 IR 홍보문("전략을 제시했다", "입지를 강화하고 있다") 차단.
 const IR_FLUFF_REGEX = /((outlines?|unveils?|presents?|sets out)\s+(its\s+)?[\w\s-]{0,30}?(strategy|outlook|vision|roadmap)\b|(strengthen(ing|s)?|solidif(y|ies|ying)|build(ing|s)?)\s+its\s+(position|leadership|presence)\b|as investors\s+(assess|monitor|eye|track|watch)|전략(을|를)\s*(제시|발표)(했|한다)|입지를\s*강화하고\s*있)/i;
 
@@ -287,6 +293,32 @@ export async function enrichWithTranslations(articles: Article[]): Promise<Artic
 }
 function articleId(link: string, title: string) { return crypto.createHash('sha256').update(`${link||''}|${title||''}`).digest('hex').slice(0,20); }
 function domainOf(link: string) { try { return new URL(link).hostname.replace(/^www\./,''); } catch { return ''; } }
+function normalizedSourceUrl(link: string) {
+  try {
+    const u = new URL(link);
+    for (const key of Array.from(u.searchParams.keys())) {
+      if (/^(utm_|fbclid|gclid|mc_|ref|source|output|guccounter)/i.test(key)) u.searchParams.delete(key);
+    }
+    u.hash = '';
+    return `${u.hostname.replace(/^www\./,'')}${u.pathname.replace(/\/$/,'')}${u.search}`.toLowerCase();
+  } catch { return (link || '').trim().toLowerCase(); }
+}
+function rawDedupKeyFor(title: string, link: string) {
+  const wire = wireCopyKey(title);
+  if (wire && wire.length >= 24) return `wire:${wire}`;
+  const url = normalizedSourceUrl(link);
+  return url ? `url:${url}` : '';
+}
+function buildRawDedupIndex(articles: Article[]) {
+  const keys = new Set<string>();
+  for (const a of articles) {
+    const url = normalizedSourceUrl(a.link || '');
+    if (url) keys.add(`url:${url}`);
+    const wire = wireCopyKey(a.title || '');
+    if (wire && wire.length >= 24) keys.add(`wire:${wire}`);
+  }
+  return keys;
+}
 function extractPublisherFromTitle(title: string) {
   const parts = title.split(/\s[-–—|]\s|\|\s*/).map(p => p.trim()).filter(Boolean);
   const tail = parts.at(-1) || '';
@@ -318,6 +350,7 @@ function signature(title: string, publishedAt?: string) {
 function extractTags(text: string): string[] { const lower=text.toLowerCase(); return TAXONOMY.tags.filter(t=>t.keywords.some(kw=>lower.includes(kw.toLowerCase()))).map(t=>t.id); }
 function classifyArticle(text: string, fallback?: string) {
   const lower = text.toLowerCase();
+  if (FINANCIAL_RISK_REGEX.test(text)) return 'financial-risk';
   if (/(regulation|compliance|tariff|antidumping|lawsuit|fine|공정위|중기부|검찰|고발|제재|규제|관세)/i.test(text)) return 'regulation';
   if (/(caprolactam|bpa|bisphenol|naphtha|benzene|butadiene|mdi|tdi|monomer|원료|나프타|카프로락탐)/i.test(text)) return 'upstream';
   // [v1.0] n8n v5.6/v5.7 이식: 미래 성장동력 응용처는 electronics-emobility/
@@ -359,7 +392,7 @@ function scoreArticle(text: string, category: string) {
     if (/outlook|forecast|전망/i.test(lower)) score += 10;
     return Math.min(100, score);
   }
-  const lower=text.toLowerCase(); let score=0; if (hasCoreSignal(text)) score+=35; if (EVENT_REGEX.test(text)) score+=30; if (/(lg chem|lotte|sk chemicals|kolon|basf|sabino|covestro|dupont|한국엔지니어링플라스틱)/i.test(text)) score+=15; if (category==='regulation') score+=10; if (category==='capacity'||category==='ma-strategy'||category==='distribution-channel') score+=8; if (FUTURE_GROWTH_TERMS.test(text)) score+=10; if (/(price|가격|수급|shortage|tariff|관세)/i.test(lower)) score+=8; return Math.min(100, Math.max(0, score));
+  const lower=text.toLowerCase(); let score=0; if (hasCoreSignal(text)) score+=35; if (EVENT_REGEX.test(text)) score+=30; if (/(lg chem|lotte|sk chemicals|kolon|basf|sabino|covestro|dupont|한국엔지니어링플라스틱)/i.test(text)) score+=15; if (category==='regulation') score+=10; if (category==='financial-risk') score+=14; if (category==='capacity'||category==='ma-strategy'||category==='distribution-channel') score+=8; if (FUTURE_GROWTH_TERMS.test(text)) score+=10; if (FINANCIAL_RISK_REGEX.test(text)) score+=16; if (/(price|가격|수급|shortage|tariff|관세)/i.test(lower)) score+=8; return Math.min(100, Math.max(0, score));
 }
 export const DEFAULT_LOOKBACK_DAYS = 90;
 // [v1.3] 저장 시점(수집) 하한 — 사용자가 조절하는 '표시 기간'과는 다른 개념.
@@ -448,7 +481,8 @@ function titleTokens(title: string) {
 // [v5.33] 검색 모드는 recall 확보를 위해 raw 기사 기반으로 조회하지만,
 // GlobeNewswire/Yahoo Finance/BusinessWire 재배포처럼 제목 본문이 완전히 같은 wire copy까지
 // 중복 노출되면 사용성이 떨어진다. 출처 suffix와 market-report 상투어 차이는 제거하되,
-// 회사명/숫자/소재명은 보존한 canonical key로 검색 결과에만 얕은 exact dedup을 적용한다.
+// 회사명/숫자/소재명은 보존한 canonical key를 3단계 dedup 안전망에서 공유한다.
+// Stage 1: 수집 저장 전 rawDedupKeyFor(), Stage 2: 기본 피드 similarTitle(), Stage 3: 검색 dedupeSearchWireCopies().
 function wireCopyKey(title: string) {
   return sanitizeText(title).toLowerCase()
     .replace(/\s+[-–—|]\s+(globenewswire|yahoo finance( singapore| korea)?|business wire|pr newswire|accesswire|newsfile|benzinga|[^-–—|]{2,40})\s*$/i, ' ')
@@ -479,7 +513,7 @@ function dedupeSearchWireCopies(articles: Article[]) {
 // → 제거하고, "같은 사건유형 + 같은 핵심회사" 조건일 때만 관대한 토큰겹침 기준을
 // 적용하도록 대체. 회사가 다르면(둘 다 회사명이 있는데 서로 다르면) 절대 병합 안 함.
 const EVENT_CLASS_PATTERNS: Array<[string, RegExp]> = [
-  ['insolvency', /(insolven|bankrupt|파산|liquidat)/i],
+  ['financial-risk', FINANCIAL_RISK_REGEX],
   ['deal', /(licens|partnership|파트너십|제휴|alliance|deal|agreement|계약|jv|joint venture|합작)/i],
   ['acquisition', /(acqui|인수|매입|takeover|합병|merger)/i],
   ['price', /(price|가격|인상|인하|hike)/i],
@@ -579,7 +613,7 @@ function similarTitle(a: string, b: string) {
   // ("Chemie: Polyamid GmbH" ↔ "LEUNA-Polyamid") 대응. 파산은 희귀한 사건이라
   // 같은 산업재료어(폴리아미드)를 공유하면 회사명이 달라도 동일 사건으로 간주해도
   // 안전함(insolvency 클래스에서만 적용되므로 일반 뉴스 오병합 위험 없음).
-  if (shared.includes('insolvency')) {
+  if (shared.includes('financial-risk')) {
     const materialShare = /polyamid|폴리아미드/i.test(a) && /polyamid|폴리아미드/i.test(b);
     if (materialShare) return true;
   }
@@ -650,10 +684,10 @@ export function readArticles(): Article[] { return processedArticles(); }
 export async function collectFeeds(options?: { maxFeeds?: number; category?: string; balanced?: boolean; perCategory?: number; concurrency?: number }) {
   const allEnabledFeeds = getFeeds().filter((f: FeedSource) => f.enabled && (!options?.category || f.category === options.category));
   const enabledFeeds = options?.maxFeeds ? allEnabledFeeds.slice(0, options.maxFeeds) : allEnabledFeeds;
-  const existing = readRawArticles(); const byId = new Map(existing.map((a: Article)=>[a.id,a]));
-  const errors: Array<{feed:string; message:string}> = []; let fetchedItems=0, inserted=0, oldFiltered=0, killedFiltered=0, gateFiltered=0;
+  const existing = readRawArticles(); const byId = new Map(existing.map((a: Article)=>[a.id,a])); const rawDedupIndex = buildRawDedupIndex(existing);
+  const errors: Array<{feed:string; message:string}> = []; let fetchedItems=0, inserted=0, duplicateFiltered=0, oldFiltered=0, killedFiltered=0, gateFiltered=0;
   type FilterSample = { feedId: string; feedName: string; category: string; reason: string; title: string; link: string; summary: string; publishedAt: string; hasCore?: boolean; hasEvent?: boolean; isMacro?: boolean };
-  const diagnostics: { oldFilteredSamples: FilterSample[]; killedSamples: FilterSample[]; gateFilteredSamples: FilterSample[] } = { oldFilteredSamples: [], killedSamples: [], gateFilteredSamples: [] };
+  const diagnostics: { oldFilteredSamples: FilterSample[]; killedSamples: FilterSample[]; duplicateFilteredSamples: FilterSample[]; gateFilteredSamples: FilterSample[] } = { oldFilteredSamples: [], killedSamples: [], duplicateFilteredSamples: [], gateFilteredSamples: [] };
   function pushSample(bucket: FilterSample[], sample: FilterSample) { if (bucket.length < 160) bucket.push(sample); }
   const startedAt = Date.now();
 
@@ -669,6 +703,8 @@ export async function collectFeeds(options?: { maxFeeds?: number; category?: str
       for (const item of parsed.items.slice(0, 20)) {
         const title=sanitizeText(item.title||'제목 없음'); const link=(item.link||item.guid||'').trim(); const summary=sanitizeText(item.contentSnippet||item.summary||item.content||''); const publishedAt=item.isoDate||item.pubDate||new Date().toISOString(); const id=articleId(link,title); fetchedItems++;
         if (byId.has(id)) continue; if (!isWithinDays(publishedAt, STORAGE_LOOKBACK_DAYS)) { oldFiltered++; pushSample(diagnostics.oldFilteredSamples, { feedId: feed.id, feedName: feed.name, category: String(feed.category), reason: 'older_than_storage_lookback', title, link, summary: summary.slice(0, 260), publishedAt, isMacro }); continue; }
+        const rawDedupKey = rawDedupKeyFor(title, link);
+        if (rawDedupKey && rawDedupIndex.has(rawDedupKey)) { duplicateFiltered++; pushSample(diagnostics.duplicateFilteredSamples, { feedId: feed.id, feedName: feed.name, category: String(feed.category), reason: rawDedupKey.startsWith('wire:') ? 'duplicate_wire_copy_stage1' : 'duplicate_url_stage1', title, link, summary: summary.slice(0, 260), publishedAt, isMacro }); continue; }
         const text=`${title} ${summary} ${feed.name}`;
         const hasCore = hasCoreSignal(text);
         const hasEvent = EVENT_REGEX.test(text);
@@ -680,7 +716,7 @@ export async function collectFeeds(options?: { maxFeeds?: number; category?: str
         const displayTitle = isMacro ? `[매크로] ${title}` : title;
         const category = isMacro ? 'macro-trade' : classifyArticle(text, feed.category);
         const article: Article = { id, feedId: feed.id, feedName: feed.name, category, title: displayTitle, link, summary: summary.slice(0,800), contentSnippet: summary.slice(0,300), publishedAt: new Date(publishedAt).toISOString(), collectedAt: new Date().toISOString(), source: parsed.title || feed.name, sourceName: displaySourceName(feed.name, link, parsed.title, title), language: detectLanguage(`${title} ${summary}`), summaryStatus: summary ? 'summary' : 'fallback', score: scoreArticle(text, category), tags: extractTags(text) };
-        byId.set(id, article); inserted++;
+        byId.set(id, article); if (rawDedupKey) rawDedupIndex.add(rawDedupKey); const normalizedUrlKey = normalizedSourceUrl(link); if (normalizedUrlKey) rawDedupIndex.add(`url:${normalizedUrlKey}`); inserted++;
       }
     } catch (error) {
       errors.push({ feed: feed.name, message: error instanceof Error ? error.message : String(error) });
@@ -698,6 +734,7 @@ export async function collectFeeds(options?: { maxFeeds?: number; category?: str
     feedsTried: enabledFeeds.length,
     fetchedItems,
     inserted,
+    duplicateFiltered,
     oldFiltered,
     killedFiltered,
     gateFiltered,
@@ -705,7 +742,7 @@ export async function collectFeeds(options?: { maxFeeds?: number; category?: str
     ...diagnostics,
   };
   try { fs.writeFileSync(FILTER_DIAGNOSTICS_PATH, JSON.stringify(diagnosticsPayload, null, 2), 'utf8'); } catch { /* diagnostics should never block collection */ }
-  return { feedsTried: enabledFeeds.length, fetchedItems, inserted, totalArticles: byId.size, filteredArticles: processedArticles().length, oldFiltered, killedFiltered, gateFiltered, errors, durationMs, concurrency: CONCURRENCY, diagnosticsPath: FILTER_DIAGNOSTICS_PATH };
+  return { feedsTried: enabledFeeds.length, fetchedItems, inserted, totalArticles: byId.size, filteredArticles: processedArticles().length, duplicateFiltered, oldFiltered, killedFiltered, gateFiltered, errors, durationMs, concurrency: CONCURRENCY, diagnosticsPath: FILTER_DIAGNOSTICS_PATH };
 }
 export function queryArticles(filters: ArticleFilters = {}) {
   const q = filters.query?.trim().toLowerCase();

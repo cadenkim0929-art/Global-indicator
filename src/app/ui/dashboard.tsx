@@ -221,7 +221,10 @@ export default function Dashboard({
   }, [epArticles, stats.counts]);
   const macroCount = macroArticles.length;
   const visibleCategories = categories.filter((c) =>
-    c.id !== 'macro-trade' && ((epCounts.find((x) => x.category === c.id)?.count || 0) > 0 || selectedCategories.includes(c.id))
+    // [v5.39] 카테고리 탭 노출은 현재 클라이언트에 로드된 기사 subset이 아니라
+    // 서버 stats.counts 기준으로 판단한다. 재무리스크처럼 빈도는 낮지만 중요한 레인은
+    // 최신 limit 안에 대표 카드가 없더라도 탭/빠른필터가 보여야 한다.
+    c.id !== 'macro-trade' && ((stats.counts.find((x) => x.category === c.id)?.count || 0) > 0 || selectedCategories.includes(c.id))
   );
 
   const filtered = useMemo(() => {
@@ -328,7 +331,7 @@ export default function Dashboard({
       // Search mode favors recall: query the server with a wider lookback and
       // larger limit instead of filtering only the already-loaded feed page.
       const effectiveDays = q ? Math.max(nextDays, 730) : nextDays;
-      const params = new URLSearchParams({ limit: q ? '1000' : '500', days: String(effectiveDays) });
+      const params = new URLSearchParams({ limit: '1000', days: String(effectiveDays) });
       if (q) params.set('q', q);
       const res = await fetch(`/api/articles?${params.toString()}`);
       const data = await res.json();
