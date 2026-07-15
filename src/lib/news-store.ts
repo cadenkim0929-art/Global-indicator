@@ -48,14 +48,14 @@ export const CATEGORY_META = [
 // 통과되던 문제 수정. BASF/Covestro 같은 대형 화학사는 향료·도료 등 EP와 무관한
 // 보도자료에도 이런 범용 단어를 흔히 포함하므로, 범용 단어 단독으로는 게이트를
 // 통과할 수 없게 하고 EP 특화 재료명/약어/전문기업명 중 하나를 반드시 요구한다.
-const CORE_SPECIFIC = /(engineering plastics?|폴리카보네이트|폴리아미드|나일론\s?6\.?6|특수수지|엔지니어링\s?플라스틱|엔프라|複合材料|エンプラ|エンジニアリングプラスチック|樹脂複合|polycarbonate|polyamide|\bpa\s?6\/?6\b|\bpa\s?6\b|\bpbt\b|\bpom\b|\bpeek\b|\bpps\b|\bppa\b|\bpsu\b|\bpei\b|caprolactam|bisphenol|\bbpa\b|liquid crystal polymer|\blcp\b|covestro|celanese|envalior|syensqo|victrex|ems-chemie|ems-grivory|polyplastics|kingfa|trinseo|sabic|lg\s?chem|lg화학|lotte\s?chem|롯데케미칼|sk\s?chemicals|kolon|코오롱|wanhua|domo\s?chemicals|radicigroup|espolytech|에스폴리텍|biopolymers|ultrason|tinosorb|bemotrizinol|adapzo|carbon trust|\bbasf\b|pret\s?composites?|shanghai\s?pret|formosa\s?(plastics|chemicals)?|nan\s?ya\s?plastics?|chang\s?chun\s?(group|plastics)?|shinkong\s?synthetic\s?fibers?|far\s?eastern\s?new\s?century|\bfenc\b|lcy\s?(chemical|group)?|polyrocks|nanjing\s?julong|xiamen\s?lft|long\s?fiber\s?thermoplastic|dawn\s?polymer|shandong\s?dawn)/i;
+const CORE_SPECIFIC = /(engineering plastics?|폴리카보네이트|폴리아미드|나일론\s?6\.?6|특수수지|엔지니어링\s?플라스틱|엔프라|工程塑料|改性塑料|特种工程塑料|特種工程塑料|聚酰胺|尼龙|尼龍|聚碳酸酯|聚甲醛|聚苯硫醚|液晶聚合物|复合材料|複合材料|樹脂複合|エンプラ|エンジニアリングプラスチック|樹脂複合|polycarbonate|polyamide|\bpa\s?6\/?6\b|\bpa\s?6\b|\bpbt\b|\bpom\b|\bpeek\b|\bpps\b|\bppa\b|\bpsu\b|\bpei\b|caprolactam|bisphenol|\bbpa\b|liquid crystal polymer|\blcp\b|covestro|celanese|envalior|syensqo|victrex|ems-chemie|ems-grivory|polyplastics|kingfa|金发科技|trinseo|sabic|lg\s?chem|lg화학|lotte\s?chem|롯데케미칼|sk\s?chemicals|kolon|코오롱|wanhua|万华化学|萬華化學|domo\s?chemicals|radicigroup|espolytech|에스폴리텍|biopolymers|ultrason|tinosorb|bemotrizinol|adapzo|carbon trust|\bbasf\b|pret\s?composites?|shanghai\s?pret|普利特|formosa\s?(plastics|chemicals)?|台塑|南亚塑胶|南亞塑膠|nan\s?ya\s?plastics?|chang\s?chun\s?(group|plastics)?|长春化工|長春化工|shinkong\s?synthetic\s?fibers?|新光合成纤维|新光合成纖維|far\s?eastern\s?new\s?century|远东新世纪|遠東新世紀|\bfenc\b|lcy\s?(chemical|group)?|李长荣化工|李長榮化工|polyrocks|聚石化学|聚石化學|nanjing\s?julong|南京聚隆|xiamen\s?lft|long\s?fiber\s?thermoplastic|dawn\s?polymer|shandong\s?dawn|道恩股份|山东道恩|山東道恩)/i;
 // [v1.0] n8n v5.6 이식: 미래 성장동력 응용처(로봇/휴머노이드/ESS/반도체패키징/AI데이터센터/
 // 자율주행) 키워드. CORE_SPECIFIC에 있어야 EP 재료명과 결합됐을 때 확실히 게이트 통과.
 const FUTURE_GROWTH_TERMS = /(humanoid|humanoid robot|service robot|industrial robot|robot actuator|robot joint|collaborative robot|cobot|autonomous driving|self-driving|lidar|adas|robotaxi|energy storage system|\bess\b|battery enclosure|battery pack housing|thermal runaway|flame retardant compound|semiconductor packaging|advanced packaging|chip packaging|glass substrate|test socket|wafer carrier|ai data center|data center cooling|immersion cooling|medical device|medical grade|biocompatible|휴머노이드|서비스로봇|산업용로봇|협동로봇|로봇 액추에이터|자율주행|라이다|에너지저장장치|배터리팩 하우징|열폭주|반도체 패키징|유리기판|테스트소켓|ai 데이터센터|액침냉각|의료기기|임플란트)/i;
 const CORE_GENERIC = /(resin|compound|polymer|composite|수지|화합물|樹脂)/i;
 function hasCoreSignal(text: string) { return CORE_SPECIFIC.test(text) || CORE_GENERIC.test(text); }
 
-const EVENT_REGEX = /(launch|unveil|introduc|debut|develop|expansion|capacity|investment|acqui|partnership|merger|agreement|regulation|tariff|antidumping|lawsuit|fine|recall|contract|price|supply|demand|shortage|plant|facility|factory|compounding|recycling|insolven|bankrupt|files? for|adopt|selected for|chosen for|qualifies for|qualified for|names?\s+(?:new\s+)?|showcase|showcasing|award|certification|certified|opens?|commission|inaugurat|출시|개발|증설|투자|인수|합병|제휴|규제|관세|고발|제재|계약|가격|수급|공장|설비|파산|선적|출하|납품|공급|채택|선정|完了|発表|買収|提携|規制)/i;
+const EVENT_REGEX = /(launch|unveil|introduc|debut|develop|expansion|capacity|investment|acqui|partnership|merger|agreement|regulation|tariff|antidumping|lawsuit|fine|recall|contract|price|supply|demand|shortage|plant|facility|factory|compounding|recycling|insolven|bankrupt|files? for|adopt|selected for|chosen for|qualifies for|qualified for|names?\s+(?:new\s+)?|showcase|showcasing|award|certification|certified|opens?|commission|inaugurat|출시|개발|증설|투자|인수|합병|제휴|규제|관세|고발|제재|계약|가격|수급|공장|설비|파산|선적|출하|납품|공급|채택|선정|扩产|擴產|投产|投產|产能|產能|投资|投資|收购|收購|并购|併購|合作|协议|協議|开发|開發|推出|发布|發布|获批|獲批|专利|專利|涨价|漲價|价格|價格|供应|供應|短缺|工厂|工廠|基地|项目|項目|完了|発表|買収|提携|規制)/i;
 // [v0.3] 사건성 없는 IR 홍보문("전략을 제시했다", "입지를 강화하고 있다") 차단.
 const IR_FLUFF_REGEX = /((outlines?|unveils?|presents?|sets out)\s+(its\s+)?[\w\s-]{0,30}?(strategy|outlook|vision|roadmap)\b|(strengthen(ing|s)?|solidif(y|ies|ying)|build(ing|s)?)\s+its\s+(position|leadership|presence)\b|as investors\s+(assess|monitor|eye|track|watch)|전략(을|를)\s*(제시|발표)(했|한다)|입지를\s*강화하고\s*있)/i;
 
@@ -87,7 +87,7 @@ const RESEARCH_COMPANIES = [
   'dataintelo','maximize market research','stratview research','spherical insights',
   'skyquest','straits research','indexbox','research and markets','reportlinker',
 ];
-const TITLE_KILL_REGEX = /(market size|share, trends|market analysis|market growth driven|forecast\s*(to|203|202)|,\s*forecast\s*,|cagr|industry analysis|research report|시장\s*규모|시장\s*보고서|시장\s*전망\s*보고서|시장\s?조사\s?보고서|市場規模|分析レポート|調査レポート|무료 샘플|샘플 요청|press release distribution|students capture|honors\b|contracts for [a-z]+ \d{1,2}, \d{4}|pnas|市场规模|市场报告|市场研究报告|市场调研|调研报告|市场调查|行业调研|stock price|share price|technical analysis|price to book|net profit jumps|q[1-4]\s+net profit|eps\b|dividend|intraday surge|hits day high|투자의견|목표가|주가)/i;
+const TITLE_KILL_REGEX = /(market size|share, trends|market analysis|market growth driven|forecast\s*(to|203|202)|,\s*forecast\s*,|cagr|industry analysis|research report|시장\s*규모|시장\s*보고서|시장\s*전망\s*보고서|시장\s?조사\s?보고서|市場規模|分析レポート|調査レポート|무료 샘플|샘플 요청|press release distribution|students capture|honors\b|contracts for [a-z]+ \d{1,2}, \d{4}|pnas|市场规模|市场报告|市场研究报告|市场调研|调研报告|市场调查|行业调研|股价|股票|行情|主力资金|净卖出|净买入|业绩预告|業績預告|业绩说明会|業績說明會|法说会|法說會|財報|财报|中报|中報|年报|年報|研报|研報|买入评级|買入評級|目标价|目標價|涨停|漲停|跌停|stock price|share price|technical analysis|price to book|net profit jumps|q[1-4]\s+net profit|eps\b|dividend|intraday surge|hits day high|투자의견|목표가|주가)/i;
 const KILL_PATTERNS = [
   /tradingview/i,
   // [v5.11] ICIS/Google News가 로그인 차단 페이지를 기사처럼 내보내는 경우
@@ -232,7 +232,11 @@ export async function enrichWithTranslations(articles: Article[]): Promise<Artic
   // (스크린샷에서 확인: SABIC/롯데케미칼 부제에 <b>Sabic</b> 그대로 노출).
   // 캐시에 태그가 남아있으면 "미완료"로 간주해 재번역하도록 조건 추가.
   const hasTag = (s?: string) => !!s && /<[a-z]/i.test(s);
-  const need = articles.filter(a => !a.titleKo || !a.titleEn || hasTag(a.titleKo) || hasTag(a.titleEn));
+  // [v5.31] 중문 원문 소스 확장 대응: 제목뿐 아니라 요약도 한국어로 캐싱한다.
+  // 단, 화면/API 응답 대상 기사에 대해서만 처리하여 번역 호출량을 제한한다.
+  // 실패 시 원문 fallback — 번역 장애가 뉴스 수집/렌더링을 막지 않도록 한다.
+  const needsSummaryKo = (a: Article) => !!a.summary && detectLanguage(a.summary) !== 'ko' && (!a.summaryKo || hasTag(a.summaryKo));
+  const need = articles.filter(a => !a.titleKo || !a.titleEn || hasTag(a.titleKo) || hasTag(a.titleEn) || needsSummaryKo(a));
   if (need.length === 0) return articles;
 
   const raw = readRawArticles();
@@ -257,11 +261,15 @@ export async function enrichWithTranslations(articles: Article[]): Promise<Artic
       if (!a.titleEn || hasTag(a.titleEn)) a.titleEn = a.title;
       if (!a.titleKo || hasTag(a.titleKo)) a.titleKo = tag + ((await translateText(bare, 'ko')) || bare);
     }
+    if (needsSummaryKo(a)) {
+      const cleanSummary = sanitizeText(a.summary).slice(0, 280);
+      a.summaryKo = (await translateText(cleanSummary, 'ko')) || cleanSummary;
+    }
     // [v1.3 버그수정] processedArticles()가 병합 시 id를 재해싱하므로, 원본
     // raw 배열 조회는 반드시 rawId(재해싱 이전 원본 id)로 해야 함 — a.id로
     // 조회하면 항상 실패해 캐싱이 무력화됨.
     const rawArt = rawById.get(a.rawId || a.id);
-    if (rawArt) { rawArt.titleKo = a.titleKo; rawArt.titleEn = a.titleEn; changed = true; }
+    if (rawArt) { rawArt.titleKo = a.titleKo; rawArt.titleEn = a.titleEn; rawArt.summaryKo = a.summaryKo; changed = true; }
   }));
 
   if (changed) { try { writeArticles(raw); } catch { /* 캐싱 실패해도 이번 응답엔 영향 없음 */ } }
