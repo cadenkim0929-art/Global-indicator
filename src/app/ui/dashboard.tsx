@@ -305,14 +305,26 @@ export default function Dashboard({
     };
   }, [articles, allIndicators, categoryById, stats.categories]);
 
-  async function refresh(nextDays = days) {
+  async function refresh(nextDays = days, nextQuery = query) {
     setLoading(true);
     try {
-      const res = await fetch(`/api/articles?limit=500&days=${nextDays}`);
+      const q = nextQuery.trim();
+      // Search mode favors recall: query the server with a wider lookback and
+      // larger limit instead of filtering only the already-loaded feed page.
+      const effectiveDays = q ? Math.max(nextDays, 730) : nextDays;
+      const params = new URLSearchParams({ limit: q ? '1000' : '500', days: String(effectiveDays) });
+      if (q) params.set('q', q);
+      const res = await fetch(`/api/articles?${params.toString()}`);
       const data = await res.json();
       setArticles(data.articles);
       setStats(data.stats);
     } finally { setLoading(false); }
+  }
+
+  function handleFeedQueryChange(value: string) {
+    setQuery(value);
+    setVisibleCount(12);
+    void refresh(days, value);
   }
 
   function toggle(list: string[], value: string, setter: (v: string[]) => void) {
@@ -712,7 +724,7 @@ export default function Dashboard({
           lastCollectedAt={stats.lastCollectedAt}
           resultsCount={filtered.length}
           query={query}
-          onQueryChange={(v) => { setQuery(v); setVisibleCount(12); }}
+          onQueryChange={handleFeedQueryChange}
           sort={sort}
           onSortChange={(v) => { setSort(v); setVisibleCount(12); }}
           advancedOpen={showAdvanced}
@@ -757,7 +769,10 @@ export default function Dashboard({
               categoryLabel={categoryById.get(heroArticle.category)?.label || heroArticle.category}
               categoryColor={categoryById.get(heroArticle.category)?.color || '#E8A63C'}
             />}
-            {visibleGeneralArticles.length === 0 ? <div className="empty"><b>조건에 맞는 기사가 없습니다</b><span>검색어를 지우거나 기간을 늘려보세요. 뉴스와 지표는 스케줄러가 자동으로 갱신합니다.</span></div> : <>
+            {filtered.length === 0 ? (
+              <div className="empty"><b>조건에 맞는 기사가 없습니다</b><span>검색어를 지우거나 기간을 늘려보세요. 뉴스와 지표는 스케줄러가 자동으로 갱신합니다.</span></div>
+            ) : visibleGeneralArticles.length > 0 ? (
+              <>
               <div className="feedGrid">
                 {visibleGeneralArticles.map((a, i) => (
                   <FeedCard
@@ -774,14 +789,18 @@ export default function Dashboard({
                   {Math.min(12, generalArticles.length - visibleGeneralArticles.length).toLocaleString()}건 더 보기 · 남은 {(generalArticles.length - visibleGeneralArticles.length).toLocaleString()}건
                 </button>
               )}
-            </>}
+              </>
+            ) : (
+              // heroArticle만 있고 일반 기사가 없는 경우 — 빈(empty) 대신 대표 기사만 표시
+              null
+            )}
           </div>
 
           <FeedSidePanel
             briefItems={briefItems}
             keywords={keywordList}
             activeKeyword={query}
-            onKeywordClick={(t) => { setQuery(t); setVisibleCount(12); }}
+            onKeywordClick={(t) => handleFeedQueryChange(t)}
             categories={visibleCategories}
             selectedCategories={selectedCategories}
             onToggleCategory={(id) => { toggle(selectedCategories, id, setSelectedCategories); setVisibleCount(12); }}

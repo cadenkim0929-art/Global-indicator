@@ -13,7 +13,9 @@ const TAXONOMY = taxonomyData as {
 
 const parser = new Parser({
   timeout: 12000,
-  headers: { 'User-Agent': 'EP-Industry-Monitor/0.2 (+https://local.ep-monitor)' },
+  // SEC EDGAR blocks generic/bot-like User-Agent values with 403.
+  // Use an identifiable contact-style UA as recommended for SEC automated access.
+  headers: { 'User-Agent': 'EP Industry Monitor qdong@lgchem.com' },
 });
 
 const DATA_DIR = path.join(process.cwd(), 'data');
@@ -46,14 +48,14 @@ export const CATEGORY_META = [
 // 통과되던 문제 수정. BASF/Covestro 같은 대형 화학사는 향료·도료 등 EP와 무관한
 // 보도자료에도 이런 범용 단어를 흔히 포함하므로, 범용 단어 단독으로는 게이트를
 // 통과할 수 없게 하고 EP 특화 재료명/약어/전문기업명 중 하나를 반드시 요구한다.
-const CORE_SPECIFIC = /(engineering plastics?|폴리카보네이트|폴리아미드|나일론\s?6\.?6|특수수지|엔지니어링\s?플라스틱|엔프라|複合材料|エンプラ|エンジニアリングプラスチック|樹脂複合|polycarbonate|polyamide|\bpa\s?6\/?6\b|\bpa\s?6\b|\bpbt\b|\bpom\b|\bpeek\b|\bpps\b|\bppa\b|\bpsu\b|\bpei\b|caprolactam|bisphenol|\bbpa\b|liquid crystal polymer|\blcp\b|covestro|celanese|envalior|syensqo|victrex|ems-chemie|ems-grivory|polyplastics|kingfa|trinseo|sabic|lg\s?chem|lg화학|lotte\s?chem|롯데케미칼|sk\s?chemicals|kolon|코오롱|wanhua|domo\s?chemicals|radicigroup|espolytech|에스폴리텍)/i;
+const CORE_SPECIFIC = /(engineering plastics?|폴리카보네이트|폴리아미드|나일론\s?6\.?6|특수수지|엔지니어링\s?플라스틱|엔프라|複合材料|エンプラ|エンジニアリングプラスチック|樹酯複合|polycarbonate|polyamide|\bpa\s?6\/?6\b|\bpa\s?6\b|\bpbt\b|\bpom\b|\bpeek\b|\bpps\b|\bppa\b|\bpsu\b|\bpei\b|caprolactam|bisphenol|\bbpa\b|liquid crystal polymer|\blcp\b|covestro|celanese|envalior|syensqo|victrex|ems-chemie|ems-grivory|polyplastics|kingfa|trinseo|sabic|lg\s?chem|lg화학|lotte\s?chem|롯데케미칼|sk\s?chemicals|kolon|코오롱|wanhua|domo\s?chemicals|radicigroup|espolytech|에스폴리텍|biopolymers|ultrason|tinosorb|bemotrizinol|adapzo|carbon trust|\bbasf\b)/i;
 // [v1.0] n8n v5.6 이식: 미래 성장동력 응용처(로봇/휴머노이드/ESS/반도체패키징/AI데이터센터/
 // 자율주행) 키워드. CORE_SPECIFIC에 있어야 EP 재료명과 결합됐을 때 확실히 게이트 통과.
 const FUTURE_GROWTH_TERMS = /(humanoid|humanoid robot|service robot|industrial robot|robot actuator|robot joint|collaborative robot|cobot|autonomous driving|self-driving|lidar|adas|robotaxi|energy storage system|\bess\b|battery enclosure|battery pack housing|thermal runaway|flame retardant compound|semiconductor packaging|advanced packaging|chip packaging|glass substrate|test socket|wafer carrier|ai data center|data center cooling|immersion cooling|medical device|medical grade|biocompatible|휴머노이드|서비스로봇|산업용로봇|협동로봇|로봇 액추에이터|자율주행|라이다|에너지저장장치|배터리팩 하우징|열폭주|반도체 패키징|유리기판|테스트소켓|ai 데이터센터|액침냉각|의료기기|임플란트)/i;
 const CORE_GENERIC = /(resin|compound|polymer|composite|수지|화합물|樹脂)/i;
 function hasCoreSignal(text: string) { return CORE_SPECIFIC.test(text) || CORE_GENERIC.test(text); }
 
-const EVENT_REGEX = /(launch|unveil|introduc|debut|develop|expansion|capacity|investment|acqui|partnership|merger|agreement|regulation|tariff|antidumping|lawsuit|fine|recall|contract|price|supply|demand|shortage|plant|facility|insolven|bankrupt|files? for|adopt|selected for|chosen for|qualifies for|qualified for|출시|개발|증설|투자|인수|합병|제휴|규제|관세|고발|제재|계약|가격|수급|공장|설비|파산|선적|출하|납품|공급|채택|선정|完了|発表|買収|提携|規制)/i;
+const EVENT_REGEX = /(launch|unveil|introduc|debut|develop|expansion|capacity|investment|acqui|partnership|merger|agreement|regulation|tariff|antidumping|lawsuit|fine|recall|contract|price|supply|demand|shortage|plant|facility|insolven|bankrupt|files? for|adopt|selected for|chosen for|qualifies for|qualified for|names?\s+(?:new\s+)?|출시|개발|증설|투자|인수|합병|제휴|규제|관세|고발|제재|계약|가격|수급|공장|설비|파산|선적|출하|납품|공급|채택|선정|完了|発表|買収|提携|規制)/i;
 // [v0.3] 사건성 없는 IR 홍보문("전략을 제시했다", "입지를 강화하고 있다") 차단.
 const IR_FLUFF_REGEX = /((outlines?|unveils?|presents?|sets out)\s+(its\s+)?[\w\s-]{0,30}?(strategy|outlook|vision|roadmap)\b|(strengthen(ing|s)?|solidif(y|ies|ying)|build(ing|s)?)\s+its\s+(position|leadership|presence)\b|as investors\s+(assess|monitor|eye|track|watch)|전략(을|를)\s*(제시|발표)(했|한다)|입지를\s*강화하고\s*있)/i;
 
@@ -357,7 +359,16 @@ function killed(title: string, link: string, summary='') {
     || RESEARCH_COMPANIES.some(c => lower.includes(c))
     || IR_FLUFF_REGEX.test(title);
 }
-function passesGates(text: string) { return hasCoreSignal(text) && EVENT_REGEX.test(text); }
+// [v2.8] passesGates 로직 정리:
+//  - hasCoreSignal: EP 재료명/기업명/미래성장 키워드 중 하나라도 있으면 true
+//  - EVENT_REGEX: EP 산업 사건성 키워드
+//  - AND 조건 + IR_FLUFF_FILTER로 사건성 없는 IR 홍보문만 걸러냄
+//  - 핵심: "회사가 언급된 EP 산업 기사"는 회사와 사건 유무에 따라 유연하게 통과
+//  - IR_FLUFF는 제목에 집중(본문에 marketing 표현이 많으면误殺가 많음)
+function passesGates(text: string) {
+  if (IR_FLUFF_REGEX.test(text)) return false;
+  return hasCoreSignal(text) && EVENT_REGEX.test(text);
+}
 
 // [v1.0] n8n v5.5/v5.7 이식: 매크로/전방산업/통상규제 전용 게이트.
 // EP 수지명을 요구하지 않음(전방산업 경기·관세·CBAM 기사는 특정 수지를 언급하지 않는
@@ -616,5 +627,21 @@ export async function collectFeeds(options?: { maxFeeds?: number; category?: str
   const durationMs = Date.now() - startedAt;
   return { feedsTried: enabledFeeds.length, fetchedItems, inserted, totalArticles: byId.size, filteredArticles: processedArticles().length, oldFiltered, killedFiltered, gateFiltered, errors, durationMs, concurrency: CONCURRENCY };
 }
-export function queryArticles(filters: ArticleFilters = {}) { let articles=processedArticles(filters.days ?? DEFAULT_LOOKBACK_DAYS); if (filters.category && filters.category!=='전체') articles=articles.filter(a=>a.category===filters.category); if (filters.tag) articles=articles.filter(a=>a.tags.includes(filters.tag!)); if (filters.query) { const q=filters.query.toLowerCase(); articles=articles.filter(a=>`${a.title} ${a.titleKo||''} ${a.summary} ${a.summaryKo||''} ${a.feedName} ${a.sourceName||''} ${a.tags.join(' ')}`.toLowerCase().includes(q)); } return articles.slice(0, filters.limit ?? 200); }
+export function queryArticles(filters: ArticleFilters = {}) {
+  const q = filters.query?.trim().toLowerCase();
+  // Search mode should favor recall over dedup compactness. The normal feed uses
+  // processedArticles() to merge similar wire copies, but company/material search
+  // (BASF, Covestro, PA66...) must be able to surface all relevant good items,
+  // including articles that would otherwise be hidden behind a merged primary.
+  let articles = q
+    ? readRawArticles().map((a) => normalizeArticle(a, filters.days ?? DEFAULT_LOOKBACK_DAYS)).filter((a): a is Article => Boolean(a))
+    : processedArticles(filters.days ?? DEFAULT_LOOKBACK_DAYS);
+  if (filters.category && filters.category !== '전체') articles = articles.filter((a) => a.category === filters.category);
+  if (filters.tag) articles = articles.filter((a) => a.tags.includes(filters.tag!));
+  if (q) {
+    articles = articles.filter((a) => `${a.title} ${a.titleKo || ''} ${a.summary} ${a.summaryKo || ''} ${a.feedName} ${a.sourceName || ''} ${a.tags.join(' ')}`.toLowerCase().includes(q));
+    articles = articles.sort((a, b) => (b.score || 0) - (a.score || 0) || +new Date(b.publishedAt) - +new Date(a.publishedAt));
+  }
+  return articles.slice(0, filters.limit ?? 200);
+}
 export function getStats(days: number = DEFAULT_LOOKBACK_DAYS) { const raw=readRawArticles(); const articles=processedArticles(days); const feedsList=getFeeds(); const cats=['전체', ...CATEGORY_META.map(c=>c.id)]; const counts=cats.map(category=>({ category, label: category==='전체'?'전체':CATEGORY_META.find(c=>c.id===category)?.label || category, count: category==='전체'?articles.length:articles.filter(a=>a.category===category).length, feeds: category==='전체'?feedsList.length:feedsList.length })); const lastCollectedAt=raw.map(a=>a.collectedAt).sort().at(-1)||null; const topTags=Object.entries(articles.flatMap(a=>a.tags).reduce<Record<string,number>>((acc,tag)=>{acc[tag]=(acc[tag]||0)+1; return acc;},{})).sort((a,b)=>b[1]-a[1]).slice(0,30).map(([tag,count])=>({tag,count})); return { totalArticles: raw.length, filteredArticles: articles.length, totalFeeds: feedsList.length, counts, lastCollectedAt, topTags, categories: CATEGORY_META, lookbackDays: days }; }
