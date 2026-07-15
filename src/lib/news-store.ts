@@ -435,6 +435,34 @@ function titleTokens(title: string) {
   const stop = new Set(['요청','고발','중기부','검찰고발','거래','지위','남용','경쟁사','경쟁','업체','차단','막아','우월적','뉴스','단독','투자','발표','확대','재개','결정','계약','진행','수주','매출','실적','기업','산업','시장','업계','성장','계획','전략','announced','expansion','investment','launch','development','plan']);
   return new Set((normalizeTitle(title).match(/[가-힣A-Za-z0-9]+/g) || []).filter(w => w.length > 1 && !stop.has(w)));
 }
+// [v5.33] 검색 모드는 recall 확보를 위해 raw 기사 기반으로 조회하지만,
+// GlobeNewswire/Yahoo Finance/BusinessWire 재배포처럼 제목 본문이 완전히 같은 wire copy까지
+// 중복 노출되면 사용성이 떨어진다. 출처 suffix와 market-report 상투어 차이는 제거하되,
+// 회사명/숫자/소재명은 보존한 canonical key로 검색 결과에만 얕은 exact dedup을 적용한다.
+function wireCopyKey(title: string) {
+  return sanitizeText(title).toLowerCase()
+    .replace(/\s+[-–—|]\s+(globenewswire|yahoo finance( singapore| korea)?|business wire|pr newswire|accesswire|newsfile|benzinga|[^-–—|]{2,40})\s*$/i, ' ')
+    .replace(/["'“”‘’\[\](),.?!:;·]/g, ' ')
+    .replace(/\b(globenewswire|yahoo finance( singapore| korea)?|business wire|pr newswire|accesswire|newsfile|benzinga)\b/g, ' ')
+    .replace(/\b(to reach|reaches|reach|by|worth|valued at|market|services?|industry|global|report)\b/g, ' ')
+    .replace(/\b(usd|us\$|\$)\b/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+function dedupeSearchWireCopies(articles: Article[]) {
+  const byKey = new Map<string, Article>();
+  for (const a of articles) {
+    const key = wireCopyKey(a.title);
+    if (!key || key.length < 24) { byKey.set(`${a.id}:${key}`, a); continue; }
+    const existing = byKey.get(key);
+    if (!existing) { byKey.set(key, a); continue; }
+    const better = ((a.score || 0) > (existing.score || 0)) ||
+      ((a.score || 0) === (existing.score || 0) && (a.summary || '').length > (existing.summary || '').length);
+    if (better) byKey.set(key, { ...a, duplicateCount: (existing.duplicateCount || 1) + 1, duplicateSources: Array.from(new Set([...(existing.duplicateSources || [existing.sourceName || existing.feedName]), a.sourceName || a.feedName])) });
+    else byKey.set(key, { ...existing, duplicateCount: (existing.duplicateCount || 1) + 1, duplicateSources: Array.from(new Set([...(existing.duplicateSources || [existing.sourceName || existing.feedName]), a.sourceName || a.feedName])) });
+  }
+  return Array.from(byKey.values());
+}
 // [v0.3] 기존 코드는 두 제목이 모두 '엔지니어링플라스틱'을 포함하면 무조건 같은
 // 기사로 간주했음(하드코딩). 이 단어는 우리 산업 전반의 핵심 용어라 서로 다른
 // 사건(예: A사 증설 vs B사 신제품)까지 전부 하나로 합쳐버리는 위험한 규칙이었음.
@@ -652,6 +680,7 @@ export function queryArticles(filters: ArticleFilters = {}) {
   if (filters.tag) articles = articles.filter((a) => a.tags.includes(filters.tag!));
   if (q) {
     articles = articles.filter((a) => `${a.title} ${a.titleKo || ''} ${a.summary} ${a.summaryKo || ''} ${a.tags.join(' ')}`.toLowerCase().includes(q));
+    articles = dedupeSearchWireCopies(articles);
     articles = articles.sort((a, b) => (b.score || 0) - (a.score || 0) || +new Date(b.publishedAt) - +new Date(a.publishedAt));
   }
   return articles.slice(0, filters.limit ?? 200);
