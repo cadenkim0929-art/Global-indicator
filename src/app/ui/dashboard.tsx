@@ -152,6 +152,12 @@ function sourceRegion(name: string) {
   if (/us|america|\.com/i.test(name)) return '미국';
   return '기타';
 }
+function isMacroArticle(article: Pick<Article, 'category' | 'title'>) {
+  return article.category === 'macro-trade' || article.title.startsWith('[매크로]');
+}
+function stripMacroPrefix(title: string) {
+  return title.replace(/^\[매크로\]\s*/, '').trim();
+}
 
 export default function Dashboard({
   initialArticles, initialStats, initialIndicators, initialIndicatorMeta, initialIndicatorCounts, initialPage = 'feed',
@@ -204,13 +210,23 @@ export default function Dashboard({
 
   const categories = stats.categories || [];
   const categoryById = useMemo(() => new Map((stats.categories || []).map((c) => [c.id, c])), [stats.categories]);
+  const epArticles = useMemo(() => articles.filter((a) => !isMacroArticle(a)), [articles]);
+  const macroArticles = useMemo(() => articles.filter(isMacroArticle), [articles]);
+  const epCounts = useMemo(() => {
+    const countMap = new Map<string, number>();
+    epArticles.forEach((a) => countMap.set(a.category, (countMap.get(a.category) || 0) + 1));
+    return stats.counts.map((row) => row.category === '전체'
+      ? { ...row, count: epArticles.length }
+      : { ...row, count: countMap.get(row.category) || 0 }).filter((row) => row.category === '전체' || row.category !== 'macro-trade');
+  }, [epArticles, stats.counts]);
+  const macroCount = macroArticles.length;
   const visibleCategories = categories.filter((c) =>
-    (stats.counts.find((x) => x.category === c.id)?.count || 0) > 0 || selectedCategories.includes(c.id)
+    c.id !== 'macro-trade' && ((epCounts.find((x) => x.category === c.id)?.count || 0) > 0 || selectedCategories.includes(c.id))
   );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const list = articles.filter((a) => {
+    const list = epArticles.filter((a) => {
       if (selectedCategories.length && !selectedCategories.includes(a.category)) return false;
       if (selectedLanguages.length && !selectedLanguages.includes(a.language || 'other')) return false;
       if ((a.score || 0) < minScore) return false;
@@ -222,7 +238,7 @@ export default function Dashboard({
       if (sort === 'category') return a.category.localeCompare(b.category) || +new Date(b.publishedAt) - +new Date(a.publishedAt);
       return +new Date(b.publishedAt) - +new Date(a.publishedAt);
     });
-  }, [articles, selectedCategories, selectedLanguages, minScore, query, sort]);
+  }, [epArticles, selectedCategories, selectedLanguages, minScore, query, sort]);
 
   // [피드 리디자인] 대표 기사(오늘의 핵심 인사이트)와 "오늘의 브리프"는 사용자가 고른
   // 정렬(sort) 기준과 무관하게 항상 score→최신순으로 뽑는다(섹션9 데이터 매핑 규칙).
@@ -245,21 +261,21 @@ export default function Dashboard({
 
   const feedCounts = useMemo(() => {
     const map = new Map<string, { count: number; region: string; type: string }>();
-    articles.forEach((a) => {
+    epArticles.forEach((a) => {
       const name = a.sourceName || a.feedName;
       const existing = map.get(name) || { count: 0, region: sourceRegion(name), type: categoryById.get(a.category)?.label || a.category };
       existing.count += 1;
       map.set(name, existing);
     });
     return Array.from(map.entries()).sort((a, b) => b[1].count - a[1].count);
-  }, [articles, categoryById]);
+  }, [epArticles, categoryById]);
 
   const reportModel = useMemo(() => {
     const validArticles = articles.filter((a) => Number.isFinite(+new Date(a.publishedAt)));
     const anchor = validArticles.reduce((max, a) => Math.max(max, +new Date(a.publishedAt)), 0);
     const rangeArticles = (rangeDays: number) => validArticles.filter((a) => anchor > 0 && anchor - +new Date(a.publishedAt) <= rangeDays * 86400000);
     const makeReport = (rangeDays: number) => {
-      const scope = rangeArticles(rangeDays);
+      const scope = rangeArticles(rangeDays).filter((a) => !isMacroArticle(a));
       const topArticles = rankByScoreThenDate(scope).slice(0, 6);
       const categoryMap = new Map<string, { label: string; count: number; scoreSum: number }>();
       const tagMap = new Map<string, number>();
@@ -295,7 +311,7 @@ export default function Dashboard({
       };
     };
     const themeRows = (stats.categories || []).map((cat) => {
-      const scope = validArticles.filter((a) => a.category === cat.id);
+      const scope = validArticles.filter((a) => !isMacroArticle(a) && a.category === cat.id);
       const top = rankByScoreThenDate(scope).slice(0, 3);
       return { ...cat, count: scope.length, avgScore: scope.length ? Math.round(scope.reduce((sum, a) => sum + (a.score || 0), 0) / scope.length) : 0, top };
     }).filter((x) => x.count > 0).sort((a, b) => b.count - a.count || b.avgScore - a.avgScore).slice(0, 8);
@@ -383,6 +399,12 @@ export default function Dashboard({
   // 항목을 가리키게 함.
   const safeHighlightIdx = macroHighlights.length > 0 ? highlightIdx % macroHighlights.length : 0;
   const macroHighlight = macroHighlights[safeHighlightIdx] || null;
+  const macroNewsCards = useMemo(() => rankByScoreThenDate(macroArticles).slice(0, 12), [macroArticles]);
+  const macroNewsSources = useMemo(() => {
+    const map = new Map<string, number>();
+    macroArticles.forEach((a) => map.set(a.sourceName || a.feedName, (map.get(a.sourceName || a.feedName) || 0) + 1));
+    return Array.from(map.entries()).sort((a, b) => b[1] - a[1]).slice(0, 8);
+  }, [macroArticles]);
 
   const mediumIndicatorGroups = useMemo(() => {
     if (indicatorHorizonKey !== 'recent') return [];
@@ -670,8 +692,8 @@ export default function Dashboard({
     <aside className="sidebar">
       <div className="logo"><span>EP</span><div className="logoText"><b>EP Industry Monitor</b><small>Engineering · Plastics · Intelligence</small></div></div>
       <nav>
-        <button className={page === 'feed' ? 'active' : ''} onClick={() => setPage('feed')}>피드</button>
-        <button className={page === 'macro' ? 'active' : ''} onClick={() => setPage('macro')}>매크로 지표</button>
+        <button className={page === 'feed' ? 'active' : ''} onClick={() => setPage('feed')}>EP 산업 뉴스</button>
+        <button className={page === 'macro' ? 'active' : ''} onClick={() => setPage('macro')}>매크로 브리핑</button>
         <button className={page === 'sources' ? 'active' : ''} onClick={() => setPage('sources')}>소스</button>
         {/* [디자인 리뉴얼] 보고서/관심 지표/알림 설정은 아직 백엔드가 없는 예정 기능이라
             실제 페이지 전환 없이 자리만 잡아두고 "Soon" 배지로 준비 중임을 명시.
@@ -686,7 +708,8 @@ export default function Dashboard({
           <span className="statusPill"><i></i>정상</span>
         </div>
         <div className="metaRow"><span>최종 수집</span><b>{formatDate(stats.lastCollectedAt)}</b></div>
-        <div className="metaRow"><span>파이프라인</span><b>{stats.totalArticles.toLocaleString()}건 수집 → {stats.filteredArticles.toLocaleString()}건 표시</b></div>
+        <div className="metaRow"><span>EP 뉴스</span><b>{epArticles.length.toLocaleString()}건 표시</b></div>
+        <div className="metaRow"><span>매크로</span><b>{macroCount.toLocaleString()}건 별도 레인</b></div>
         <div className="metaRow"><span>소스</span><b>{stats.totalFeeds}개</b></div>
         <div className="productCredit">
           <span>제작</span>
@@ -698,11 +721,11 @@ export default function Dashboard({
     <section className="content">
       {page !== 'feed' && <header className="pageHeader">
         <div className="pageHeaderTitle">
-          <span className="eyebrow">{page === 'macro' ? 'Global Indicators' : page === 'reports' ? 'Deterministic Reports' : 'Source Directory'}</span>
-          <h1>{page === 'sources' ? '소스 현황' : page === 'reports' ? '보고서' : '매크로 & 전방산업 지표'}</h1>
+          <span className="eyebrow">{page === 'macro' ? 'Macro Briefing' : page === 'reports' ? 'Deterministic Reports' : 'Source Directory'}</span>
+          <h1>{page === 'sources' ? '소스 현황' : page === 'reports' ? '보고서' : '매크로 브리핑'}</h1>
           <p>{page === 'sources' ? `${feedCounts.length}개 소스가 최근 기여한 기사 수`
             : page === 'reports' ? 'LLM 없이 기사·지표 데이터를 규칙 기반으로 집계한 자동 보고서입니다.'
-            : '거시경제와 전방산업의 핵심 지표를 모니터링하여, 변화의 흐름을 한눈에 파악하세요.'}</p>
+            : `매크로 기사 ${macroCount.toLocaleString()}건과 핵심 지표를 EP 산업 뉴스와 분리해 봅니다.`}</p>
           {page === 'macro' && <span className="pageHeaderMeta">{indicatorMeta.totalIndicators}개 지표 · {formatDate(indicatorMeta.generatedAt)} 갱신</span>}
           {page === 'reports' && <span className="pageHeaderMeta">기준 데이터 · {formatDate(reportModel.generatedAt)}</span>}
         </div>
@@ -720,6 +743,7 @@ export default function Dashboard({
         </div>
       </header>}
       {page === 'feed' ? <>
+        <div className="laneNotice epLaneNotice"><b>EP 산업 뉴스 레인</b><span>매크로 기사는 기본 피드에서 분리했습니다. 환율·PMI·GDP·유가 뉴스는 매크로 브리핑에서 확인하세요.</span><button onClick={() => setPage('macro')}>매크로 보기</button></div>
         <FeedHeader
           lastCollectedAt={stats.lastCollectedAt}
           resultsCount={filtered.length}
@@ -756,8 +780,8 @@ export default function Dashboard({
         <FeedCategoryTabs
           categories={visibleCategories}
           selected={selectedCategories}
-          counts={stats.counts}
-          totalCount={stats.filteredArticles}
+          counts={epCounts}
+          totalCount={epArticles.length}
           onToggle={(id) => { toggle(selectedCategories, id, setSelectedCategories); setVisibleCount(12); }}
           onSelectAll={() => { setSelectedCategories([]); setVisibleCount(12); }}
         />
@@ -845,6 +869,25 @@ export default function Dashboard({
             </div>}
           </div>
         </article>}
+
+        <section className="macroNewsLane">
+          <div className="macroNewsHead">
+            <div><span>Macro News Lane</span><b>매크로 기사 브리핑</b><p>환율·유가·GDP·PMI·통상 이슈는 EP 산업 뉴스와 분리해 관리합니다.</p></div>
+            <strong>{macroCount.toLocaleString()}건</strong>
+          </div>
+          <div className="macroNewsGrid">
+            <div className="macroNewsList">
+              {macroNewsCards.length ? macroNewsCards.map((a) => <a className="macroNewsRow" href={a.link} target="_blank" rel="noreferrer" key={a.id}>
+                <div><b>{editorialHeadline(stripMacroPrefix(a.titleKo || a.title), a.sourceName || a.feedName)}</b><small>{a.sourceName || a.feedName} · {shortDate(a.publishedAt)} · Impact {a.score || 0}</small></div>
+                <span>원문 ↗</span>
+              </a>) : <div className="empty small">매크로 기사가 없습니다</div>}
+            </div>
+            <aside className="macroNewsSources">
+              <b>주요 매크로 소스</b>
+              {macroNewsSources.map(([name, count]) => <div key={name}><span>{name}</span><strong>{count}</strong></div>)}
+            </aside>
+          </div>
+        </section>
         {indicatorLoading ? <div className="indicatorGrid" key="macro-loading"><div className="empty"><b>불러오는 중…</b></div></div> : indicators.length === 0 ? <div className="indicatorGrid" key="macro-empty"><div className="empty"><b>이 시간축에 등록된 지표가 없습니다</b></div></div> : indicatorHorizonKey === 'now' ? <div className="macroOverviewGrid" key="macro-overview-now">
           <section className="indicatorSection macroTapeSection">
             <div className="indicatorSectionHead"><b>주요 매크로 지표</b><span>환율·유가·금리의 단기 흐름</span></div>
@@ -880,6 +923,7 @@ export default function Dashboard({
         {reportTab === 'monthly' && renderReportBlock('월간 리뷰', reportModel.monthly)}
         {reportTab === 'theme' && <div className="reportPage"><section className="reportPanel"><div className="reportPanelHead"><b>테마 리포트</b><span>카테고리별 자동 묶음</span></div><div className="themeReportGrid">{reportModel.themeRows.map((theme) => <article className="themeReportCard" key={theme.id}><span>{theme.label}</span><b>{theme.count.toLocaleString()}건</b><small>평균 Impact {theme.avgScore}</small><div>{theme.top.map((a, i) => renderReportArticle(a, i))}</div></article>)}</div></section></div>}
       </> : <>
+        <div className="laneNotice"><b>소스도 EP 기준으로 표시</b><span>매크로 소스는 매크로 브리핑 레인에서 별도로 집계합니다.</span></div>
         <div className="filters"><input className="searchInput" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="소스 검색…" /></div>
         <div className="sourceList">{feedCounts.filter(([name]) => !query || name.toLowerCase().includes(query.toLowerCase())).map(([name, info]) => <div className="sourceRow" key={name}><div className="sourceInfo"><b>{name}</b><span>{info.region} · {info.type}</span></div><div className="sourceStats"><strong>{info.count}</strong><span>최근 기여</span></div></div>)}</div>
       </>}
