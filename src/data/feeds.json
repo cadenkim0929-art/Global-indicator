@@ -506,10 +506,18 @@
   {
     "id": "gn-envalior",
     "name": "GN_Envalior",
-    "url": "https://news.google.com/rss/search?q=%22Envalior%22&hl=en&gl=US&ceid=US:en",
-    "category": "응용 산업",
+    "url": "https://news.google.com/rss/search?q=Envalior+AND+(polyamide+OR+PA66+OR+PEEK+OR+%22engineering+plastics%22+OR+Arnitel+OR+Forgedi+OR+Staramide+OR+%22lightweight%22+OR+EV+OR+automotive+OR+aerospace+OR+launch+OR+announce+OR+develop+OR+acquire+OR+expand+OR+plant+OR+capacity+OR+K+2025+OR+Fakuma+OR+Chinaplas)&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
     "enabled": true,
     "sourceWorkflowNode": "GN_Envalior"
+  },
+  {
+    "id": "envalior-com",
+    "name": "Envalior_PR",
+    "url": "https://news.google.com/rss/search?q=site:envalior.com+AND+(polyamide+OR+PA66+OR+PEEK+OR+%22engineering+plastics%22+OR+Arnitel+OR+launch+OR+announce+OR+expand+OR+plant+OR+capacity+OR+acquisition)&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "RSS_Envalior"
   },
   {
     "id": "gn-syensqo",
