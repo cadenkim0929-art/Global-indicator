@@ -744,6 +744,190 @@
     "sourceWorkflowNode": "GN_EMS_Chemie"
   },
   {
+    "id": "gn-eu-radici",
+    "name": "GN_EU_RadiciGroup",
+    "url": "https://news.google.com/rss/search?q=RadiciGroup%20AND%20%28engineering%20plastics%20OR%20polyamide%20OR%20nylon%20OR%20compound%20OR%20automotive%20OR%20plant%20OR%20capacity%20OR%20acquisition%20OR%20launch%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_EU_RadiciGroup"
+  },
+  {
+    "id": "gn-eu-domo",
+    "name": "GN_EU_DOMO_Chemicals",
+    "url": "https://news.google.com/rss/search?q=%22DOMO%20Chemicals%22%20AND%20%28engineering%20plastics%20OR%20polyamide%20OR%20nylon%20OR%20compound%20OR%20TECHNYL%20OR%20plant%20OR%20capacity%20OR%20acquisition%20OR%20launch%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_EU_DOMO_Chemicals"
+  },
+  {
+    "id": "gn-eu-ascend",
+    "name": "GN_EU_Ascend_Performance_Materials",
+    "url": "https://news.google.com/rss/search?q=%22Ascend%20Performance%20Materials%22%20AND%20%28polyamide%20OR%20nylon%20OR%20engineering%20plastics%20OR%20compound%20OR%20plant%20OR%20capacity%20OR%20acquisition%20OR%20launch%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_EU_Ascend_Performance_Materials"
+  },
+  {
+    "id": "gn-eu-roechling",
+    "name": "GN_EU_Roechling",
+    "url": "https://news.google.com/rss/search?q=%28Roechling%20OR%20R%C3%B6chling%29%20AND%20%28engineering%20plastics%20OR%20polyamide%20OR%20thermoplastic%20OR%20automotive%20OR%20medical%20OR%20plant%20OR%20investment%20OR%20launch%20OR%20expansion%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_EU_Roechling"
+  },
+  {
+    "id": "gn-eu-lehvoss-luvocom",
+    "name": "GN_EU_LEHVOSS_LUVOCOM",
+    "url": "https://news.google.com/rss/search?q=%28LEHVOSS%20OR%20LUVOCOM%29%20AND%20%28engineering%20plastics%20OR%20compound%20OR%20PEEK%20OR%20PPS%20OR%20polyamide%20OR%20thermoplastic%20OR%203D%20printing%20OR%20launch%20OR%20plant%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_EU_LEHVOSS_LUVOCOM"
+  },
+  {
+    "id": "gn-eu-mocom",
+    "name": "GN_EU_MOCOM",
+    "url": "https://news.google.com/rss/search?q=MOCOM%20AND%20%28engineering%20plastics%20OR%20compound%20OR%20thermoplastic%20OR%20polyamide%20OR%20recycled%20OR%20medical%20OR%20plant%20OR%20launch%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_EU_MOCOM"
+  },
+  {
+    "id": "gn-eu-albis",
+    "name": "GN_EU_ALBIS",
+    "url": "https://news.google.com/rss/search?q=ALBIS%20AND%20%28engineering%20plastics%20OR%20compound%20OR%20thermoplastic%20OR%20distribution%20OR%20recycled%20OR%20polyamide%20OR%20partnership%20OR%20launch%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_EU_ALBIS"
+  },
+  {
+    "id": "gn-eu-ensinger",
+    "name": "GN_EU_Ensinger",
+    "url": "https://news.google.com/rss/search?q=Ensinger%20AND%20%28engineering%20plastics%20OR%20polyamide%20OR%20PEEK%20OR%20PPS%20OR%20POM%20OR%20thermoplastic%20OR%20compound%20OR%20extrusion%20OR%20machining%20OR%20plant%20OR%20investment%20OR%20launch%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_EU_Ensinger"
+  },
+  {
+    "id": "gn-eu-sirmax",
+    "name": "GN_EU_Sirmax",
+    "url": "https://news.google.com/rss/search?q=Sirmax%20AND%20%28engineering%20plastics%20OR%20compound%20OR%20polypropylene%20OR%20recycled%20OR%20thermoplastic%20OR%20automotive%20OR%20plant%20OR%20investment%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_EU_Sirmax"
+  },
+  {
+    "id": "gn-eu-biesterfeld",
+    "name": "GN_EU_Biesterfeld",
+    "url": "https://news.google.com/rss/search?q=Biesterfeld%20AND%20%28engineering%20plastics%20OR%20compound%20OR%20polyamide%20OR%20thermoplastic%20OR%20distribution%20OR%20partnership%20OR%20Syensqo%20OR%20BASF%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_EU_Biesterfeld"
+  },
+  {
+    "id": "gn-eu-grupa-azoty",
+    "name": "GN_EU_Grupa_Azoty_Tarnamid",
+    "url": "https://news.google.com/rss/search?q=%28%22Grupa%20Azoty%22%20OR%20Tarnamid%29%20AND%20%28polyamide%20OR%20caprolactam%20OR%20engineering%20plastics%20OR%20compound%20OR%20plant%20OR%20capacity%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_EU_Grupa_Azoty_Tarnamid"
+  },
+  {
+    "id": "gn-us-avient",
+    "name": "GN_US_Avient",
+    "url": "https://news.google.com/rss/search?q=Avient%20AND%20%28engineering%20plastics%20OR%20specialty%20engineered%20materials%20OR%20polyamide%20OR%20thermoplastic%20OR%20compound%20OR%20composite%20OR%20colorant%20OR%20plant%20OR%20acquisition%20OR%20launch%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_US_Avient"
+  },
+  {
+    "id": "gn-us-rtp",
+    "name": "GN_US_RTP_Company",
+    "url": "https://news.google.com/rss/search?q=%28%22RTP%20Company%22%20OR%20%22RTP%20Co.%22%29%20AND%20%28engineering%20plastics%20OR%20thermoplastic%20OR%20compound%20OR%20conductive%20OR%20medical%20OR%20automotive%20OR%20launch%20OR%20plant%20OR%20investment%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_US_RTP_Company"
+  },
+  {
+    "id": "gn-us-tekniplex",
+    "name": "GN_US_TekniPlex",
+    "url": "https://news.google.com/rss/search?q=TekniPlex%20AND%20%28medical%20plastics%20OR%20polymer%20OR%20compound%20OR%20tubing%20OR%20healthcare%20OR%20acquisition%20OR%20plant%20OR%20capacity%20OR%20launch%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_US_TekniPlex"
+  },
+  {
+    "id": "gn-us-zeus",
+    "name": "GN_US_Zeus_Industrial",
+    "url": "https://news.google.com/rss/search?q=%28%22Zeus%20Industrial%20Products%22%20OR%20%22Zeus%20Company%22%29%20AND%20%28polymer%20OR%20fluoropolymer%20OR%20medical%20tubing%20OR%20catheter%20OR%20thermoplastic%20OR%20plant%20OR%20investment%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_US_Zeus_Industrial"
+  },
+  {
+    "id": "gn-us-foster",
+    "name": "GN_US_Foster_Corporation",
+    "url": "https://news.google.com/rss/search?q=%28%22Foster%20Corporation%22%20OR%20%22Foster%20Compounds%22%29%20AND%20%28medical%20polymers%20OR%20polymer%20compound%20OR%20thermoplastic%20OR%20radiopaque%20OR%20implantable%20OR%20launch%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_US_Foster_Corporation"
+  },
+  {
+    "id": "gn-us-putnam",
+    "name": "GN_US_Putnam_Plastics",
+    "url": "https://news.google.com/rss/search?q=%28%22Putnam%20Plastics%22%20OR%20%22Putnam%20Plastics%20Corporation%22%29%20AND%20%28medical%20tubing%20OR%20polymer%20OR%20thermoplastic%20OR%20catheter%20OR%20extrusion%20OR%20acquisition%20OR%20expansion%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_US_Putnam_Plastics"
+  },
+  {
+    "id": "gn-us-polymer-resources",
+    "name": "GN_US_Polymer_Resources",
+    "url": "https://news.google.com/rss/search?q=%28%22Polymer%20Resources%22%20OR%20%22Polymer%20Resources%20Ltd%22%29%20AND%20%28engineering%20plastics%20OR%20polycarbonate%20OR%20ABS%20OR%20compound%20OR%20resin%20OR%20medical%20OR%20expansion%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_US_Polymer_Resources"
+  },
+  {
+    "id": "gn-us-chase-plastics",
+    "name": "GN_US_Chase_Plastics",
+    "url": "https://news.google.com/rss/search?q=%22Chase%20Plastics%22%20AND%20%28engineering%20plastics%20OR%20resin%20distribution%20OR%20polyamide%20OR%20thermoplastic%20OR%20partnership%20OR%20expansion%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_US_Chase_Plastics"
+  },
+  {
+    "id": "gn-us-m-holland",
+    "name": "GN_US_M_Holland",
+    "url": "https://news.google.com/rss/search?q=%28%22M.%20Holland%22%20OR%20%22M%20Holland%20Company%22%29%20AND%20%28engineering%20plastics%20OR%20resin%20distribution%20OR%20polyamide%20OR%20thermoplastic%20OR%20partnership%20OR%20acquisition%20OR%20healthcare%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_US_M_Holland"
+  },
+  {
+    "id": "gn-us-techmer",
+    "name": "GN_US_Techmer_PM",
+    "url": "https://news.google.com/rss/search?q=%28%22Techmer%20PM%22%20OR%20Techmer%29%20AND%20%28polymer%20additive%20OR%20masterbatch%20OR%20compound%20OR%20engineering%20plastics%20OR%20colorant%20OR%20launch%20OR%20acquisition%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_US_Techmer_PM"
+  },
+  {
+    "id": "gn-us-aurora",
+    "name": "GN_US_Aurora_Plastics",
+    "url": "https://news.google.com/rss/search?q=%22Aurora%20Plastics%22%20AND%20%28compound%20OR%20PVC%20OR%20thermoplastic%20OR%20polymer%20OR%20acquisition%20OR%20plant%20OR%20expansion%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_US_Aurora_Plastics"
+  },
+  {
+    "id": "gn-us-star-plastics",
+    "name": "GN_US_Star_Plastics",
+    "url": "https://news.google.com/rss/search?q=%22Star%20Plastics%22%20AND%20%28engineering%20plastics%20OR%20compound%20OR%20polycarbonate%20OR%20ABS%20OR%20thermoplastic%20OR%20resin%20OR%20rebrand%29&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_US_Star_Plastics"
+  },
+  {
     "id": "gn-superep",
     "name": "GN_SuperEP",
     "url": "https://news.google.com/rss/search?q=%22polyphenylene%20sulfide%22%20OR%20%22liquid%20crystal%20polymer%22%20OR%20%22PEEK%20polymer%22&hl=en&gl=US&ceid=US:en",
@@ -766,14 +950,6 @@
     "category": "응용 산업",
     "enabled": true,
     "sourceWorkflowNode": "GN_EP_Korea"
-  },
-  {
-    "id": "gn-radici-domo",
-    "name": "GN_Radici_Domo",
-    "url": "https://news.google.com/rss/search?q=%22RadiciGroup%22%20OR%20%22Domo%20Chemicals%22%20OR%20%22Ascend%20Performance%20Materials%22&hl=en&gl=US&ceid=US:en",
-    "category": "응용 산업",
-    "enabled": true,
-    "sourceWorkflowNode": "GN_Radici_Domo"
   },
   {
     "id": "sig-edgar-trinseo",
