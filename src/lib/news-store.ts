@@ -20,6 +20,7 @@ const parser = new Parser({
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const ARTICLES_PATH = path.join(DATA_DIR, 'articles.json');
+const FILTER_DIAGNOSTICS_PATH = path.join(DATA_DIR, 'filter-diagnostics.json');
 
 export const CATEGORY_META = [
   { id: 'new-materials', label: '🧪 신소재 & 제품 출시', color: '#49D7A9', keywords: ['launch','new product','grade','material','resin','compound','신제품','출시','소재','수지','グレード'] },
@@ -55,7 +56,7 @@ const FUTURE_GROWTH_TERMS = /(humanoid|humanoid robot|service robot|industrial r
 const CORE_GENERIC = /(resin|compound|polymer|composite|수지|화합물|樹脂)/i;
 function hasCoreSignal(text: string) { return CORE_SPECIFIC.test(text) || CORE_GENERIC.test(text); }
 
-const EVENT_REGEX = /(launch|unveil|introduc|debut|develop|expansion|capacity|investment|acqui|partnership|merger|agreement|regulation|tariff|antidumping|lawsuit|fine|recall|contract|price|supply|demand|shortage|plant|facility|factory|compounding|recycling|insolven|bankrupt|files? for|adopt|selected for|chosen for|qualifies for|qualified for|names?\s+(?:new\s+)?|showcase|showcasing|award|certification|certified|opens?|commission|inaugurat|출시|개발|증설|투자|인수|합병|제휴|규제|관세|고발|제재|계약|가격|수급|공장|설비|파산|선적|출하|납품|공급|채택|선정|扩产|擴產|投产|投產|产能|產能|投资|投資|收购|收購|并购|併購|合作|协议|協議|开发|開發|推出|发布|發布|获批|獲批|专利|專利|涨价|漲價|价格|價格|供应|供應|短缺|工厂|工廠|基地|项目|項目|完了|発表|買収|提携|規制)/i;
+const EVENT_REGEX = /(launch|unveil|introduc|debut|develop|advanc|expansion|capacity|investment|acqui|partnership|merger|agreement|transaction|complete[sd]?|regulation|tariff|antidumping|lawsuit|fine|recall|contract|price|supply|supplies|demand|shortage|plant|facility|factory|unit|compounding|recycling|split|reorganization|insolven|bankrupt|files? for|adopt|selected for|chosen for|qualifies for|qualified for|names?\s+(?:new\s+)?|showcase|showcasing|exhibit|attend|award|recogniz|certification|certified|opens?|commission|inaugurat|출시|개발|증설|투자|인수|합병|제휴|거래|완료|규제|관세|고발|제재|계약|가격|수급|공장|설비|파산|분할|조직개편|선적|출하|납품|공급|채택|선정|扩产|擴產|投产|投產|产能|產能|投资|投資|收购|收購|并购|併購|合作|协议|協議|开发|開發|推出|发布|發布|获批|獲批|专利|專利|涨价|漲價|价格|價格|供应|供應|短缺|工厂|工廠|基地|项目|項目|完了|発表|買収|提携|規制)/i;
 // [v0.3] 사건성 없는 IR 홍보문("전략을 제시했다", "입지를 강화하고 있다") 차단.
 const IR_FLUFF_REGEX = /((outlines?|unveils?|presents?|sets out)\s+(its\s+)?[\w\s-]{0,30}?(strategy|outlook|vision|roadmap)\b|(strengthen(ing|s)?|solidif(y|ies|ying)|build(ing|s)?)\s+its\s+(position|leadership|presence)\b|as investors\s+(assess|monitor|eye|track|watch)|전략(을|를)\s*(제시|발표)(했|한다)|입지를\s*강화하고\s*있)/i;
 
@@ -127,7 +128,9 @@ const KILL_PATTERNS = [
   /수익\s?대비\s?가격|price\s+to\s+earnings\s+forward|forward\s+p\/?e\b|\bp\/e\s+forward\b/i,
   // [v5.13] ad-hoc-news.de 등에서 회사명+소재 키워드를 끼워 넣은 종목/주식 해설 기사 배제.
   /\b[A-Z][A-Za-z0-9-]{2,}(?:\s+[A-Z][A-Za-z0-9-]{2,}){0,2}\s+stock\s+(reflects|stays|remains|is|looks|trades|gains|falls|drops|rises|surges|slumps)\b/i,
-  /\b(stock|shares?)\b.{0,80}\b(specialty polymers?|manufacturing demand|supported by|focus amid)\b/i,
+  /\b(stock|shares?)\b.{0,80}\b(specialty polymers?|manufacturing demand|supported by|focus amid|sink|fall|profit|earnings|revenue|investors?|ftse)\b/i,
+  /\b(earnings|profits?|revenue|impairment)\b.{0,80}\b(slump|fall|sink|softens?|investors?|shares?|stock|buying opportunity)\b/i,
+  /\b(care chemicals|personal care|fragrance ingredients?|fungicide|cosmetics?|longevity)\b/i,
   /(주식|주가).{0,60}(특수\s*폴리머|제조\s*수요|수요에 의해|초점을 반영|유지)/,
   // [v5.23] 한국어 증시 마감/종가 해설 기사 배제. 회사명·업황이 있어도 주가 마감분석은 산업 뉴스가 아님.
   /\[(마감\s*분석|종가\s*분석|장마감\s*분석)\]/,
@@ -629,6 +632,9 @@ export async function collectFeeds(options?: { maxFeeds?: number; category?: str
   const enabledFeeds = options?.maxFeeds ? allEnabledFeeds.slice(0, options.maxFeeds) : allEnabledFeeds;
   const existing = readRawArticles(); const byId = new Map(existing.map((a: Article)=>[a.id,a]));
   const errors: Array<{feed:string; message:string}> = []; let fetchedItems=0, inserted=0, oldFiltered=0, killedFiltered=0, gateFiltered=0;
+  type FilterSample = { feedId: string; feedName: string; category: string; reason: string; title: string; link: string; summary: string; publishedAt: string; hasCore?: boolean; hasEvent?: boolean; isMacro?: boolean };
+  const diagnostics: { oldFilteredSamples: FilterSample[]; killedSamples: FilterSample[]; gateFilteredSamples: FilterSample[] } = { oldFilteredSamples: [], killedSamples: [], gateFilteredSamples: [] };
+  function pushSample(bucket: FilterSample[], sample: FilterSample) { if (bucket.length < 160) bucket.push(sample); }
   const startedAt = Date.now();
 
   // [v0.4] 103개 피드를 순차 처리하면 최악의 경우 20분 가까이 걸리고, 중간에
@@ -642,13 +648,15 @@ export async function collectFeeds(options?: { maxFeeds?: number; category?: str
       const isMacro = feed.category === 'macro';
       for (const item of parsed.items.slice(0, 20)) {
         const title=sanitizeText(item.title||'제목 없음'); const link=(item.link||item.guid||'').trim(); const summary=sanitizeText(item.contentSnippet||item.summary||item.content||''); const publishedAt=item.isoDate||item.pubDate||new Date().toISOString(); const id=articleId(link,title); fetchedItems++;
-        if (byId.has(id)) continue; if (!isWithinDays(publishedAt, STORAGE_LOOKBACK_DAYS)) { oldFiltered++; continue; }
+        if (byId.has(id)) continue; if (!isWithinDays(publishedAt, STORAGE_LOOKBACK_DAYS)) { oldFiltered++; pushSample(diagnostics.oldFilteredSamples, { feedId: feed.id, feedName: feed.name, category: String(feed.category), reason: 'older_than_storage_lookback', title, link, summary: summary.slice(0, 260), publishedAt, isMacro }); continue; }
         const text=`${title} ${summary} ${feed.name}`;
+        const hasCore = hasCoreSignal(text);
+        const hasEvent = EVENT_REGEX.test(text);
         // [v1.0] 매크로 레인: EP CORE 게이트 대신 매크로 관련성 게이트 사용, 도메인/스팸
         // 킬은 공통 적용(리서치 스팸은 매크로 레인에도 흘러들 수 있으므로).
-        if (killed(title,link,summary)) { killedFiltered++; continue; }
-        if (isMacro) { if (!passesMacroGate(text)) { gateFiltered++; continue; } }
-        else if (!passesGates(text)) { gateFiltered++; continue; }
+        if (killed(title,link,summary)) { killedFiltered++; pushSample(diagnostics.killedSamples, { feedId: feed.id, feedName: feed.name, category: String(feed.category), reason: 'killed_pattern_or_domain', title, link, summary: summary.slice(0, 260), publishedAt, hasCore, hasEvent, isMacro }); continue; }
+        if (isMacro) { if (!passesMacroGate(text)) { gateFiltered++; pushSample(diagnostics.gateFilteredSamples, { feedId: feed.id, feedName: feed.name, category: String(feed.category), reason: 'macro_gate_failed', title, link, summary: summary.slice(0, 260), publishedAt, hasCore, hasEvent, isMacro }); continue; } }
+        else if (!passesGates(text)) { gateFiltered++; pushSample(diagnostics.gateFilteredSamples, { feedId: feed.id, feedName: feed.name, category: String(feed.category), reason: !hasCore ? 'missing_core_signal' : !hasEvent ? 'missing_event_signal' : 'gate_failed_other', title, link, summary: summary.slice(0, 260), publishedAt, hasCore, hasEvent, isMacro }); continue; }
         const displayTitle = isMacro ? `[매크로] ${title}` : title;
         const category = isMacro ? 'macro-trade' : classifyArticle(text, feed.category);
         const article: Article = { id, feedId: feed.id, feedName: feed.name, category, title: displayTitle, link, summary: summary.slice(0,800), contentSnippet: summary.slice(0,300), publishedAt: new Date(publishedAt).toISOString(), collectedAt: new Date().toISOString(), source: parsed.title || feed.name, sourceName: displaySourceName(feed.name, link, parsed.title, title), language: detectLanguage(`${title} ${summary}`), summaryStatus: summary ? 'summary' : 'fallback', score: scoreArticle(text, category), tags: extractTags(text) };
@@ -665,7 +673,19 @@ export async function collectFeeds(options?: { maxFeeds?: number; category?: str
   }
 
   const durationMs = Date.now() - startedAt;
-  return { feedsTried: enabledFeeds.length, fetchedItems, inserted, totalArticles: byId.size, filteredArticles: processedArticles().length, oldFiltered, killedFiltered, gateFiltered, errors, durationMs, concurrency: CONCURRENCY };
+  const diagnosticsPayload = {
+    collectedAt: new Date().toISOString(),
+    feedsTried: enabledFeeds.length,
+    fetchedItems,
+    inserted,
+    oldFiltered,
+    killedFiltered,
+    gateFiltered,
+    errors: errors.slice(0, 20),
+    ...diagnostics,
+  };
+  try { fs.writeFileSync(FILTER_DIAGNOSTICS_PATH, JSON.stringify(diagnosticsPayload, null, 2), 'utf8'); } catch { /* diagnostics should never block collection */ }
+  return { feedsTried: enabledFeeds.length, fetchedItems, inserted, totalArticles: byId.size, filteredArticles: processedArticles().length, oldFiltered, killedFiltered, gateFiltered, errors, durationMs, concurrency: CONCURRENCY, diagnosticsPath: FILTER_DIAGNOSTICS_PATH };
 }
 export function queryArticles(filters: ArticleFilters = {}) {
   const q = filters.query?.trim().toLowerCase();
