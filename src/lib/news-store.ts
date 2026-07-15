@@ -549,6 +549,13 @@ function coreCompaniesIn(t: string): string[] {
 }
 
 function similarTitle(a: string, b: string) {
+  // [v5.36] 기본 피드 병합에도 wire-copy canonical key를 적용한다.
+  // v5.33은 검색 모드 dedup만 고쳤기 때문에, 기본 EP 피드에서는
+  // GlobeNewswire/Yahoo Finance Singapore/Yahoo Finance UK 같은 재배포본이
+  // 3개 카드로 남을 수 있었다. 제목 내부 하이픈(Implant-Grade)은 보존하고
+  // 끝의 source suffix만 제거한 key가 같으면 같은 wire copy로 병합한다.
+  const wa = wireCopyKey(a), wb = wireCopyKey(b);
+  if (wa && wb && wa.length >= 24 && wa === wb) return true;
   const A = titleTokens(a), B = titleTokens(b);
   const inter = [...A].filter(x => B.has(x)).length;
   const minSize = Math.min(A.size, B.size) || 1;
@@ -611,8 +618,14 @@ export function processedArticles(days: number = DEFAULT_LOOKBACK_DAYS): Article
     if (VAGUE_MARKERS.test(title) && !COUNTRY_HINTS.test(title)) bonus -= 10; // 밋밋한 상투어만 있고 구체정보 없으면 페널티
     return bonus;
   }
+  function sourcePriority(item: Article): number {
+    const source = `${item.sourceName || ''} ${item.feedName || ''} ${item.link || ''}`.toLowerCase();
+    if (/globenewswire|businesswire|business wire|prnewswire|pr newswire|accesswire|newsfile/.test(source)) return 18;
+    if (/yahoo finance|benzinga|marketwatch/.test(source)) return -8;
+    return 0;
+  }
   for (const items of groups) {
-    items.sort((a,b)=> ((b.score + specificityBonus(b.title)) - (a.score + specificityBonus(a.title))) || ((b.summary||'').length-(a.summary||'').length));
+    items.sort((a,b)=> ((b.score + specificityBonus(b.title) + sourcePriority(b)) - (a.score + specificityBonus(a.title) + sourcePriority(a))) || ((b.summary||'').length-(a.summary||'').length));
     const primary = { ...items[0] };
     primary.duplicateCount = items.length;
     primary.duplicateSources = Array.from(new Set(items.map(i=>i.sourceName || displaySourceName(i.feedName, i.link, i.source, i.title))));
