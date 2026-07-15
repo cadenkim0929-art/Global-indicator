@@ -1542,5 +1542,117 @@
     "category": "macro",
     "enabled": true,
     "sourceWorkflowNode": "RSS_macro-bok"
+  },
+  {
+    "id": "gn-dist-ravago",
+    "name": "GN_Dist_Ravago",
+    "url": "https://news.google.com/rss/search?q=Ravago%20AND%20%28polymer%20OR%20resin%20OR%20plastics%20OR%20distributor%20OR%20distribution%20OR%20compound%20OR%20engineering%20plastics%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "distribution-channel",
+    "enabled": true,
+    "sourceWorkflowNode": "HermesClaw v5.37 global polymer distribution channel expansion"
+  },
+  {
+    "id": "gn-dist-nexeo",
+    "name": "GN_Dist_Nexeo_Plastics",
+    "url": "https://news.google.com/rss/search?q=Nexeo%20Plastics%20AND%20%28polymer%20OR%20resin%20OR%20plastics%20OR%20distributor%20OR%20distribution%20OR%20engineering%20plastics%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "distribution-channel",
+    "enabled": true,
+    "sourceWorkflowNode": "HermesClaw v5.37 global polymer distribution channel expansion"
+  },
+  {
+    "id": "gn-dist-resinex",
+    "name": "GN_Dist_Resinex",
+    "url": "https://news.google.com/rss/search?q=Resinex%20AND%20%28polymer%20OR%20resin%20OR%20plastics%20OR%20distributor%20OR%20engineering%20plastics%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "distribution-channel",
+    "enabled": true,
+    "sourceWorkflowNode": "HermesClaw v5.37 global polymer distribution channel expansion"
+  },
+  {
+    "id": "gn-dist-biesterfeld",
+    "name": "GN_Dist_Biesterfeld",
+    "url": "https://news.google.com/rss/search?q=Biesterfeld%20AND%20%28polymer%20distribution%20OR%20plastics%20distribution%20OR%20resin%20distributor%20OR%20engineering%20plastics%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "distribution-channel",
+    "enabled": true,
+    "sourceWorkflowNode": "HermesClaw v5.37 global polymer distribution channel expansion"
+  },
+  {
+    "id": "gn-dist-distrupol",
+    "name": "GN_Dist_Distrupol_Omya",
+    "url": "https://news.google.com/rss/search?q=Distrupol%20OR%20%22Omya%20Performance%20Polymer%20Distribution%22%20AND%20%28polymer%20OR%20resin%20OR%20plastics%20OR%20distributor%20OR%20distribution%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "distribution-channel",
+    "enabled": true,
+    "sourceWorkflowNode": "HermesClaw v5.37 global polymer distribution channel expansion"
+  },
+  {
+    "id": "gn-dist-m-holland",
+    "name": "GN_Dist_M_Holland",
+    "url": "https://news.google.com/rss/search?q=%22M.%20Holland%22%20AND%20%28polymer%20OR%20resin%20OR%20plastics%20OR%20distribution%20OR%20distributor%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "distribution-channel",
+    "enabled": true,
+    "sourceWorkflowNode": "HermesClaw v5.37 global polymer distribution channel expansion"
+  },
+  {
+    "id": "gn-dist-channel-prime",
+    "name": "GN_Dist_Channel_Prime",
+    "url": "https://news.google.com/rss/search?q=%22Channel%20Prime%20Alliance%22%20AND%20%28polymer%20OR%20resin%20OR%20plastics%20OR%20distribution%20OR%20distributor%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "distribution-channel",
+    "enabled": true,
+    "sourceWorkflowNode": "HermesClaw v5.37 global polymer distribution channel expansion"
+  },
+  {
+    "id": "gn-dist-plastribution",
+    "name": "GN_Dist_Plastribution",
+    "url": "https://news.google.com/rss/search?q=Plastribution%20AND%20%28polymer%20OR%20resin%20OR%20plastics%20OR%20distributor%20OR%20distribution%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "distribution-channel",
+    "enabled": true,
+    "sourceWorkflowNode": "HermesClaw v5.37 global polymer distribution channel expansion"
+  },
+  {
+    "id": "gn-dist-albis",
+    "name": "GN_Dist_ALBIS_Distribution",
+    "url": "https://news.google.com/rss/search?q=ALBIS%20AND%20%28distribution%20OR%20distributor%20OR%20polymer%20OR%20resin%20OR%20plastics%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "distribution-channel",
+    "enabled": true,
+    "sourceWorkflowNode": "HermesClaw v5.37 global polymer distribution channel expansion"
+  },
+  {
+    "id": "gn-dist-imcd-polymers",
+    "name": "GN_Dist_IMCD_Polymers",
+    "url": "https://news.google.com/rss/search?q=IMCD%20AND%20%28polymer%20OR%20resin%20OR%20plastics%20OR%20engineering%20plastics%20OR%20distributor%20OR%20distribution%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "distribution-channel",
+    "enabled": true,
+    "sourceWorkflowNode": "HermesClaw v5.37 global polymer distribution channel expansion"
+  },
+  {
+    "id": "gn-dist-azelis-polymers",
+    "name": "GN_Dist_Azelis_Polymers",
+    "url": "https://news.google.com/rss/search?q=Azelis%20AND%20%28polymer%20OR%20resin%20OR%20plastics%20OR%20engineering%20plastics%20OR%20distributor%20OR%20distribution%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "distribution-channel",
+    "enabled": true,
+    "sourceWorkflowNode": "HermesClaw v5.37 global polymer distribution channel expansion"
+  },
+  {
+    "id": "gn-dist-polymer-global",
+    "name": "GN_Dist_Global_Polymer_Distribution",
+    "url": "https://news.google.com/rss/search?q=%28%22polymer%20distributor%22%20OR%20%22resin%20distributor%22%20OR%20%22plastics%20distribution%22%29%20AND%20%28acquires%20OR%20partnership%20OR%20agreement%20OR%20expands%20OR%20launches%20OR%20distributes%20OR%20appointment%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "distribution-channel",
+    "enabled": true,
+    "sourceWorkflowNode": "HermesClaw v5.37 global polymer distribution channel expansion"
+  },
+  {
+    "id": "gn-dist-engplastics-global",
+    "name": "GN_Dist_Engineering_Plastics_Distribution",
+    "url": "https://news.google.com/rss/search?q=%28%22engineering%20plastics%20distributor%22%20OR%20%22engineering%20thermoplastics%20distributor%22%29%20AND%20%28partnership%20OR%20agreement%20OR%20expands%20OR%20distributes%20OR%20appointment%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "distribution-channel",
+    "enabled": true,
+    "sourceWorkflowNode": "HermesClaw v5.37 global polymer distribution channel expansion"
+  },
+  {
+    "id": "gn-dist-ul-prospector",
+    "name": "GN_Dist_UL_Prospector_SpecialChem",
+    "url": "https://news.google.com/rss/search?q=%28%22UL%20Prospector%22%20OR%20SpecialChem%20OR%20CAMPUSplastics%29%20AND%20%28polymer%20OR%20plastics%20OR%20resin%20OR%20material%20database%20OR%20engineering%20plastics%29&hl=en-US&gl=US&ceid=US:en",
+    "category": "distribution-channel",
+    "enabled": true,
+    "sourceWorkflowNode": "HermesClaw v5.37 global polymer distribution channel expansion"
   }
 ]
