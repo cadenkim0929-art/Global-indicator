@@ -184,7 +184,19 @@ def main() -> None:
         except Exception as exc:
             failures.append({"indicatorId": indicator_id, "url": cfg["url"], "error": str(exc)})
 
-    if rows:
+    # [v5.40] Partial failures must be visible in the data file. Previously oil
+    # scraping could fail for a week while FX/rates succeeded, making top-level
+    # generatedAt look fresh and hiding the per-indicator outage.
+    data["indicatorRefresh"] = {
+        "generatedAt": utc_now_iso(),
+        "source": "TradingEconomics public web meta description",
+        "rowsUpserted": len(rows),
+        "rows": rows,
+        "skipped": skipped,
+        "failures": failures,
+    }
+
+    if rows or failures or skipped:
         data["generatedAt"] = utc_now_iso()
         data["version"] = "v5.15-short-macro-tradingeconomics"
         atomic_write_json(DATA, data)
@@ -198,6 +210,12 @@ def main() -> None:
         "failures": failures,
         "generatedAt": data.get("generatedAt"),
     }, ensure_ascii=False, indent=2))
+
+    # Make partial indicator failures observable to cron/systemd while still
+    # preserving successful rows in indicators.json. A caller may treat exit 2
+    # as degraded rather than total failure, but it must not be silent.
+    if failures:
+        raise SystemExit(2)
 
 
 if __name__ == "__main__":

@@ -76,9 +76,13 @@ export interface RelatedNewsItem {
 export interface IndicatorCard extends IndicatorCatalogItem {
   latestValue: number | null;
   latestPeriod: string | null;
+  previousPeriod?: string | null;
   previousValue: number | null;
   pctChange: number | null;
   dataStatus: 'ok' | 'stale' | 'insufficient';
+  changeStatus?: 'ok' | 'gap' | 'insufficient';
+  changeIntervalDays?: number | null;
+  dataWarning?: string;
   history: IndicatorObservation[];
   relatedNews: RelatedNewsItem[];
 }

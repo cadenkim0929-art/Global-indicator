@@ -229,7 +229,8 @@ export default function IndicatorDetail({ title, subtitle, series, defaultSeries
   const previous = active.previousValue;
   const pointDelta = latest != null && previous != null ? latest - previous : null;
   const profile = profileFor(active);
-  const change = profile === 'rate' && pointDelta != null
+  const hasGap = active.changeStatus === 'gap';
+  const change = hasGap ? null : profile === 'rate' && pointDelta != null
     ? pointDelta * 100
     : profile === 'pmi' || profile === 'growth' ? pointDelta : deltaPct(latest ?? undefined, previous ?? undefined);
   const changeSuffix = profile === 'rate' ? 'bp' : profile === 'pmi' || profile === 'growth' ? 'p' : '%';
@@ -248,7 +249,7 @@ export default function IndicatorDetail({ title, subtitle, series, defaultSeries
       </div>
       <div className="detailLeadValue">
         <strong>{formatNumber(latest, Math.abs(latest || 0) < 10 ? 3 : 2)}<small>{compactUnit(active.unit)}</small></strong>
-        <span className={directionClass(change)}>{change == null ? '전기 데이터 없음' : `${change > 0 ? '▲' : change < 0 ? '▼' : '–'} ${formatNumber(Math.abs(change))}${changeSuffix}`}</span>
+        <span className={directionClass(change)} title={active.dataWarning}>{hasGap ? `갱신공백 ${active.changeIntervalDays}일` : change == null ? '전기 데이터 없음' : `${change > 0 ? '▲' : change < 0 ? '▼' : '–'} ${formatNumber(Math.abs(change))}${changeSuffix}`}</span>
         <time>{formatPeriod(active.latestPeriod, active.frequency)} 기준</time>
       </div>
     </section>

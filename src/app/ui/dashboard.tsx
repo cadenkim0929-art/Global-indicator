@@ -453,8 +453,13 @@ export default function Dashboard({
       : null;
     const rateUp = pointDelta !== null && pointDelta > 0;
     const rateDown = pointDelta !== null && pointDelta < 0;
-    const changeText = ind.dataStatus === 'stale'
-      ? '최신 아님'
+    const gapText = ind.changeStatus === 'gap' && ind.changeIntervalDays
+      ? `갱신공백 ${ind.changeIntervalDays}일`
+      : null;
+    const changeText = gapText
+      ? gapText
+      : ind.dataStatus === 'stale'
+        ? '최신 아님'
       : isRateIndicator && pointDelta !== null
         ? `${rateUp ? '▲' : rateDown ? '▼' : '–'} ${Math.abs(pointDelta)}p`
         : ind.pctChange !== null
@@ -480,7 +485,7 @@ export default function Dashboard({
       </div>
       <div className="indicatorListTrend">
         {!isPmiIndicator && <Sparkline history={ind.history} />}
-        <span className={`indicatorChange ${changeClass}`}>{changeText}</span>
+        <span className={`indicatorChange ${changeClass}`} title={ind.dataWarning}>{changeText}</span>
       </div>
       <span className="indicatorChevron" aria-hidden="true">›</span>
     </Link>;
@@ -494,8 +499,13 @@ export default function Dashboard({
     const changeValue = isRateIndicator ? pointDelta : ind.pctChange;
     const changeClass = ind.dataStatus === 'stale' ? 'stale' : changeValue !== null && changeValue > 0
       ? 'up' : changeValue !== null && changeValue < 0 ? 'down' : '';
-    const changeText = ind.dataStatus === 'stale'
-      ? '최신 아님'
+    const gapText = ind.changeStatus === 'gap' && ind.changeIntervalDays
+      ? `갱신공백 ${ind.changeIntervalDays}일`
+      : null;
+    const changeText = gapText
+      ? gapText
+      : ind.dataStatus === 'stale'
+        ? '최신 아님'
       : changeValue !== null
         ? `${changeValue > 0 ? '▲' : changeValue < 0 ? '▼' : '–'} ${Math.abs(changeValue)}${isRateIndicator ? 'p' : '%'}`
         : '—';
@@ -510,8 +520,8 @@ export default function Dashboard({
         <small>{ind.unit}</small>
       </div>
       <div className="macroTapeDelta">
-        <span className={changeClass}>{changeText}</span>
-        <small>전기 대비</small>
+        <span className={changeClass} title={ind.dataWarning}>{changeText}</span>
+        <small>{gapText ? '비교 중단' : '전기 대비'}</small>
       </div>
       <span className="macroTapeChevron" aria-hidden="true">›</span>
     </Link>;

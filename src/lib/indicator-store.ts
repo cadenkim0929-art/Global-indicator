@@ -14,6 +14,13 @@ interface IndicatorsFile {
   generatedAt: string;
   indicators: IndicatorCatalogItem[];
   observations: IndicatorObservation[];
+  indicatorRefresh?: {
+    generatedAt?: string;
+    source?: string;
+    rowsUpserted?: number;
+    failures?: Array<{ indicatorId: string; url?: string; error: string }>;
+    skipped?: Array<{ indicatorId: string; period?: string; reason: string }>;
+  };
 }
 
 let cache: IndicatorsFile | null = null;
@@ -39,6 +46,23 @@ function isFresh(period: string | null | undefined, frequency: IndicatorFrequenc
     yearly: 700,
   };
   return ageDays <= limits[frequency];
+}
+
+function daysBetween(a?: string | null, b?: string | null): number | null {
+  const da = parsePeriodDate(a);
+  const db = parsePeriodDate(b);
+  if (!da || !db) return null;
+  return Math.round(Math.abs(da.getTime() - db.getTime()) / 86_400_000);
+}
+
+function maxExpectedIntervalDays(frequency: IndicatorFrequency): number {
+  // Daily market indicators can skip weekends/holidays, but an 8-day gap must not
+  // be displayed as a normal one-period move. Monthly/quarterly/yearly thresholds
+  // are intentionally wider to avoid false warnings from release calendars.
+  if (frequency === 'daily') return 4;
+  if (frequency === 'monthly') return 45;
+  if (frequency === 'quarterly') return 120;
+  return 430;
 }
 
 // [v1.2] 지표별 관련뉴스 매칭. 입력 뉴스 풀을 macro-trade로 제한하되,
@@ -165,7 +189,7 @@ export function clearIndicatorCache() {
 
 export function getIndicatorMeta(): { version: string; generatedAt: string; totalIndicators: number } {
   const f = readFile();
-  return { version: f.version, generatedAt: f.generatedAt, totalIndicators: f.indicators.length };
+  return { version: f.version, generatedAt: f.generatedAt, totalIndicators: f.indicators.length, ...(f.indicatorRefresh ? { indicatorRefresh: f.indicatorRefresh } : {}) } as { version: string; generatedAt: string; totalIndicators: number };
 }
 
 /** 프론트에서 쓸 카드 목록: 카탈로그 + 최신 2개 관측치(전기 대비 계산용) 결합 */
@@ -187,16 +211,23 @@ export function getIndicatorCards(frequency?: IndicatorFrequency): IndicatorCard
       const obs = byIndicator.get(ind.id) || [];
       const latest = obs[0];
       const previous = obs[1];
-      const pctChange = latest && previous && previous.value !== 0
+      const intervalDays = latest && previous ? daysBetween(latest.period, previous.period) : null;
+      const hasGap = intervalDays !== null && intervalDays > maxExpectedIntervalDays(ind.frequency);
+      const pctChange = latest && previous && previous.value !== 0 && !hasGap
         ? ((latest.value - previous.value) / Math.abs(previous.value)) * 100
         : null;
+      const latestFresh = latest ? isFresh(latest.period, ind.frequency) : false;
       return {
         ...ind,
         latestValue: latest ? latest.value : null,
         latestPeriod: latest ? latest.period : null,
+        previousPeriod: previous ? previous.period : null,
         previousValue: previous ? previous.value : null,
         pctChange: pctChange !== null ? Math.round(pctChange * 100) / 100 : null,
-        dataStatus: latest ? (isFresh(latest.period, ind.frequency) ? 'ok' : 'stale') : 'insufficient',
+        dataStatus: latest ? (latestFresh && !hasGap ? 'ok' : 'stale') : 'insufficient',
+        changeStatus: !latest || !previous ? 'insufficient' : hasGap ? 'gap' : 'ok',
+        changeIntervalDays: intervalDays,
+        dataWarning: hasGap ? `직전 관측치와 ${intervalDays}일 간격 — 누적 변동을 전기 대비로 표시하지 않음` : undefined,
         history: obs.slice(0, 8).reverse(), // 과거→최신 순, 스파크라인용
         relatedNews: getRelatedNews(ind.id),
       };
