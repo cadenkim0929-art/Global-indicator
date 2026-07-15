@@ -528,12 +528,108 @@
     "sourceWorkflowNode": "GN_Syensqo"
   },
   {
-    "id": "gn-kingfa-wanhua",
-    "name": "GN_Kingfa_Wanhua",
-    "url": "https://news.google.com/rss/search?q=%22Kingfa%22%20OR%20%22Wanhua%20Chemical%22&hl=en&gl=US&ceid=US:en",
-    "category": "응용 산업",
+    "id": "gn-kingfa",
+    "name": "GN_Kingfa",
+    "url": "https://news.google.com/rss/search?q=Kingfa+AND+(polyamide+OR+PA66+OR+PBT+OR+%22engineering+plastics%22+OR+composite+OR+resin+OR+automotive+OR+battery+OR+capacity+OR+plant+OR+expansion)&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
     "enabled": true,
-    "sourceWorkflowNode": "GN_Kingfa_Wanhua"
+    "sourceWorkflowNode": "GN_Kingfa"
+  },
+  {
+    "id": "gn-wanhua",
+    "name": "GN_Wanhua_Chemical",
+    "url": "https://news.google.com/rss/search?q=%22Wanhua+Chemical%22+AND+(polyurethane+OR+TPU+OR+polycarbonate+OR+MDI+OR+%22engineering+plastics%22+OR+resin+OR+plant+OR+capacity+OR+expansion)&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Wanhua_Chemical"
+  },
+  {
+    "id": "gn-pret",
+    "name": "GN_Shanghai_PRET",
+    "url": "https://news.google.com/rss/search?q=(%22Shanghai+PRET%22+OR+%22PRET+Composites%22+OR+%22Shanghai+Pret+Composites%22)+AND+(polyamide+OR+PA66+OR+composite+OR+compound+OR+%22engineering+plastics%22+OR+automotive+OR+battery+OR+resin+OR+factory+OR+plant+OR+capacity)&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Shanghai_PRET"
+  },
+  {
+    "id": "gn-nanjing-julong",
+    "name": "GN_Nanjing_Julong",
+    "url": "https://news.google.com/rss/search?q=(%22Nanjing+Julong%22+OR+%22Nanjing+Julong+Science%22)+AND+(polyamide+OR+%22engineering+plastics%22+OR+composite+OR+automotive+OR+resin+OR+plant+OR+investment)&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Nanjing_Julong"
+  },
+  {
+    "id": "gn-xiamen-lft",
+    "name": "GN_Xiamen_LFT",
+    "url": "https://news.google.com/rss/search?q=(%22Xiamen+LFT%22+OR+%22Xiamen+LFT+composite%22+OR+%22long+fiber+thermoplastic%22)+AND+(polyamide+OR+%22engineering+plastics%22+OR+automotive+OR+composite+OR+plant)&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Xiamen_LFT"
+  },
+  {
+    "id": "gn-polyrocks",
+    "name": "GN_Polyrocks",
+    "url": "https://news.google.com/rss/search?q=Polyrocks+AND+(polyamide+OR+PBT+OR+%22engineering+plastics%22+OR+composite+OR+resin+OR+automotive+OR+plant+OR+capacity)&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Polyrocks"
+  },
+  {
+    "id": "gn-dawn-polymer",
+    "name": "GN_Dawn_Polymer",
+    "url": "https://news.google.com/rss/search?q=(%22Dawn+Polymer%22+OR+%22Shandong+Dawn%22)+AND+(polyamide+OR+%22engineering+plastics%22+OR+composite+OR+resin+OR+TPE+OR+TPU+OR+plant+OR+capacity+OR+investment)&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Dawn_Polymer"
+  },
+  {
+    "id": "gn-formosa",
+    "name": "GN_Formosa_Plastics",
+    "url": "https://news.google.com/rss/search?q=(%22Formosa+Plastics%22+OR+%22Formosa+Chemicals%22)+AND+(polypropylene+OR+polycarbonate+OR+%22engineering+plastics%22+OR+resin+OR+plant+OR+capacity+OR+launch+OR+expansion)&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Formosa_Plastics"
+  },
+  {
+    "id": "gn-nan-ya",
+    "name": "GN_Nan_Ya_Plastics",
+    "url": "https://news.google.com/rss/search?q=(%22Nan+Ya+Plastics%22+OR+%22Nan+Ya%22)+AND+(PBT+OR+%22engineering+plastics%22+OR+resin+OR+polyester+OR+plant+OR+capacity+OR+electronics)&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Nan_Ya_Plastics"
+  },
+  {
+    "id": "gn-chang-chun",
+    "name": "GN_Chang_Chun_Group",
+    "url": "https://news.google.com/rss/search?q=(%22Chang+Chun+Plastics%22+OR+%22Chang+Chun+Group%22)+AND+(PBT+OR+%22engineering+plastics%22+OR+resin+OR+phenolic+OR+plant+OR+capacity+OR+expansion)&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Chang_Chun_Group"
+  },
+  {
+    "id": "gn-shinkong",
+    "name": "GN_Shinkong_Synthetic_Fibers",
+    "url": "https://news.google.com/rss/search?q=(%22Shinkong+Synthetic+Fibers%22+OR+%22Shinkong+Synthetic%22)+AND+(PET+OR+PBT+OR+%22engineering+plastics%22+OR+resin+OR+polyester+OR+recycling+OR+plant+OR+investment)&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Shinkong_Synthetic_Fibers"
+  },
+  {
+    "id": "gn-far-eastern-new-century",
+    "name": "GN_Far_Eastern_New_Century",
+    "url": "https://news.google.com/rss/search?q=(%22Far+Eastern+New+Century%22+OR+FENC)+AND+(PET+OR+polyester+OR+%22engineering+plastics%22+OR+resin+OR+recycled+OR+plant+OR+capacity)&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_Far_Eastern_New_Century"
+  },
+  {
+    "id": "gn-lcy-chemical",
+    "name": "GN_LCY_Chemical",
+    "url": "https://news.google.com/rss/search?q=(%22LCY+Chemical%22+OR+%22LCY+Group%22)+AND+(TPU+OR+TPE+OR+%22engineering+plastics%22+OR+resin+OR+polypropylene+OR+plant+OR+capacity)&hl=en&gl=US&ceid=US:en",
+    "category": "기업 PR",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_LCY_Chemical"
   },
   {
     "id": "gn-ems-chemie",

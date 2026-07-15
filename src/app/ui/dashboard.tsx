@@ -214,7 +214,7 @@ export default function Dashboard({
       if (selectedCategories.length && !selectedCategories.includes(a.category)) return false;
       if (selectedLanguages.length && !selectedLanguages.includes(a.language || 'other')) return false;
       if ((a.score || 0) < minScore) return false;
-      if (q && !`${a.title} ${a.titleKo || ''} ${a.titleEn || ''} ${a.summary} ${a.summaryKo || ''} ${a.sourceName || a.feedName} ${a.tags.join(' ')}`.toLowerCase().includes(q)) return false;
+      if (q && !`${a.title} ${a.titleKo || ''} ${a.titleEn || ''} ${a.summary} ${a.summaryKo || ''} ${a.tags.join(' ')}`.toLowerCase().includes(q)) return false;
       return true;
     });
     return [...list].sort((a, b) => {

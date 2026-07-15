@@ -48,14 +48,14 @@ export const CATEGORY_META = [
 // 통과되던 문제 수정. BASF/Covestro 같은 대형 화학사는 향료·도료 등 EP와 무관한
 // 보도자료에도 이런 범용 단어를 흔히 포함하므로, 범용 단어 단독으로는 게이트를
 // 통과할 수 없게 하고 EP 특화 재료명/약어/전문기업명 중 하나를 반드시 요구한다.
-const CORE_SPECIFIC = /(engineering plastics?|폴리카보네이트|폴리아미드|나일론\s?6\.?6|특수수지|엔지니어링\s?플라스틱|엔프라|複合材料|エンプラ|エンジニアリングプラスチック|樹酯複合|polycarbonate|polyamide|\bpa\s?6\/?6\b|\bpa\s?6\b|\bpbt\b|\bpom\b|\bpeek\b|\bpps\b|\bppa\b|\bpsu\b|\bpei\b|caprolactam|bisphenol|\bbpa\b|liquid crystal polymer|\blcp\b|covestro|celanese|envalior|syensqo|victrex|ems-chemie|ems-grivory|polyplastics|kingfa|trinseo|sabic|lg\s?chem|lg화학|lotte\s?chem|롯데케미칼|sk\s?chemicals|kolon|코오롱|wanhua|domo\s?chemicals|radicigroup|espolytech|에스폴리텍|biopolymers|ultrason|tinosorb|bemotrizinol|adapzo|carbon trust|\bbasf\b)/i;
+const CORE_SPECIFIC = /(engineering plastics?|폴리카보네이트|폴리아미드|나일론\s?6\.?6|특수수지|엔지니어링\s?플라스틱|엔프라|複合材料|エンプラ|エンジニアリングプラスチック|樹脂複合|polycarbonate|polyamide|\bpa\s?6\/?6\b|\bpa\s?6\b|\bpbt\b|\bpom\b|\bpeek\b|\bpps\b|\bppa\b|\bpsu\b|\bpei\b|caprolactam|bisphenol|\bbpa\b|liquid crystal polymer|\blcp\b|covestro|celanese|envalior|syensqo|victrex|ems-chemie|ems-grivory|polyplastics|kingfa|trinseo|sabic|lg\s?chem|lg화학|lotte\s?chem|롯데케미칼|sk\s?chemicals|kolon|코오롱|wanhua|domo\s?chemicals|radicigroup|espolytech|에스폴리텍|biopolymers|ultrason|tinosorb|bemotrizinol|adapzo|carbon trust|\bbasf\b|pret\s?composites?|shanghai\s?pret|formosa\s?(plastics|chemicals)?|nan\s?ya\s?plastics?|chang\s?chun\s?(group|plastics)?|shinkong\s?synthetic\s?fibers?|far\s?eastern\s?new\s?century|\bfenc\b|lcy\s?(chemical|group)?|polyrocks|nanjing\s?julong|xiamen\s?lft|long\s?fiber\s?thermoplastic|dawn\s?polymer|shandong\s?dawn)/i;
 // [v1.0] n8n v5.6 이식: 미래 성장동력 응용처(로봇/휴머노이드/ESS/반도체패키징/AI데이터센터/
 // 자율주행) 키워드. CORE_SPECIFIC에 있어야 EP 재료명과 결합됐을 때 확실히 게이트 통과.
 const FUTURE_GROWTH_TERMS = /(humanoid|humanoid robot|service robot|industrial robot|robot actuator|robot joint|collaborative robot|cobot|autonomous driving|self-driving|lidar|adas|robotaxi|energy storage system|\bess\b|battery enclosure|battery pack housing|thermal runaway|flame retardant compound|semiconductor packaging|advanced packaging|chip packaging|glass substrate|test socket|wafer carrier|ai data center|data center cooling|immersion cooling|medical device|medical grade|biocompatible|휴머노이드|서비스로봇|산업용로봇|협동로봇|로봇 액추에이터|자율주행|라이다|에너지저장장치|배터리팩 하우징|열폭주|반도체 패키징|유리기판|테스트소켓|ai 데이터센터|액침냉각|의료기기|임플란트)/i;
 const CORE_GENERIC = /(resin|compound|polymer|composite|수지|화합물|樹脂)/i;
 function hasCoreSignal(text: string) { return CORE_SPECIFIC.test(text) || CORE_GENERIC.test(text); }
 
-const EVENT_REGEX = /(launch|unveil|introduc|debut|develop|expansion|capacity|investment|acqui|partnership|merger|agreement|regulation|tariff|antidumping|lawsuit|fine|recall|contract|price|supply|demand|shortage|plant|facility|insolven|bankrupt|files? for|adopt|selected for|chosen for|qualifies for|qualified for|names?\s+(?:new\s+)?|출시|개발|증설|투자|인수|합병|제휴|규제|관세|고발|제재|계약|가격|수급|공장|설비|파산|선적|출하|납품|공급|채택|선정|完了|発表|買収|提携|規制)/i;
+const EVENT_REGEX = /(launch|unveil|introduc|debut|develop|expansion|capacity|investment|acqui|partnership|merger|agreement|regulation|tariff|antidumping|lawsuit|fine|recall|contract|price|supply|demand|shortage|plant|facility|factory|compounding|recycling|insolven|bankrupt|files? for|adopt|selected for|chosen for|qualifies for|qualified for|names?\s+(?:new\s+)?|showcase|showcasing|award|certification|certified|opens?|commission|inaugurat|출시|개발|증설|투자|인수|합병|제휴|규제|관세|고발|제재|계약|가격|수급|공장|설비|파산|선적|출하|납품|공급|채택|선정|完了|発表|買収|提携|規制)/i;
 // [v0.3] 사건성 없는 IR 홍보문("전략을 제시했다", "입지를 강화하고 있다") 차단.
 const IR_FLUFF_REGEX = /((outlines?|unveils?|presents?|sets out)\s+(its\s+)?[\w\s-]{0,30}?(strategy|outlook|vision|roadmap)\b|(strengthen(ing|s)?|solidif(y|ies|ying)|build(ing|s)?)\s+its\s+(position|leadership|presence)\b|as investors\s+(assess|monitor|eye|track|watch)|전략(을|를)\s*(제시|발표)(했|한다)|입지를\s*강화하고\s*있)/i;
 
@@ -65,7 +65,7 @@ const KILL_DOMAINS = [
   // [v2.1] TradingView는 뉴스가 아니라 순수 주가지표(목표주가/PER 등) 스니펫만
   // 생성 — 회사명이 EP 기업과 겹치면(예: "Shaily Engineering Plastics") CORE
   // 게이트를 통과하지만 실제로는 산업 뉴스가 아님(실사용 데이터에서 2건 확인).
-  'tradingview.com',
+  'tradingview.com','marketsmojo.com',
   'fortunebusinessinsights.com','marketresearchfuture.com','researchandmarkets.com',
   'openpr.com','einnews.com','einpresswire.com','globenewswire.com','prnewswire.com',
   'reportlinker.com','verifiedmarketreports.com','marketwatch.com',
@@ -87,7 +87,7 @@ const RESEARCH_COMPANIES = [
   'dataintelo','maximize market research','stratview research','spherical insights',
   'skyquest','straits research','indexbox','research and markets','reportlinker',
 ];
-const TITLE_KILL_REGEX = /(market size|share, trends|market analysis|market growth driven|forecast\s*(to|203|202)|,\s*forecast\s*,|cagr|industry analysis|research report|시장\s*규모|시장\s*보고서|시장\s*전망\s*보고서|시장\s?조사\s?보고서|市場規模|分析レポート|調査レポート|무료 샘플|샘플 요청|press release distribution|students capture|honors\b|contracts for [a-z]+ \d{1,2}, \d{4}|pnas|市场规模|市场报告|市场研究报告|市场调研|调研报告|市场调查|行业调研)/i;
+const TITLE_KILL_REGEX = /(market size|share, trends|market analysis|market growth driven|forecast\s*(to|203|202)|,\s*forecast\s*,|cagr|industry analysis|research report|시장\s*규모|시장\s*보고서|시장\s*전망\s*보고서|시장\s?조사\s?보고서|市場規模|分析レポート|調査レポート|무료 샘플|샘플 요청|press release distribution|students capture|honors\b|contracts for [a-z]+ \d{1,2}, \d{4}|pnas|市场规模|市场报告|市场研究报告|市场调研|调研报告|市场调查|行业调研|stock price|share price|technical analysis|price to book|net profit jumps|q[1-4]\s+net profit|eps\b|dividend|intraday surge|hits day high|투자의견|목표가|주가)/i;
 const KILL_PATTERNS = [
   /tradingview/i,
   // [v5.11] ICIS/Google News가 로그인 차단 페이지를 기사처럼 내보내는 경우
@@ -346,7 +346,11 @@ function scoreArticle(text: string, category: string) {
 export const DEFAULT_LOOKBACK_DAYS = 90;
 // [v1.3] 저장 시점(수집) 하한 — 사용자가 조절하는 '표시 기간'과는 다른 개념.
 // 넉넉하게 잡아 데이터 손실을 막고, 실제 표시 범위는 읽기 시점에 필터링한다.
-const STORAGE_LOOKBACK_DAYS = 180;
+// [v2.9] 중국/대만계 EP 경쟁사(PRET, Nanjing Julong, Formosa/Nan Ya 등)는
+// Google News 색인량이 적고 유효 산업 뉴스가 6~24개월 전 기사로 남아 있는 경우가 많다.
+// 저장 하한을 2년으로 늘려 검색 모드(730d lookback)에서 회수 가능하게 한다.
+// 기본 피드 표시 기간(DEFAULT_LOOKBACK_DAYS=90)은 그대로라 일반 화면 노이즈는 늘리지 않음.
+const STORAGE_LOOKBACK_DAYS = 730;
 export function isWithinDays(publishedAt: string, days: number): boolean { const dt=new Date(publishedAt).getTime(); return !isNaN(dt) && dt >= Date.now()-days*24*3600*1000; }
 export function isWithin7Days(publishedAt: string): boolean { return isWithinDays(publishedAt, 7); }
 function killed(title: string, link: string, summary='') {
@@ -639,7 +643,7 @@ export function queryArticles(filters: ArticleFilters = {}) {
   if (filters.category && filters.category !== '전체') articles = articles.filter((a) => a.category === filters.category);
   if (filters.tag) articles = articles.filter((a) => a.tags.includes(filters.tag!));
   if (q) {
-    articles = articles.filter((a) => `${a.title} ${a.titleKo || ''} ${a.summary} ${a.summaryKo || ''} ${a.feedName} ${a.sourceName || ''} ${a.tags.join(' ')}`.toLowerCase().includes(q));
+    articles = articles.filter((a) => `${a.title} ${a.titleKo || ''} ${a.summary} ${a.summaryKo || ''} ${a.tags.join(' ')}`.toLowerCase().includes(q));
     articles = articles.sort((a, b) => (b.score || 0) - (a.score || 0) || +new Date(b.publishedAt) - +new Date(a.publishedAt));
   }
   return articles.slice(0, filters.limit ?? 200);
