@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import Sparkline from './indicator-sparkline';
 import type { Article, IndicatorCard, IndicatorFrequency } from '@/lib/types';
-import { categoryLabelFor, displayArticleTitle, formatDate, isTodayKst, rankByScoreThenDate, shortDate, buildKeywordList, t } from './format-utils';
+import { categoryLabelFor, countryLabelFor, displayArticleTitle, formatDate, impactBadgeFor, indicatorNameFor, isTodayKst, rankByScoreThenDate, shortDate, buildKeywordList, t } from './format-utils';
 import type { PageKey, SortKey, UiLang } from './format-utils';
 import FeedHeader from './feed/feed-header';
 import FeedCategoryTabs from './feed/feed-filters';
@@ -62,9 +62,6 @@ function horizonCount(counts: Record<IndicatorFrequency, number>, horizon: Indic
   const tab = HORIZON_TABS.find((x) => x.key === horizon);
   return tab ? tab.frequencies.reduce((sum, f) => sum + (counts[f] || 0), 0) : 0;
 }
-const GDP_COUNTRY_LABELS: Record<string, string> = {
-  us: '미국', korea: '한국', japan: '일본', china: '중국', eurozone: '유로존', india: '인도',
-};
 const GDP_COUNTRY_ORDER = ['us', 'korea', 'japan', 'china', 'eurozone', 'india'];
 const GDP_COUNTRY_FLAGS: Record<string, string> = {
   us: '🇺🇸', korea: '🇰🇷', japan: '🇯🇵', china: '🇨🇳', eurozone: '🇪🇺', india: '🇮🇳',
@@ -117,17 +114,17 @@ function editorialHeadline(title: string, sourceName?: string) {
 // Billion chained 2017 USD / Million chained 2010 EUR / Trillion USD)이라
 // 한눈에 비교가 안 되던 문제 — 전부 "조" 스케일 + 통화명으로 통일해서 표시.
 // 원시 단위는 title 툴팁으로만 보존.
-function gdpLevelDisplay(ind: IndicatorCard): { text: string; unitLabel: string } | null {
+function gdpLevelDisplay(ind: IndicatorCard, lang: UiLang = 'ko'): { text: string; unitLabel: string } | null {
   if (ind.latestValue === null) return null;
   const u = (ind.unit || '').toLowerCase();
   let v: number | null = null; let cur = '';
-  if (/million\s+krw/.test(u)) { v = ind.latestValue / 1e6; cur = '조 원'; }
-  else if (/million\s+jpy/.test(u)) { v = ind.latestValue / 1e6; cur = '조 엔'; }
-  else if (/million.*eur/.test(u)) { v = ind.latestValue / 1e6; cur = '조 유로'; }
-  else if (/billion\s+cny/.test(u)) { v = ind.latestValue / 1e3; cur = '조 위안'; }
-  else if (/billion\s+inr/.test(u)) { v = ind.latestValue / 1e3; cur = '조 루피'; }
-  else if (/billion.*(usd|dollar)/.test(u)) { v = ind.latestValue / 1e3; cur = '조 달러'; }
-  else if (/trillion\s+usd/.test(u)) { v = ind.latestValue; cur = '조 달러'; }
+  if (/million\s+krw/.test(u)) { v = ind.latestValue / 1e6; cur = t(lang, '조 원', 'tn KRW'); }
+  else if (/million\s+jpy/.test(u)) { v = ind.latestValue / 1e6; cur = t(lang, '조 엔', 'tn JPY'); }
+  else if (/million.*eur/.test(u)) { v = ind.latestValue / 1e6; cur = t(lang, '조 유로', 'tn EUR'); }
+  else if (/billion\s+cny/.test(u)) { v = ind.latestValue / 1e3; cur = t(lang, '조 위안', 'tn CNY'); }
+  else if (/billion\s+inr/.test(u)) { v = ind.latestValue / 1e3; cur = t(lang, '조 루피', 'tn INR'); }
+  else if (/billion.*(usd|dollar)/.test(u)) { v = ind.latestValue / 1e3; cur = t(lang, '조 달러', 'tn USD'); }
+  else if (/trillion\s+usd/.test(u)) { v = ind.latestValue; cur = t(lang, '조 달러', 'tn USD'); }
   if (v === null) return { text: formatIndicatorValue(ind.latestValue, ind.unit), unitLabel: ind.unit };
   const text = Math.abs(v) >= 100 ? v.toLocaleString('ko-KR', { maximumFractionDigits: 0 }) : v.toLocaleString('ko-KR', { maximumFractionDigits: 1 });
   return { text, unitLabel: cur };
@@ -423,20 +420,20 @@ export default function Dashboard({
     const groups = [
       {
         key: 'industrial-production',
-        title: '산업생산지수',
-        description: '제조·광공업 활동의 실제 생산 흐름',
+        title: t(uiLang, '산업생산지수', 'Industrial Production'),
+        description: t(uiLang, '제조·광공업 활동의 실제 생산 흐름', 'Actual manufacturing and mining production flow'),
         items: indicators.filter((ind) => ind.id.startsWith('industrial_production_')),
       },
       {
         key: 'pmi',
         title: 'PMI',
-        description: '구매관리자 설문 기반 경기 선행 신호',
+        description: t(uiLang, '구매관리자 설문 기반 경기 선행 신호', 'Forward cycle signal from purchasing manager surveys'),
         items: indicators.filter((ind) => ind.id.startsWith('pmi_')),
       },
       {
         key: 'inflation',
-        title: '물가',
-        description: '원가·금리 환경을 좌우하는 인플레이션 지표',
+        title: t(uiLang, '물가', 'Inflation'),
+        description: t(uiLang, '원가·금리 환경을 좌우하는 인플레이션 지표', 'Inflation indicators shaping cost and rate conditions'),
         items: indicators.filter((ind) => ind.id.startsWith('cpi_')),
       },
     ];
@@ -445,13 +442,13 @@ export default function Dashboard({
     if (others.length) {
       groups.push({
         key: 'other-medium',
-        title: '기타 중기 지표',
-        description: '월간 단위로 함께 확인할 보조 지표',
+        title: t(uiLang, '기타 중기 지표', 'Other Medium-Term Indicators'),
+        description: t(uiLang, '월간 단위로 함께 확인할 보조 지표', 'Supplementary monthly indicators to review together'),
         items: others,
       });
     }
     return groups.filter((group) => group.items.length > 0);
-  }, [indicatorHorizonKey, indicators]);
+  }, [indicatorHorizonKey, indicators, uiLang]);
 
   function renderIndicatorCard(ind: IndicatorCard) {
     const up = ind.pctChange !== null && ind.pctChange > 0;
@@ -463,7 +460,7 @@ export default function Dashboard({
     const rateUp = pointDelta !== null && pointDelta > 0;
     const rateDown = pointDelta !== null && pointDelta < 0;
     const gapText = ind.changeStatus === 'gap' && ind.changeIntervalDays
-      ? `갱신공백 ${ind.changeIntervalDays}일`
+      ? t(uiLang, `갱신공백 ${ind.changeIntervalDays}일`, `Gap ${ind.changeIntervalDays}d`)
       : null;
     const changeText = gapText
       ? gapText
@@ -473,24 +470,25 @@ export default function Dashboard({
         ? `${rateUp ? '▲' : rateDown ? '▼' : '–'} ${Math.abs(pointDelta)}p`
         : ind.pctChange !== null
           ? `${up ? '▲' : down ? '▼' : '–'} ${Math.abs(ind.pctChange)}%`
-          : '전기 데이터 없음';
-    const badge = indicatorImpactBadge(ind);
+          : t(uiLang, '전기 데이터 없음', 'No prior data');
+    const rawBadge = indicatorImpactBadge(ind);
+    const badge = { ...rawBadge, ...impactBadgeFor(ind.id, rawBadge.label, rawBadge.title, uiLang) };
     const changeClass = ind.dataStatus === 'stale' ? 'stale' : isRateIndicator
       ? (rateUp ? 'up' : rateDown ? 'down' : '')
       : up ? 'up' : down ? 'down' : '';
     const isPmiIndicator = ind.id.includes('pmi');
 
-    return <Link href={`/indicators/${ind.id}`} className={`indicatorCard indicatorListCard ${isPmiIndicator ? 'pmiNoChartCard' : ''}`} key={ind.id} aria-label={`${ind.nameKo} 상세 보기`}>
+    return <Link href={`/indicators/${ind.id}`} className={`indicatorCard indicatorListCard ${isPmiIndicator ? 'pmiNoChartCard' : ''}`} key={ind.id} aria-label={`${indicatorNameFor(ind.id, ind.nameKo, uiLang)} ${t(uiLang, '상세 보기', 'details')}`}>
       <div className="indicatorListMain">
         <div className="indicatorHead">
-          <span className="indicatorName" title={ind.nameKo}>{ind.nameKo}</span>
+          <span className="indicatorName" title={indicatorNameFor(ind.id, ind.nameKo, uiLang)}>{indicatorNameFor(ind.id, ind.nameKo, uiLang)}</span>
           <span className={`epBadge ${badge.tone}`} title={badge.title}>{badge.label}</span>
         </div>
         <span className="indicatorListMeta">{ind.frequency.toUpperCase()} · {formatIndicatorPeriod(ind)}</span>
         {ind.dataStatus !== 'insufficient' ? <div className="indicatorValue">
           {formatIndicatorValue(ind.latestValue, ind.unit)}
           <span className="indicatorUnit">{ind.unit}</span>
-        </div> : <div className="indicatorEmpty">데이터 수집 대기 중</div>}
+        </div> : <div className="indicatorEmpty">{t(uiLang, '데이터 수집 대기 중', 'Waiting for data')}</div>}
       </div>
       <div className="indicatorListTrend">
         {!isPmiIndicator && <Sparkline history={ind.history} />}
@@ -509,7 +507,7 @@ export default function Dashboard({
     const changeClass = ind.dataStatus === 'stale' ? 'stale' : changeValue !== null && changeValue > 0
       ? 'up' : changeValue !== null && changeValue < 0 ? 'down' : '';
     const gapText = ind.changeStatus === 'gap' && ind.changeIntervalDays
-      ? `갱신공백 ${ind.changeIntervalDays}일`
+      ? t(uiLang, `갱신공백 ${ind.changeIntervalDays}일`, `Gap ${ind.changeIntervalDays}d`)
       : null;
     const changeText = gapText
       ? gapText
@@ -518,9 +516,9 @@ export default function Dashboard({
       : changeValue !== null
         ? `${changeValue > 0 ? '▲' : changeValue < 0 ? '▼' : '–'} ${Math.abs(changeValue)}${isRateIndicator ? 'p' : '%'}`
         : '—';
-    return <Link href={`/indicators/${ind.id}`} className="macroTapeRow" key={`tape-${ind.id}`} aria-label={`${ind.nameKo} 상세 보기`}>
+    return <Link href={`/indicators/${ind.id}`} className="macroTapeRow" key={`tape-${ind.id}`} aria-label={`${indicatorNameFor(ind.id, ind.nameKo, uiLang)} ${t(uiLang, '상세 보기', 'details')}`}>
       <div className="macroTapeName">
-        <b title={ind.nameKo}>{compactIndicatorName(ind.nameKo)}</b>
+        <b title={indicatorNameFor(ind.id, ind.nameKo, uiLang)}>{compactIndicatorName(indicatorNameFor(ind.id, ind.nameKo, uiLang))}</b>
         <small>{ind.frequency.toUpperCase()} · {formatIndicatorPeriod(ind)}</small>
       </div>
       <Sparkline history={ind.history} width={82} height={28} />
@@ -530,7 +528,7 @@ export default function Dashboard({
       </div>
       <div className="macroTapeDelta">
         <span className={changeClass} title={ind.dataWarning}>{changeText}</span>
-        <small>{gapText ? '비교 중단' : '전기 대비'}</small>
+        <small>{gapText ? t(uiLang, '비교 중단', 'Comparison paused') : t(uiLang, '전기 대비', 'vs prior')}</small>
       </div>
       <span className="macroTapeChevron" aria-hidden="true">›</span>
     </Link>;
@@ -549,7 +547,7 @@ export default function Dashboard({
         <small>{formatIndicatorPeriod(ind)}</small>
       </div>;
     }
-    const lvl = gdpLevelDisplay(ind);
+    const lvl = gdpLevelDisplay(ind, uiLang);
     if (!lvl) return null;
     // 수준(level) 지표에는 전기 대비 방향 화살표를 함께 표시 — 단, 계절조정 안 된
     // 명목 분기값의 전기 대비(예: 중국 Q4→Q1 -13.85%)는 계절 요인이라 오해만
@@ -576,37 +574,37 @@ export default function Dashboard({
     if (!primary) return null;
     const lead = (() => {
       if (group.quarterlyGrowth?.latestValue != null)
-        return { v: group.quarterlyGrowth.latestValue, suffix: '전분기 대비', ind: group.quarterlyGrowth };
+        return { v: group.quarterlyGrowth.latestValue, suffix: t(uiLang, '전분기 대비', 'QoQ'), ind: group.quarterlyGrowth };
       // [v5.16] 대표 성장률은 국가 간 기준을 통일한다.
       // QoQ 지표가 없는 국가(중국·유로존 등)도 분기 GDP의 전기 대비 변화율을 우선 사용하고,
       // 연간/전년동기 성장률은 보조 항목에만 둔다.
       if (group.quarterly?.pctChange != null)
-        return { v: group.quarterly.pctChange, suffix: '전분기 대비', ind: group.quarterly };
+        return { v: group.quarterly.pctChange, suffix: t(uiLang, '전분기 대비', 'QoQ'), ind: group.quarterly };
       return null;
     })();
     const leadClass = lead && lead.v > 0 ? 'up' : lead && lead.v < 0 ? 'down' : '';
     const compactLevel = (ind?: IndicatorCard) => {
       if (!ind) return '—';
-      const value = gdpLevelDisplay(ind);
+      const value = gdpLevelDisplay(ind, uiLang);
       return value ? `${value.text} ${value.unitLabel}` : '—';
     };
     const annualGrowth = group.annualGrowth?.latestValue;
-    return <Link href={`/indicators/gdp-${group.country}`} className="gdpOverviewCard" key={`gdp-overview-${group.country}`} aria-label={`${GDP_COUNTRY_LABELS[group.country] || group.country} GDP 상세 보기`}>
+    return <Link href={`/indicators/gdp-${group.country}`} className="gdpOverviewCard" key={`gdp-overview-${group.country}`} aria-label={`${countryLabelFor(group.country, uiLang)} GDP ${t(uiLang, '상세 보기', 'details')}`}>
       <div className="gdpOverviewHead">
         <span className="gdpFlag" aria-hidden="true">{GDP_COUNTRY_FLAGS[group.country] || '•'}</span>
-        <b>{GDP_COUNTRY_LABELS[group.country] || group.country}</b>
+        <b>{countryLabelFor(group.country, uiLang)}</b>
         <span className="gdpOverviewChevron" aria-hidden="true">›</span>
       </div>
       <div className="gdpOverviewBody">
         <div className="gdpOverviewLead">
           {lead ? <strong className={leadClass}>{lead.v > 0 ? '+' : ''}{lead.v.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}<small>%</small></strong> : <strong>—</strong>}
-          <span>{lead?.suffix || '성장률'}</span>
+          <span>{lead?.suffix || t(uiLang, '성장률', 'Growth')}</span>
           <Sparkline history={(lead?.ind || primary).history} width={104} height={30} />
         </div>
         <dl className="gdpOverviewStats">
-          <div><dt>분기 GDP</dt><dd>{compactLevel(group.quarterly)}</dd></div>
-          <div><dt>연간 GDP</dt><dd>{compactLevel(group.annual)}</dd></div>
-          <div><dt>연간 성장률</dt><dd>{annualGrowth == null ? '—' : `${annualGrowth > 0 ? '+' : ''}${annualGrowth.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}%`}</dd></div>
+          <div><dt>{t(uiLang, '분기 GDP', 'Quarterly GDP')}</dt><dd>{compactLevel(group.quarterly)}</dd></div>
+          <div><dt>{t(uiLang, '연간 GDP', 'Annual GDP')}</dt><dd>{compactLevel(group.annual)}</dd></div>
+          <div><dt>{t(uiLang, '연간 성장률', 'Annual Growth')}</dt><dd>{annualGrowth == null ? '—' : `${annualGrowth > 0 ? '+' : ''}${annualGrowth.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}%`}</dd></div>
         </dl>
       </div>
       <time>{formatIndicatorPeriod(lead?.ind || primary)}</time>
@@ -622,7 +620,8 @@ export default function Dashboard({
   }) {
     const primary = group.quarterly || group.annual || group.quarterlyGrowth || group.annualGrowth;
     if (!primary) return null;
-    const badge = indicatorImpactBadge(group.quarterly || group.quarterlyGrowth || primary);
+    const rawBadge = indicatorImpactBadge(group.quarterly || group.quarterlyGrowth || primary);
+    const badge = { ...rawBadge, ...impactBadgeFor(primary.id, rawBadge.label, rawBadge.title, uiLang) };
     const hasStale = [group.quarterly, group.annual, group.quarterlyGrowth, group.annualGrowth]
       .some((x) => x?.dataStatus === 'stale');
     // [v5.17] 장기 탭의 대표 숫자는 장기 컨셉에 맞춰 연간 기준으로 통일한다.
@@ -630,20 +629,20 @@ export default function Dashboard({
     // 분기 QoQ는 장기 카드의 보조 정보로만 남긴다.
     const lead = (() => {
       if (group.annualGrowth?.latestValue != null)
-        return { v: group.annualGrowth.latestValue, suffix: '% 전년 대비', annual: true, ind: group.annualGrowth };
+        return { v: group.annualGrowth.latestValue, suffix: t(uiLang, '% 전년 대비', '% YoY'), annual: true, ind: group.annualGrowth };
       if (group.annual?.pctChange != null)
-        return { v: group.annual.pctChange, suffix: '% 전년 대비', annual: true, ind: group.annual };
+        return { v: group.annual.pctChange, suffix: t(uiLang, '% 전년 대비', '% YoY'), annual: true, ind: group.annual };
       return null;
     })();
     const gClass = lead && lead.v > 0 ? 'up' : lead && lead.v < 0 ? 'down' : '';
     // 장기 탭 대표 지표는 연간 기준: 2% 이상이면 성장세, 0 미만이면 역성장.
-    const judgment = lead === null ? '' : lead.v < 0 ? '역성장' : lead.v > 2 ? '성장세' : '정체';
+    const judgment = lead === null ? '' : lead.v < 0 ? t(uiLang, '역성장', 'Contraction') : lead.v > 2 ? t(uiLang, '성장세', 'Growth') : t(uiLang, '정체', 'Flat');
     // 명목(비계절조정) 분기 수준값의 전기 대비 화살표는 계절 노이즈라 숨김.
     const quarterlyIsNominal = !!group.quarterly?.nameKo.includes('명목');
-    return <Link href={`/indicators/gdp-${group.country}`} className="indicatorCard gdpCountryCard indicatorListCard" key={`gdp-country-${group.country}`} aria-label={`${GDP_COUNTRY_LABELS[group.country] || group.country} GDP 상세 보기`}>
+    return <Link href={`/indicators/gdp-${group.country}`} className="indicatorCard gdpCountryCard indicatorListCard" key={`gdp-country-${group.country}`} aria-label={`${countryLabelFor(group.country, uiLang)} GDP ${t(uiLang, '상세 보기', 'details')}`}>
       <div className="indicatorListMain gdpCardBody">
         <div className="indicatorHead">
-          <span className="indicatorName"><span className="gdpFlag" aria-hidden="true">{GDP_COUNTRY_FLAGS[group.country] || '•'}</span>{GDP_COUNTRY_LABELS[group.country] || group.country} GDP</span>
+          <span className="indicatorName"><span className="gdpFlag" aria-hidden="true">{GDP_COUNTRY_FLAGS[group.country] || '•'}</span>{countryLabelFor(group.country, uiLang)} GDP</span>
           <span className={`epBadge ${badge.tone}`} title={badge.title}>{badge.label}</span>
         </div>
         <div className="gdpLeadRow">
@@ -654,15 +653,15 @@ export default function Dashboard({
         </div>
         <div className="gdpMetricStack">
           {metricLine(
-            quarterlyIsNominal ? '분기 명목 GDP' : group.quarterly?.nameKo.includes('실질') ? '분기 실질 GDP' : '분기 GDP',
+            quarterlyIsNominal ? t(uiLang, '분기 명목 GDP', 'Quarterly Nominal GDP') : group.quarterly?.nameKo.includes('실질') ? t(uiLang, '분기 실질 GDP', 'Quarterly Real GDP') : t(uiLang, '분기 GDP', 'Quarterly GDP'),
             group.quarterly,
             { hideDelta: quarterlyIsNominal },
           )}
-          {metricLine('연간 명목 GDP', group.annual)}
-          {lead?.ind !== group.annualGrowth && metricLine('연간 성장률', group.annualGrowth, { kind: 'growth' })}
+          {metricLine(t(uiLang, '연간 명목 GDP', 'Annual Nominal GDP'), group.annual)}
+          {lead?.ind !== group.annualGrowth && metricLine(t(uiLang, '연간 성장률', 'Annual Growth'), group.annualGrowth, { kind: 'growth' })}
         </div>
         <div className={`indicatorChange ${hasStale ? 'stale' : ''}`}>
-          {hasStale ? '일부 지표 최신 아님' : judgment}
+          {hasStale ? t(uiLang, '일부 지표 최신 아님', 'Some indicators not current') : judgment}
           <span className="indicatorPeriod">{formatIndicatorPeriod(lead?.ind || primary)}</span>
         </div>
       </div>
@@ -759,7 +758,7 @@ export default function Dashboard({
           {page === 'macro' && <div className="headerHorizonTabs" aria-label="지표 기간">
             {HORIZON_TABS.map((f) => (
               <button key={f.key} className={indicatorHorizonKey === f.key ? 'active' : ''} onClick={() => changeIndicatorHorizon(f.key)}>
-                {f.label}<span>{horizonCount(indicatorCounts, f.key)}</span>
+                {f.key === 'now' ? t(uiLang, '단기', 'Short') : f.key === 'recent' ? t(uiLang, '중기', 'Medium') : t(uiLang, '장기', 'Long')}<span>{horizonCount(indicatorCounts, f.key)}</span>
               </button>
             ))}
           </div>}
@@ -890,13 +889,13 @@ export default function Dashboard({
             </div>
           </div>
           <div className="macroHighlightMeta">
-            <div><span>발행처</span><b>{macroHighlight.news.sourceName}</b></div>
-            <div><span>발행일</span><b>{shortDate(macroHighlight.news.publishedAt)}</b></div>
-            {macroHighlight.news.tags && macroHighlight.news.tags.length > 0 && <div className="macroHighlightTags"><span>키워드</span><div>{macroHighlight.news.tags.map((t) => <em key={t}>#{t}</em>)}</div></div>}
+            <div><span>{t(uiLang, '발행처', 'Source')}</span><b>{macroHighlight.news.sourceName}</b></div>
+            <div><span>{t(uiLang, '발행일', 'Published')}</span><b>{shortDate(macroHighlight.news.publishedAt)}</b></div>
+            {macroHighlight.news.tags && macroHighlight.news.tags.length > 0 && <div className="macroHighlightTags"><span>{t(uiLang, '키워드', 'Keywords')}</span><div>{macroHighlight.news.tags.map((tag) => <em key={tag}>#{tag}</em>)}</div></div>}
             {macroHighlights.length > 1 && <div className="macroHighlightPager">
-              <button onClick={() => setHighlightIdx((safeHighlightIdx - 1 + macroHighlights.length) % macroHighlights.length)} aria-label="이전 인사이트">‹</button>
+              <button onClick={() => setHighlightIdx((safeHighlightIdx - 1 + macroHighlights.length) % macroHighlights.length)} aria-label={t(uiLang, '이전 인사이트', 'Previous insight')}>‹</button>
               <span>{safeHighlightIdx + 1} / {macroHighlights.length}</span>
-              <button onClick={() => setHighlightIdx((safeHighlightIdx + 1) % macroHighlights.length)} aria-label="다음 인사이트">›</button>
+              <button onClick={() => setHighlightIdx((safeHighlightIdx + 1) % macroHighlights.length)} aria-label={t(uiLang, '다음 인사이트', 'Next insight')}>›</button>
             </div>}
           </div>
         </article>}
@@ -919,21 +918,21 @@ export default function Dashboard({
             </aside>
           </div>
         </section>
-        {indicatorLoading ? <div className="indicatorGrid" key="macro-loading"><div className="empty"><b>불러오는 중…</b></div></div> : indicators.length === 0 ? <div className="indicatorGrid" key="macro-empty"><div className="empty"><b>이 시간축에 등록된 지표가 없습니다</b></div></div> : indicatorHorizonKey === 'now' ? <div className="macroOverviewGrid" key="macro-overview-now">
+        {indicatorLoading ? <div className="indicatorGrid" key="macro-loading"><div className="empty"><b>{t(uiLang, '불러오는 중…', 'Loading…')}</b></div></div> : indicators.length === 0 ? <div className="indicatorGrid" key="macro-empty"><div className="empty"><b>{t(uiLang, '이 시간축에 등록된 지표가 없습니다', 'No indicators registered for this horizon')}</b></div></div> : indicatorHorizonKey === 'now' ? <div className="macroOverviewGrid" key="macro-overview-now">
           <section className="indicatorSection macroTapeSection">
-            <div className="indicatorSectionHead"><b>주요 매크로 지표</b><span>환율·유가·금리의 단기 흐름</span></div>
+            <div className="indicatorSectionHead"><b>{t(uiLang, '주요 매크로 지표', 'Key Macro Indicators')}</b><span>{t(uiLang, '환율·유가·금리의 단기 흐름', 'Short-term FX, oil and rate moves')}</span></div>
             <div className="macroTapeList">{indicators.map((ind) => renderTapeRow(ind))}</div>
           </section>
           <section className="indicatorSection gdpOverviewSection">
             <div className="indicatorSectionHead">
-              <span className="indicatorSectionTitleGroup"><b>주요국 성장률 요약</b><span className="sectionInfoIcon" title="GDP 기반 경기 속도만 요약 표시합니다. 자세한 GDP 규모와 성장률은 장기 탭에서 확인하세요.">ⓘ</span></span>
-              <button className="sectionMore" onClick={() => changeIndicatorHorizon('long')}>더보기 ›</button>
+              <span className="indicatorSectionTitleGroup"><b>{t(uiLang, '주요국 성장률 요약', 'Major Economy Growth Summary')}</b><span className="sectionInfoIcon" title={t(uiLang, 'GDP 기반 경기 속도만 요약 표시합니다. 자세한 GDP 규모와 성장률은 장기 탭에서 확인하세요.', 'Shows GDP-based economic speed only. See the Long tab for GDP size and growth details.')}>ⓘ</span></span>
+              <button className="sectionMore" onClick={() => changeIndicatorHorizon('long')}>{t(uiLang, '더보기 ›', 'More ›')}</button>
             </div>
             <div className="gdpOverviewGrid">{longGdpGroups.map((group) => renderGdpOverviewCard(group))}</div>
           </section>
         </div> : indicatorHorizonKey === 'long' ? <div className="indicatorSections" key="macro-gdp-country-grouped">
           <section className="indicatorSection">
-            <div className="indicatorSectionHead"><span className="indicatorSectionTitleGroup"><b>국가별 GDP 규모와 성장률</b><span className="sectionInfoIcon" title="경제 규모, 분기 흐름, 연간 성장률을 국가별로 비교합니다. 성장률은 지표 가용성에 따라 전분기 또는 전년 대비 기준입니다.">ⓘ</span></span><span>경제 규모, 분기 흐름, 연간 성장률을 국가별로 비교</span></div>
+            <div className="indicatorSectionHead"><span className="indicatorSectionTitleGroup"><b>{t(uiLang, '국가별 GDP 규모와 성장률', 'GDP Size and Growth by Country')}</b><span className="sectionInfoIcon" title={t(uiLang, '경제 규모, 분기 흐름, 연간 성장률을 국가별로 비교합니다. 성장률은 지표 가용성에 따라 전분기 또는 전년 대비 기준입니다.', 'Compares economic scale, quarterly momentum and annual growth by country. Growth basis depends on indicator availability.')}>ⓘ</span></span><span>{t(uiLang, '경제 규모, 분기 흐름, 연간 성장률을 국가별로 비교', 'Compare economic scale, quarterly momentum and annual growth by country')}</span></div>
             <div className="indicatorGrid gdpDetailGrid">{longGdpGroups.map((group) => renderGdpCountryCard(group))}</div>
           </section>
         </div> : <div className="indicatorSections" key="macro-medium-grouped">

@@ -114,6 +114,66 @@ export function categoryLabelFor(label: string, lang: UiLang = 'ko') {
 
 export function t(lang: UiLang, ko: string, en: string) { return lang === 'en' ? en : ko; }
 
+export function indicatorNameFor(id: string, nameKo: string, lang: UiLang = 'ko') {
+  if (lang === 'ko') return nameKo;
+  const explicit: Record<string, string> = {
+    fx_usd_krw: 'USD/KRW Exchange Rate',
+    fx_usd_cny: 'USD/CNY Exchange Rate',
+    oil_brent: 'Brent Crude Oil',
+    oil_wti: 'WTI Crude Oil',
+    rate_us_10y: 'US 10-Year Treasury Yield',
+    pmi_us: 'US Manufacturing PMI',
+    pmi_china: 'China Manufacturing PMI',
+    pmi_eurozone: 'Eurozone Manufacturing PMI',
+    pmi_japan: 'Japan Manufacturing PMI',
+    pmi_korea: 'Korea Manufacturing PMI',
+    cpi_us: 'US CPI',
+    cpi_korea: 'Korea CPI',
+    cpi_china: 'China CPI',
+    industrial_production_us: 'US Industrial Production',
+    industrial_production_korea: 'Korea Industrial Production',
+    industrial_production_china: 'China Industrial Production',
+    industrial_production_japan: 'Japan Industrial Production',
+    industrial_production_eurozone: 'Eurozone Industrial Production',
+    gdp_current_usd: 'US Annual GDP',
+  };
+  if (explicit[id]) return explicit[id];
+  const name = nameKo
+    .replace(/미국/g, 'US').replace(/한국/g, 'Korea').replace(/일본/g, 'Japan')
+    .replace(/중국/g, 'China').replace(/유로존/g, 'Eurozone').replace(/인도/g, 'India')
+    .replace(/브렌트유 가격/g, 'Brent Crude Oil').replace(/WTI유 가격/g, 'WTI Crude Oil')
+    .replace(/제조업/g, 'Manufacturing').replace(/환율/g, 'Exchange Rate').replace(/국채 10년 금리/g, '10-Year Treasury Yield')
+    .replace(/산업생산지수/g, 'Industrial Production').replace(/물가/g, 'CPI')
+    .replace(/분기 실질 GDP/g, 'Quarterly Real GDP').replace(/분기 명목 GDP/g, 'Quarterly Nominal GDP')
+    .replace(/연간 명목 GDP/g, 'Annual Nominal GDP').replace(/연간 GDP 성장률/g, 'Annual GDP Growth')
+    .replace(/분기 GDP 성장률/g, 'Quarterly GDP Growth')
+    .replace(/명목 GDP/g, 'Nominal GDP').replace(/실질 GDP/g, 'Real GDP')
+    .replace(/GDP 성장률/g, 'GDP Growth')
+    .replace(/\(국가통계국\)/g, '(NBS)');
+  return name.replace(/\s+/g, ' ').trim();
+}
+
+export function countryLabelFor(country: string, lang: UiLang = 'ko') {
+  const ko: Record<string, string> = { us: '미국', korea: '한국', japan: '일본', china: '중국', eurozone: '유로존', india: '인도' };
+  const en: Record<string, string> = { us: 'United States', korea: 'Korea', japan: 'Japan', china: 'China', eurozone: 'Eurozone', india: 'India' };
+  return (lang === 'en' ? en : ko)[country] || country;
+}
+
+export function impactBadgeFor(id: string, label: string, title: string, lang: UiLang = 'ko') {
+  if (lang === 'ko') return { label, title };
+  const labelMap: Record<string, string> = { '원료': 'Feedstock', '수요': 'Demand', '거시': 'Macro', 'EP': 'EP' };
+  const titleMap: Record<string, string> = {
+    '원유·나프타·feedstock 원가 방향성': 'Oil, naphtha and feedstock cost direction',
+    '전방 제조업·산업생산 수요 신호': 'Downstream manufacturing and industrial demand signal',
+    '분기 GDP 기반 전방수요·경기 신호': 'Quarterly GDP-based demand and cycle signal',
+    'EP 수출·원가·마진에 직접 영향이 큰 환율 지표': 'FX indicator directly linked to EP exports, cost and margin',
+    'EP 산업과 직접 관련된 우선 지표': 'Priority indicator directly relevant to EP',
+    '금리·물가·연간 GDP 등 거시 참고 지표': 'Macro reference indicator such as rates, CPI or annual GDP',
+  };
+  return { label: labelMap[label] || label, title: titleMap[title] || title };
+}
+
+
 // 대표 기사(히어로)·브리프 선정 기준: score 내림차순, 동점이면 최신순.
 export function rankByScoreThenDate(list: Article[]) {
   return [...list].sort((a, b) => {
