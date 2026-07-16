@@ -88,7 +88,7 @@ export function displayArticleTitle(article: Pick<Article, 'title' | 'titleKo' |
 
 export function secondaryArticleTitle(article: Pick<Article, 'title' | 'titleKo' | 'titleEn'>, lang: UiLang = 'ko') {
   const { titleKo, titleEn } = resolveTitles(article);
-  if (lang === 'en') return titleKo && normalizeForCompare(titleKo) !== normalizeForCompare(titleEn || article.title) ? titleKo : null;
+  if (lang === 'en') return titleEn && titleKo && normalizeForCompare(titleKo) !== normalizeForCompare(titleEn) ? titleKo : null;
   return titleEn;
 }
 
@@ -136,6 +136,27 @@ export function indicatorNameFor(id: string, nameKo: string, lang: UiLang = 'ko'
     industrial_production_japan: 'Japan Industrial Production',
     industrial_production_eurozone: 'Eurozone Industrial Production',
     gdp_current_usd: 'US Annual GDP',
+    gdp_qoq_us: 'US GDP QoQ Growth',
+    gdp_qoq_us_te: 'US Annual GDP Growth',
+    gdp_quarterly_us: 'US Quarterly Real GDP',
+    gdp_annual_korea: 'Korea Annual Nominal GDP',
+    gdp_quarterly_korea: 'Korea Quarterly Real GDP',
+    gdp_qoq_korea: 'Korea GDP QoQ Growth',
+    gdp_qoq_korea_te: 'Korea Annual GDP Growth',
+    gdp_annual_japan: 'Japan Annual Nominal GDP',
+    gdp_quarterly_japan: 'Japan Quarterly Nominal GDP',
+    gdp_qoq_japan: 'Japan GDP QoQ Growth',
+    gdp_qoq_japan_te: 'Japan Annual GDP Growth',
+    gdp_annual_china: 'China Annual Nominal GDP',
+    gdp_quarterly_china: 'China Quarterly Nominal GDP',
+    gdp_qoq_china_te: 'China Annual GDP Growth',
+    gdp_annual_eurozone: 'Eurozone Annual Nominal GDP',
+    gdp_quarterly_eurozone: 'Eurozone Quarterly Real GDP',
+    gdp_qoq_eurozone_te: 'Eurozone Annual GDP Growth',
+    gdp_annual_india: 'India Annual Nominal GDP',
+    gdp_quarterly_india: 'India Quarterly Nominal GDP',
+    gdp_qoq_india: 'India GDP QoQ Growth',
+    gdp_qoq_india_te: 'India Annual GDP Growth',
   };
   if (explicit[id]) return explicit[id];
   const name = nameKo
@@ -148,7 +169,7 @@ export function indicatorNameFor(id: string, nameKo: string, lang: UiLang = 'ko'
     .replace(/연간 명목 GDP/g, 'Annual Nominal GDP').replace(/연간 GDP 성장률/g, 'Annual GDP Growth')
     .replace(/분기 GDP 성장률/g, 'Quarterly GDP Growth')
     .replace(/명목 GDP/g, 'Nominal GDP').replace(/실질 GDP/g, 'Real GDP')
-    .replace(/GDP 성장률/g, 'GDP Growth')
+    .replace(/전분기 성장률/g, 'QoQ Growth').replace(/연간 성장률/g, 'Annual Growth').replace(/GDP 성장률/g, 'GDP Growth')
     .replace(/\(국가통계국\)/g, '(NBS)');
   return name.replace(/\s+/g, ' ').trim();
 }

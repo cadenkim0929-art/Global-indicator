@@ -5,10 +5,6 @@ import { getGdpCountryDetail, getIndicatorDetail } from '@/lib/indicator-store';
 
 export const dynamic = 'force-dynamic';
 
-const COUNTRY_LABELS: Record<string, string> = {
-  us: '미국', korea: '한국', japan: '일본', china: '중국', eurozone: '유로존', india: '인도',
-};
-
 function seriesLabel(id: string) {
   if (id.startsWith('gdp_qoq_')) return id.includes('_te') ? '연간 성장률' : '성장률';
   if (id.startsWith('gdp_quarterly_')) return '분기 GDP';
@@ -35,10 +31,10 @@ export default async function IndicatorDetailPage({ params }: { params: Promise<
     return <main className="detailPage">
       <header className="detailTopbar">
         <Link href="/?view=macro" className="detailBrand"><span>EP</span><b>Industry Monitor</b></Link>
-        <Link href="/?view=macro" className="detailBack">← 매크로 지표</Link>
+        <Link href="/?view=macro" className="detailBack">← Macro</Link>
       </header>
       <IndicatorDetail
-        title={`${COUNTRY_LABELS[country] || country} GDP`}
+        title={`${country} GDP`}
         subtitle="Global growth frame"
         series={series}
         defaultSeriesId={series[0].id}
@@ -51,7 +47,7 @@ export default async function IndicatorDetailPage({ params }: { params: Promise<
   return <main className="detailPage">
     <header className="detailTopbar">
       <Link href="/?view=macro" className="detailBrand"><span>EP</span><b>Industry Monitor</b></Link>
-      <Link href="/?view=macro" className="detailBack">← 매크로 지표</Link>
+      <Link href="/?view=macro" className="detailBack">← Macro</Link>
     </header>
     <IndicatorDetail
       title={indicator.nameKo}

@@ -1273,3 +1273,6 @@ body{word-break:keep-all;overflow-wrap:break-word}
 .macroNewsSources strong{font:800 11px 'JetBrains Mono';color:var(--brand-dim)}
 @media(max-width:960px){.macroNewsGrid{grid-template-columns:1fr}.macroNewsSources{grid-template-columns:1fr 1fr}.macroNewsSources>b{grid-column:1/-1}}
 @media(max-width:620px){.laneNotice{align-items:flex-start}.laneNotice button{width:100%}.macroNewsSources{grid-template-columns:1fr}.macroNewsRow{align-items:flex-start;flex-direction:column}.macroNewsRow>span{align-self:flex-end}}
+
+.detailLangToggle{max-width:260px;margin:0 0 18px auto}
+@media(max-width:760px){.detailLangToggle{margin:0 0 16px 0;max-width:100%}}
