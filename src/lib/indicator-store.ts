@@ -162,7 +162,7 @@ function getRelatedNews(indicatorId: string, limit = 3): RelatedNewsItem[] {
       return true;
     }).slice(0, limit).map(({ article: a }) => ({
       title: a.title, titleKo: a.titleKo, titleEn: a.titleEn, link: a.link, publishedAt: a.publishedAt, sourceName: a.sourceName || a.feedName,
-      summary: a.summary || undefined, summaryKo: a.summaryKo, tags: (a.tags && a.tags.length > 0) ? a.tags.slice(0, 3) : undefined,
+      summary: a.summary || undefined, summaryKo: a.summaryKo, summaryEn: a.summaryEn, tags: (a.tags && a.tags.length > 0) ? a.tags.slice(0, 3) : undefined,
     }));
   } catch {
     return [];

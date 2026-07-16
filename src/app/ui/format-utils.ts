@@ -49,6 +49,11 @@ function normalizeForCompare(s: string) {
   return s.toLowerCase().replace(/^\[매크로\]\s*/, '').replace(/[^\p{L}\p{N}]+/gu, '').trim();
 }
 
+function hasNonLatinPayload(s: string | undefined | null) {
+  const payload = (s || '').replace(/^\[매크로\]\s*/, '').replace(/^\[Macro\]\s*/, '');
+  return /[가-힣ぁ-ヿ一-龯]/.test(payload);
+}
+
 // [매크로] 같은 파이프라인 태그 접두어, 그리고 "제목 - 출처명"처럼 반복되는 꼬리표를
 // 표시 단계에서만 제거한다. 원본 문자열(article.title)은 수정하지 않는다.
 export function cleanArticleTitle(title: string, sourceName?: string) {
@@ -69,8 +74,10 @@ export function resolveTitles(article: Pick<Article, 'title' | 'titleKo' | 'titl
 
 // 제목과 사실상 동일한 요약(번역 실패로 제목을 그대로 복붙한 경우 등)은 감추고,
 // 대신 짧고 정직한 상태 문구로 대체한다 — 존재하지 않는 AI 요약을 지어내지 않는다.
-export function resolveSummary(article: Pick<Article, 'title' | 'summary' | 'summaryKo'>, categoryLabel: string, lang: UiLang = 'ko') {
-  const rawSummary = lang === 'en' ? (article.summary || article.summaryKo) : (article.summaryKo || article.summary);
+export function resolveSummary(article: Pick<Article, 'title' | 'summary' | 'summaryKo' | 'summaryEn'>, categoryLabel: string, lang: UiLang = 'ko') {
+  const rawSummary = lang === 'en'
+    ? (article.summaryEn || (!hasNonLatinPayload(article.summary) ? article.summary : ''))
+    : (article.summaryKo || article.summary);
   const titleCore = article.title.replace(/\s[-–—|]\s.*$/, '').trim();
   const summaryCore = (rawSummary || '').replace(/\s[-–—|]\s.*$/, '').trim();
   const isMeaningful = !!rawSummary
@@ -87,8 +94,8 @@ export function displayArticleTitle(article: Pick<Article, 'title' | 'titleKo' |
 }
 
 export function secondaryArticleTitle(article: Pick<Article, 'title' | 'titleKo' | 'titleEn'>, lang: UiLang = 'ko') {
-  const { titleKo, titleEn } = resolveTitles(article);
-  if (lang === 'en') return titleEn && titleKo && normalizeForCompare(titleKo) !== normalizeForCompare(titleEn) ? titleKo : null;
+  const { titleEn } = resolveTitles(article);
+  if (lang === 'en') return null;
   return titleEn;
 }
 

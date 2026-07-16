@@ -20,6 +20,7 @@ export interface Article {
   link: string;
   summary: string;
   summaryKo?: string;
+  summaryEn?: string;
   contentSnippet?: string;
   publishedAt: string;
   collectedAt: string;
@@ -73,6 +74,7 @@ export interface RelatedNewsItem {
   sourceName: string;
   summary?: string;
   summaryKo?: string;
+  summaryEn?: string;
   tags?: string[];
 }
 
