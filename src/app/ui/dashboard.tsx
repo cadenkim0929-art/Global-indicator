@@ -337,7 +337,7 @@ export default function Dashboard({
       // Search mode favors recall: query the server with a wider lookback and
       // larger limit instead of filtering only the already-loaded feed page.
       const effectiveDays = q ? Math.max(nextDays, 730) : nextDays;
-      const params = new URLSearchParams({ limit: q ? '500' : '200', days: String(effectiveDays) });
+      const params = new URLSearchParams({ limit: q ? '1000' : '1000', days: String(effectiveDays) });
       if (q) params.set('q', q);
       const res = await fetch(`/api/articles?${params.toString()}`);
       const data = await res.json();
