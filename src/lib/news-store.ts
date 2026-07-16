@@ -217,7 +217,7 @@ function sanitizeText(raw: string): string {
 }
 function ensureStore() { fs.mkdirSync(DATA_DIR, { recursive: true }); if (!fs.existsSync(ARTICLES_PATH)) fs.writeFileSync(ARTICLES_PATH, '[]', 'utf8'); }
 export function readRawArticles(): Article[] { ensureStore(); try { return JSON.parse(fs.readFileSync(ARTICLES_PATH, 'utf8')) as Article[]; } catch { return []; } }
-export function writeArticles(articles: Article[]) { ensureStore(); const sorted = [...articles].sort((a,b)=>+new Date(b.publishedAt||b.collectedAt)-+new Date(a.publishedAt||a.collectedAt)); const tmp = `${ARTICLES_PATH}.${process.pid}.tmp`; fs.writeFileSync(tmp, JSON.stringify(sorted,null,2),'utf8'); fs.renameSync(tmp, ARTICLES_PATH); }
+export function writeArticles(articles: Article[]) { ensureStore(); const sorted = [...articles].sort((a,b)=>+new Date(b.publishedAt||b.collectedAt)-+new Date(a.publishedAt||a.collectedAt)); const tmp = `${ARTICLES_PATH}.${process.pid}.tmp`; fs.writeFileSync(tmp, JSON.stringify(sorted,null,2),'utf8'); fs.renameSync(tmp, ARTICLES_PATH); clearNewsStoreCache(); }
 
 // [v1.3] 한/영 제목 병기 — Gemini 없이 무료 번역으로 처리.
 // 비공식 Google Translate 엔드포인트(API 키 불필요, 다수 오픈소스 도구가 사용하는 방식)를
@@ -242,7 +242,7 @@ async function translateText(text: string, targetLang: 'ko' | 'en'): Promise<str
 
 // 화면에 노출될 소수의 기사에 대해서만 번역하고, 원본 저장소에 캐싱해 재요청 시
 // 다시 번역하지 않도록 한다(무료 엔드포인트 호출량 최소화 + 응답 속도 확보).
-export async function enrichWithTranslations(articles: Article[]): Promise<Article[]> {
+export async function enrichWithTranslations(articles: Article[], options: { maxTranslate?: number } = {}): Promise<Article[]> {
   // [v1.5] sanitizeText 도입 이전에 캐시된 titleKo/titleEn엔 <b> 태그가 그대로
   // 남아있음 — 캐시 존재 여부만 보고 건너뛰면 이 오염된 캐시가 영구 보존됨
   // (스크린샷에서 확인: SABIC/롯데케미칼 부제에 <b>Sabic</b> 그대로 노출).
@@ -252,7 +252,8 @@ export async function enrichWithTranslations(articles: Article[]): Promise<Artic
   // 단, 화면/API 응답 대상 기사에 대해서만 처리하여 번역 호출량을 제한한다.
   // 실패 시 원문 fallback — 번역 장애가 뉴스 수집/렌더링을 막지 않도록 한다.
   const needsSummaryKo = (a: Article) => !!a.summary && detectLanguage(a.summary) !== 'ko' && (!a.summaryKo || hasTag(a.summaryKo));
-  const need = articles.filter(a => !a.titleKo || !a.titleEn || hasTag(a.titleKo) || hasTag(a.titleEn) || needsSummaryKo(a));
+  const maxTranslate = options.maxTranslate ?? 40;
+  const need = articles.filter(a => !a.titleKo || !a.titleEn || hasTag(a.titleKo) || hasTag(a.titleEn) || needsSummaryKo(a)).slice(0, maxTranslate);
   if (need.length === 0) return articles;
 
   const raw = readRawArticles();
@@ -636,12 +637,59 @@ function macroTopicSimilar(a: string, b: string) {
   const tb = MACRO_TOPIC_TOKENS.filter(t => b.includes(t));
   return ta.filter(t => tb.includes(t)).length >= 3;
 }
+
+let processedCache: { days: number; mtimeMs: number; articles: Article[] } | null = null;
+function articlesStoreMtimeMs() {
+  try { return fs.statSync(ARTICLES_PATH).mtimeMs; } catch { return 0; }
+}
+export function clearNewsStoreCache() { processedCache = null; }
 export function processedArticles(days: number = DEFAULT_LOOKBACK_DAYS): Article[] {
+  const mtimeMs = articlesStoreMtimeMs();
+  if (processedCache && processedCache.days === days && processedCache.mtimeMs === mtimeMs) return processedCache.articles;
   const groups: Article[][] = [];
+  // [v5.41] Cold-start performance: the old grouping path used groups.find(...)
+  // for every article, which became O(n²) once raw storage grew past 1.5k rows.
+  // Maintain lightweight indexes and compare only plausible candidate groups.
+  const wireIndex = new Map<string, Set<Article[]>>();
+  const macroIndex = new Map<string, Set<Article[]>>();
+  const eventCompanyIndex = new Map<string, Set<Article[]>>();
+  const tokenIndex = new Map<string, Set<Article[]>>();
+  const add = (map: Map<string, Set<Article[]>>, key: string, group: Article[]) => {
+    if (!key) return;
+    const set = map.get(key) || new Set<Article[]>();
+    set.add(group); map.set(key, set);
+  };
+  const macroKey = (title: string) => {
+    if (!title.includes('[매크로]')) return '';
+    const hits = MACRO_TOPIC_TOKENS.filter(t => title.includes(t)).sort();
+    return hits.length >= 3 ? hits.join('|') : '';
+  };
+  const eventCompanyKeys = (title: string) => {
+    const ev = eventClasses(title);
+    const co = coreCompaniesIn(title);
+    const keys: string[] = [];
+    for (const e of ev) for (const c of co) keys.push(`${e}:${c}`);
+    return keys;
+  };
+  const usefulBucketTokens = (title: string) => Array.from(titleTokens(title))
+    .filter(t => t.length >= 5 && !/^(plastics?|plastic|polymer|resin|chemical|materials?|market|industry|global|distribution|distributor|company|group|news|price|supply|demand)$/i.test(t))
+    .slice(0, 5);
+  const registerGroup = (group: Article[], article: Article) => {
+    const w = wireCopyKey(article.title); if (w && w.length >= 24) add(wireIndex, w, group);
+    add(macroIndex, macroKey(article.title), group);
+    for (const key of eventCompanyKeys(article.title)) add(eventCompanyIndex, key, group);
+    for (const t of usefulBucketTokens(article.title)) add(tokenIndex, t, group);
+  };
   for (const raw of readRawArticles()) {
     const n = normalizeArticle(raw, days); if (!n) continue;
-    const group = groups.find(g => similarTitle(g[0].title, n.title) || macroTopicSimilar(g[0].title, n.title));
-    if (group) group.push(n); else groups.push([n]);
+    const candidates = new Set<Article[]>();
+    const w = wireCopyKey(n.title); if (w && w.length >= 24) wireIndex.get(w)?.forEach(g => candidates.add(g));
+    const mk = macroKey(n.title); if (mk) macroIndex.get(mk)?.forEach(g => candidates.add(g));
+    for (const key of eventCompanyKeys(n.title)) eventCompanyIndex.get(key)?.forEach(g => candidates.add(g));
+    for (const t of usefulBucketTokens(n.title)) tokenIndex.get(t)?.forEach(g => candidates.add(g));
+    const group = Array.from(candidates).find(g => similarTitle(g[0].title, n.title) || macroTopicSimilar(g[0].title, n.title));
+    if (group) { group.push(n); registerGroup(group, n); }
+    else { const ng = [n]; groups.push(ng); registerGroup(ng, n); }
   }
   const merged: Article[] = [];
   // [v2.7] 병합 그룹의 "대표 기사"를 순수 스코어로만 뽑다 보니, 같은 사건이라도
@@ -677,7 +725,9 @@ export function processedArticles(days: number = DEFAULT_LOOKBACK_DAYS): Article
     primary.id = crypto.createHash('sha256').update(signature(primary.title, primary.publishedAt)||primary.id).digest('hex').slice(0,20);
     merged.push(primary);
   }
-  return merged.sort((a,b)=>+new Date(b.publishedAt)-+new Date(a.publishedAt));
+  const sorted = merged.sort((a,b)=>+new Date(b.publishedAt)-+new Date(a.publishedAt));
+  processedCache = { days, mtimeMs, articles: sorted };
+  return sorted;
 }
 export function readArticles(): Article[] { return processedArticles(); }
 
