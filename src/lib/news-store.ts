@@ -150,7 +150,7 @@ const KILL_PATTERNS = [
   /\b(clinical\s+cost|pharma\s+input\s+price|dietary\s+supplement\s+industries)\b/i,
   /(動意株|トレーダーズ・ウェブ|ウエルスアドバイザー|Yahoo!ファイナンス)/i,
   /(工作機械|車販売|自動車販売|米販売|がん|癌|水素|希土類|レアアース|食品素材|食材|中古ＩＴ機器|Champion|販売権およびライセンス権|契約管理|Hubble mini|ログミーFinance|バイオメタン|硫酸販売)/i,
-  /\b(machine tools?|car sales|vehicle sales|hydrogen|rare earth|food ingredients?|cancer radiation|biodiesel solutions|mobile device distribution|used mobile device|lego building|clean ammonia|ammonia project|komatsu distributor|steel establishes|steel distributor)\b/i,
+  /\b(machine tools?|car sales|vehicle sales|hydrogen|rare earth|food ingredients?|cancer radiation|biodiesel solutions|mobile device distribution|used mobile device|it hardware distributor|hardware distributor|lego building|clean ammonia|ammonia project|komatsu distributor|steel establishes|steel distributor)\b/i,
   /(주식|주가).{0,60}(특수\s*폴리머|제조\s*수요|수요에 의해|초점을 반영|유지)/,
   // [v5.23] 한국어 증시 마감/종가 해설 기사 배제. 회사명·업황이 있어도 주가 마감분석은 산업 뉴스가 아님.
   /\[(마감\s*분석|종가\s*분석|장마감\s*분석)\]/,

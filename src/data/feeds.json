@@ -1742,5 +1742,157 @@
     "category": "distribution-channel",
     "enabled": true,
     "sourceWorkflowNode": "HermesClaw v5.38 Japanese trading companies polymer distribution expansion"
+  },
+  {
+    "id": "v551-kr-ep-core",
+    "name": "KR EP Core Local",
+    "url": "https://news.google.com/rss/search?q=%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81%ED%94%8C%EB%9D%BC%EC%8A%A4%ED%8B%B1+OR+%ED%8F%B4%EB%A6%AC%EC%B9%B4%EB%B3%B4%EB%84%A4%EC%9D%B4%ED%8A%B8+OR+%ED%8F%B4%EB%A6%AC%EC%95%84%EB%AF%B8%EB%93%9C+OR+%ED%8A%B9%EC%88%98%EC%88%98%EC%A7%80+OR+%EC%BB%B4%ED%8C%8C%EC%9A%B4%EB%93%9C+%EC%88%98%EC%A7%80&hl=ko&gl=KR&ceid=KR%3Ako",
+    "category": "업계 미디어",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-kr-ep-core"
+  },
+  {
+    "id": "v551-jp-ep-core",
+    "name": "JP EP Core Local",
+    "url": "https://news.google.com/rss/search?q=%E3%82%A8%E3%83%B3%E3%83%97%E3%83%A9+OR+%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%83%AA%E3%83%B3%E3%82%B0%E3%83%97%E3%83%A9%E3%82%B9%E3%83%81%E3%83%83%E3%82%AF+OR+%E3%83%9D%E3%83%AA%E3%82%AB%E3%83%BC%E3%83%9C%E3%83%8D%E3%83%BC%E3%83%88+OR+%E3%83%9D%E3%83%AA%E3%82%A2%E3%83%9F%E3%83%89+OR+%E5%A4%89%E6%80%A7%E6%A8%B9%E8%84%82&hl=ja&gl=JP&ceid=JP%3Aja",
+    "category": "업계 미디어",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-jp-ep-core"
+  },
+  {
+    "id": "v551-cn-ep-core",
+    "name": "CN EP Core Local",
+    "url": "https://news.google.com/rss/search?q=%E5%B7%A5%E7%A8%8B%E5%A1%91%E6%96%99+OR+%E8%81%9A%E7%A2%B3%E9%85%B8%E9%85%AF+OR+%E8%81%9A%E9%85%B0%E8%83%BA+OR+%E6%94%B9%E6%80%A7%E5%A1%91%E6%96%99+OR+%E7%89%B9%E7%A7%8D%E6%A0%91%E8%84%82&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans",
+    "category": "업계 미디어",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-cn-ep-core"
+  },
+  {
+    "id": "v551-tw-ep-core",
+    "name": "TW EP Core Local",
+    "url": "https://news.google.com/rss/search?q=%E5%B7%A5%E7%A8%8B%E5%A1%91%E8%86%A0+OR+%E8%81%9A%E7%A2%B3%E9%85%B8%E9%85%AF+OR+%E8%81%9A%E9%86%AF%E8%83%BA+OR+%E6%94%B9%E6%80%A7%E5%A1%91%E8%86%A0+OR+%E7%89%B9%E7%A8%AE%E6%A8%B9%E8%84%82&hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant",
+    "category": "업계 미디어",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-tw-ep-core"
+  },
+  {
+    "id": "v551-kr-feedstock",
+    "name": "KR Feedstock Local",
+    "url": "https://news.google.com/rss/search?q=%EB%82%98%ED%94%84%ED%83%80+OR+%EB%B2%A4%EC%A0%A0+OR+%EC%B9%B4%ED%94%84%EB%A1%9C%EB%9D%BD%ED%83%90+OR+BPA+OR+%EC%84%9D%EC%9C%A0%ED%99%94%ED%95%99+%EC%9B%90%EB%A3%8C&hl=ko&gl=KR&ceid=KR%3Ako",
+    "category": "원료 시장",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-kr-feedstock"
+  },
+  {
+    "id": "v551-jp-feedstock",
+    "name": "JP Feedstock Local",
+    "url": "https://news.google.com/rss/search?q=%E3%83%8A%E3%83%95%E3%82%B5+OR+%E3%83%99%E3%83%B3%E3%82%BC%E3%83%B3+OR+%E3%82%AB%E3%83%97%E3%83%AD%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%A0+OR+BPA+OR+%E7%9F%B3%E6%B2%B9%E5%8C%96%E5%AD%A6+%E5%8E%9F%E6%96%99&hl=ja&gl=JP&ceid=JP%3Aja",
+    "category": "원료 시장",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-jp-feedstock"
+  },
+  {
+    "id": "v551-cn-feedstock",
+    "name": "CN Feedstock Local",
+    "url": "https://news.google.com/rss/search?q=%E7%9F%B3%E8%84%91%E6%B2%B9+OR+%E8%8B%AF+OR+%E5%B7%B1%E5%86%85%E9%85%B0%E8%83%BA+OR+%E5%8F%8C%E9%85%9AA+OR+%E7%9F%B3%E5%8C%96%E5%8E%9F%E6%96%99&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans",
+    "category": "원료 시장",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-cn-feedstock"
+  },
+  {
+    "id": "v551-kr-trade-reg",
+    "name": "KR Trade Regulation Local",
+    "url": "https://news.google.com/rss/search?q=%EA%B4%80%EC%84%B8+OR+%EB%B0%98%EB%8D%A4%ED%95%91+OR+%EC%88%98%EC%9E%85%EA%B7%9C%EC%A0%9C+OR+%ED%83%84%EC%86%8C%EA%B5%AD%EA%B2%BD+OR+%ED%99%94%ED%95%99%EC%A0%9C%ED%92%88+%ED%86%B5%EC%83%81&hl=ko&gl=KR&ceid=KR%3Ako",
+    "category": "규제·무역",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-kr-trade-reg"
+  },
+  {
+    "id": "v551-jp-trade-reg",
+    "name": "JP Trade Regulation Local",
+    "url": "https://news.google.com/rss/search?q=%E9%96%A2%E7%A8%8E+OR+%E3%82%A2%E3%83%B3%E3%83%81%E3%83%80%E3%83%B3%E3%83%94%E3%83%B3%E3%82%B0+OR+%E8%BC%B8%E5%85%A5%E8%A6%8F%E5%88%B6+OR+%E5%8C%96%E5%AD%A6%E5%93%81+%E8%B2%BF%E6%98%93&hl=ja&gl=JP&ceid=JP%3Aja",
+    "category": "규제·무역",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-jp-trade-reg"
+  },
+  {
+    "id": "v551-cn-trade-reg",
+    "name": "CN Trade Regulation Local",
+    "url": "https://news.google.com/rss/search?q=%E5%85%B3%E7%A8%8E+OR+%E5%8F%8D%E5%80%BE%E9%94%80+OR+%E8%BF%9B%E5%8F%A3%E9%99%90%E5%88%B6+OR+%E5%8C%96%E5%B7%A5%E5%93%81%E8%B4%B8%E6%98%93+OR+%E5%A1%91%E6%96%99%E8%B4%B8%E6%98%93&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans",
+    "category": "규제·무역",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-cn-trade-reg"
+  },
+  {
+    "id": "v551-tw-trade-reg",
+    "name": "TW Trade Regulation Local",
+    "url": "https://news.google.com/rss/search?q=%E9%97%9C%E7%A8%85+OR+%E5%8F%8D%E5%82%BE%E9%8A%B7+OR+%E9%80%B2%E5%8F%A3%E9%99%90%E5%88%B6+OR+%E5%8C%96%E5%B7%A5%E5%93%81%E8%B2%BF%E6%98%93+OR+%E5%A1%91%E8%86%A0%E8%B2%BF%E6%98%93&hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant",
+    "category": "규제·무역",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-tw-trade-reg"
+  },
+  {
+    "id": "v551-kr-downstream",
+    "name": "KR Downstream Local",
+    "url": "https://news.google.com/rss/search?q=%EC%A0%84%EA%B8%B0%EC%B0%A8+%ED%94%8C%EB%9D%BC%EC%8A%A4%ED%8B%B1+OR+%EC%9E%90%EB%8F%99%EC%B0%A8+%EA%B2%BD%EB%9F%89%ED%99%94+%EC%86%8C%EC%9E%AC+OR+%EB%B0%98%EB%8F%84%EC%B2%B4+%ED%8C%A8%ED%82%A4%EC%A7%95+%EC%86%8C%EC%9E%AC+OR+%EC%9D%98%EB%A3%8C%EA%B8%B0%EA%B8%B0+%ED%94%8C%EB%9D%BC%EC%8A%A4%ED%8B%B1&hl=ko&gl=KR&ceid=KR%3Ako",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-kr-downstream"
+  },
+  {
+    "id": "v551-jp-downstream",
+    "name": "JP Downstream Local",
+    "url": "https://news.google.com/rss/search?q=%E8%87%AA%E5%8B%95%E8%BB%8A+%E8%BB%BD%E9%87%8F%E5%8C%96+%E6%A8%B9%E8%84%82+OR+%E5%8D%8A%E5%B0%8E%E4%BD%93+%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8+%E6%9D%90%E6%96%99+OR+%E5%8C%BB%E7%99%82%E6%A9%9F%E5%99%A8+%E3%83%97%E3%83%A9%E3%82%B9%E3%83%81%E3%83%83%E3%82%AF&hl=ja&gl=JP&ceid=JP%3Aja",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-jp-downstream"
+  },
+  {
+    "id": "v551-cn-downstream",
+    "name": "CN Downstream Local",
+    "url": "https://news.google.com/rss/search?q=%E6%96%B0%E8%83%BD%E6%BA%90%E6%B1%BD%E8%BD%A6+%E5%A1%91%E6%96%99+OR+%E6%B1%BD%E8%BD%A6%E8%BD%BB%E9%87%8F%E5%8C%96+%E6%9D%90%E6%96%99+OR+%E5%8D%8A%E5%AF%BC%E4%BD%93%E5%B0%81%E8%A3%85+%E6%9D%90%E6%96%99+OR+%E5%8C%BB%E7%96%97%E5%99%A8%E6%A2%B0+%E5%A1%91%E6%96%99&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-cn-downstream"
+  },
+  {
+    "id": "v551-asia-distribution",
+    "name": "Asia Polymer Distribution",
+    "url": "https://news.google.com/rss/search?q=polymer+distributor+OR+resin+distributor+OR+plastics+distribution+Asia+OR+Singapore+OR+India+OR+Japan&hl=en-SG&gl=SG&ceid=SG%3Aen",
+    "category": "응용 산업",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-asia-distribution"
+  },
+  {
+    "id": "v551-kr-chem-macro",
+    "name": "KR Chemical Macro Local",
+    "url": "https://news.google.com/rss/search?q=%ED%99%94%ED%95%99+%EC%97%85%ED%99%A9+OR+%EC%84%9D%EC%9C%A0%ED%99%94%ED%95%99+%EA%B2%BD%EA%B8%B0+OR+%EC%A0%9C%EC%A1%B0%EC%97%85+PMI+OR+%EC%82%B0%EC%97%85%EC%83%9D%EC%82%B0+%ED%99%94%ED%95%99&hl=ko&gl=KR&ceid=KR%3Ako",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-kr-chem-macro"
+  },
+  {
+    "id": "v551-jp-chem-macro",
+    "name": "JP Chemical Macro Local",
+    "url": "https://news.google.com/rss/search?q=%E5%8C%96%E5%AD%A6+%E6%A5%AD%E6%B3%81+OR+%E7%9F%B3%E6%B2%B9%E5%8C%96%E5%AD%A6+%E5%B8%82%E6%B3%81+OR+%E8%A3%BD%E9%80%A0%E6%A5%AD+PMI+OR+%E9%89%B1%E5%B7%A5%E6%A5%AD%E7%94%9F%E7%94%A3+%E5%8C%96%E5%AD%A6&hl=ja&gl=JP&ceid=JP%3Aja",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-jp-chem-macro"
+  },
+  {
+    "id": "v551-cn-chem-macro",
+    "name": "CN Chemical Macro Local",
+    "url": "https://news.google.com/rss/search?q=%E5%8C%96%E5%B7%A5+%E6%99%AF%E6%B0%94+OR+%E7%9F%B3%E5%8C%96+%E8%A1%8C%E4%B8%9A+OR+%E5%88%B6%E9%80%A0%E4%B8%9APMI+OR+%E5%B7%A5%E4%B8%9A%E7%94%9F%E4%BA%A7+%E5%8C%96%E5%B7%A5&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-cn-chem-macro"
+  },
+  {
+    "id": "v551-in-chem-macro",
+    "name": "India Chemical Macro Local",
+    "url": "https://news.google.com/rss/search?q=India+petrochemical+OR+engineering+plastics+OR+chemical+industry+PMI+OR+polymer+demand&hl=en-IN&gl=IN&ceid=IN%3Aen",
+    "category": "macro",
+    "enabled": true,
+    "sourceWorkflowNode": "GN_v551-in-chem-macro"
   }
 ]
