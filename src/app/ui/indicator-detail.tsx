@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import type { IndicatorCard, IndicatorFrequency, IndicatorObservation } from '@/lib/types';
-import { displayArticleTitle, indicatorNameFor, t, type UiLang } from './format-utils';
+import { displayArticleTitle, indicatorNameFor, sourceNameFor, t, type UiLang } from './format-utils';
 
 type IndicatorProfile = 'pmi' | 'rate' | 'fx' | 'commodity' | 'production' | 'inflation' | 'growth' | 'gdp-level' | 'default';
 
@@ -310,7 +310,7 @@ export default function IndicatorDetail({ subtitle, series, defaultSeriesId }: I
         <h2>{t(uiLang, '관련 콘텐츠', 'Related Content')}</h2>
         {active.relatedNews.length ? <div className="detailNewsList">{active.relatedNews.map((news) => <a key={`${news.link}-${news.publishedAt}`} href={news.link} target="_blank" rel="noreferrer">
           <strong>{displayArticleTitle(news, uiLang)}</strong>
-          <span>{news.sourceName} · {news.publishedAt.slice(0, 10)}</span>
+          <span>{sourceNameFor(news.sourceName, uiLang)} · {news.publishedAt.slice(0, 10)}</span>
         </a>)}</div> : <p className="detailNoNews">{t(uiLang, '현재 연결된 관련 뉴스가 없습니다.', 'No related news is currently linked.')}</p>}
       </aside>
     </div>

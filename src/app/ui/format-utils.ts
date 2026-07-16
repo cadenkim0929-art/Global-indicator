@@ -133,6 +133,34 @@ export function categoryLabelFor(label: string, lang: UiLang = 'ko') {
   return map[cleaned] || cleaned || label;
 }
 
+export function sourceNameFor(name: string | undefined | null, lang: UiLang = 'ko') {
+  const raw = (name || '').trim();
+  if (!raw || lang === 'ko') return raw;
+  const aliases: Record<string, string> = {
+    'GA_케미컬뉴스': 'Chemical News Korea',
+    'GA_化学工業日報': 'The Chemical Daily',
+    '新浪财经': 'Sina Finance',
+    '新浪网': 'Sina',
+    '연합뉴스': 'Yonhap News Agency',
+    '네이트 뉴스': 'Nate News',
+    '조선일보': 'Chosun Ilbo',
+    '매일경제': 'Maeil Business Newspaper',
+    '뉴시스': 'Newsis',
+    '서울경제': 'Seoul Economic Daily',
+    '뉴델리 경제': 'New Delhi Economy',
+    '뉴데일리 경제': 'NewDaily Economy',
+    'Yahoo!ファイナンス': 'Yahoo! Finance Japan',
+    '旭化成 エンプラ総合情報サイト': 'Asahi Kasei Engineering Plastics Portal',
+    'ゴムタイムス': 'Rubber Times Japan',
+    '京都新聞': 'Kyoto Shimbun',
+    '日刊ケミカルニュース': 'Nikkan Chemical News',
+    'トレーダーズ・ウェブ': 'Traders Web',
+    '財聯社': 'Cailian Press',
+    '财联社': 'Cailian Press',
+  };
+  return aliases[raw] || raw;
+}
+
 export function t(lang: UiLang, ko: string, en: string) { return lang === 'en' ? en : ko; }
 
 export function indicatorNameFor(id: string, nameKo: string, lang: UiLang = 'ko') {

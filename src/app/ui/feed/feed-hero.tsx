@@ -1,7 +1,7 @@
 'use client';
 
 import type { Article } from '@/lib/types';
-import { cleanArticleTitle, displayArticleTitle, resolveSummary, t, type UiLang } from '../format-utils';
+import { cleanArticleTitle, displayArticleTitle, resolveSummary, sourceNameFor, t, type UiLang } from '../format-utils';
 import { useDisplayTime } from './use-display-time';
 
 export interface FeedHeroProps {
@@ -15,7 +15,8 @@ export interface FeedHeroProps {
 // 순수 CSS/SVG 점 패턴 + 얇은 추세선으로 "글로벌 리서치" 톤만 은유적으로 표현한다.
 // 카드 전체를 링크로 감싸지 않고, "원문 보기" 버튼만 실제 앵커로 둬서 중첩 링크를 피한다.
 export default function FeedHero({ article, categoryLabel, categoryColor, lang = 'ko' }: FeedHeroProps) {
-  const cleanedTitle = cleanArticleTitle(displayArticleTitle(article, lang), article.sourceName || article.feedName);
+  const rawSourceLabel = article.sourceName || article.feedName;
+  const cleanedTitle = cleanArticleTitle(displayArticleTitle(article, lang), rawSourceLabel);
   const summary = resolveSummary(article, categoryLabel, lang);
   const timeLabel = useDisplayTime(article.publishedAt);
   const tags = (article.tags || []).filter(Boolean).slice(0, 3);
@@ -41,7 +42,7 @@ export default function FeedHero({ article, categoryLabel, categoryColor, lang =
         <h2 id="feedHeroHeading">{cleanedTitle}</h2>
         <p className="feedHeroSummary">{summary}</p>
         <div className="feedHeroMeta">
-          <span className="feedHeroSource">{article.sourceName || article.feedName}</span>
+          <span className="feedHeroSource">{sourceNameFor(rawSourceLabel, lang)}</span>
           <time dateTime={article.publishedAt}>{timeLabel}</time>
           {tags.map((t) => <span key={t} className="feedHeroTag">#{t}</span>)}
         </div>

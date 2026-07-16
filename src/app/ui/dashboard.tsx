@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import Sparkline from './indicator-sparkline';
 import type { Article, IndicatorCard, IndicatorFrequency } from '@/lib/types';
-import { categoryLabelFor, countryLabelFor, displayArticleTitle, formatDate, impactBadgeFor, indicatorNameFor, isTodayKst, rankByScoreThenDate, shortDate, buildKeywordList, t } from './format-utils';
+import { categoryLabelFor, countryLabelFor, displayArticleTitle, formatDate, impactBadgeFor, indicatorNameFor, isTodayKst, rankByScoreThenDate, shortDate, buildKeywordList, sourceNameFor, t } from './format-utils';
 import type { PageKey, SortKey, UiLang } from './format-utils';
 import FeedHeader from './feed/feed-header';
 import FeedCategoryTabs from './feed/feed-filters';
@@ -674,7 +674,7 @@ export default function Dashboard({
     const cat = categoryById.get(a.category);
     return <a className="reportArticleRow" href={a.link} target="_blank" rel="noreferrer" key={a.id}>
       <span>{index + 1}</span>
-      <div><b>{editorialHeadline(a.titleKo || a.title, a.sourceName || a.feedName)}</b><small>{cat?.label || a.category} · {a.sourceName || a.feedName} · {shortDate(a.publishedAt)}</small></div>
+      <div><b>{editorialHeadline(a.titleKo || a.title, a.sourceName || a.feedName)}</b><small>{categoryLabelFor(cat?.label || a.category, uiLang)} · {sourceNameFor(a.sourceName || a.feedName, uiLang)} · {shortDate(a.publishedAt)}</small></div>
       <strong>{a.score || 0}</strong>
     </a>;
   }
@@ -889,7 +889,7 @@ export default function Dashboard({
             </div>
           </div>
           <div className="macroHighlightMeta">
-            <div><span>{t(uiLang, '발행처', 'Source')}</span><b>{macroHighlight.news.sourceName}</b></div>
+            <div><span>{t(uiLang, '발행처', 'Source')}</span><b>{sourceNameFor(macroHighlight.news.sourceName, uiLang)}</b></div>
             <div><span>{t(uiLang, '발행일', 'Published')}</span><b>{shortDate(macroHighlight.news.publishedAt)}</b></div>
             {macroHighlight.news.tags && macroHighlight.news.tags.length > 0 && <div className="macroHighlightTags"><span>{t(uiLang, '키워드', 'Keywords')}</span><div>{macroHighlight.news.tags.map((tag) => <em key={tag}>#{tag}</em>)}</div></div>}
             {macroHighlights.length > 1 && <div className="macroHighlightPager">
@@ -908,7 +908,7 @@ export default function Dashboard({
           <div className="macroNewsGrid">
             <div className="macroNewsList">
               {macroNewsCards.length ? macroNewsCards.map((a) => <a className="macroNewsRow" href={a.link} target="_blank" rel="noreferrer" key={a.id}>
-                <div><b>{editorialHeadline(stripMacroPrefix(displayArticleTitle(a, uiLang)), a.sourceName || a.feedName)}</b><small>{a.sourceName || a.feedName} · {shortDate(a.publishedAt)} · Impact {a.score || 0}</small></div>
+                <div><b>{editorialHeadline(stripMacroPrefix(displayArticleTitle(a, uiLang)), a.sourceName || a.feedName)}</b><small>{sourceNameFor(a.sourceName || a.feedName, uiLang)} · {shortDate(a.publishedAt)} · Impact {a.score || 0}</small></div>
                 <span>{t(uiLang, '원문 ↗', 'Original ↗')}</span>
               </a>) : <div className="empty small">매크로 기사가 없습니다</div>}
             </div>
