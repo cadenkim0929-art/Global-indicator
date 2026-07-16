@@ -77,13 +77,13 @@ export function resolveSummary(article: Pick<Article, 'title' | 'summary' | 'sum
     && normalizeForCompare(summaryCore) !== normalizeForCompare(titleCore)
     && !summaryCore.includes(titleCore.slice(0, 24));
   if (isMeaningful) return rawSummary!;
-  return lang === 'en' ? `Related ${categoryLabel} update. Open the original article for details.` : `${categoryLabel} 관련 소식입니다. 원문에서 자세한 내용을 확인하세요.`;
+  return lang === 'en' ? `Related ${categoryLabelFor(categoryLabel, 'en')} update. Open the original article for details.` : `${categoryLabel} 관련 소식입니다. 원문에서 자세한 내용을 확인하세요.`;
 }
 
 
 export function displayArticleTitle(article: Pick<Article, 'title' | 'titleKo' | 'titleEn'>, lang: UiLang = 'ko') {
   const { titleKo, titleEn } = resolveTitles(article);
-  return lang === 'en' ? (titleEn || article.title || titleKo) : titleKo;
+  return lang === 'en' ? (titleEn || article.title || titleKo).replace(/^\[매크로\]/, '[Macro]') : titleKo;
 }
 
 export function secondaryArticleTitle(article: Pick<Article, 'title' | 'titleKo' | 'titleEn'>, lang: UiLang = 'ko') {
@@ -108,6 +108,20 @@ export function categoryLabelFor(label: string, lang: UiLang = 'ko') {
     '통상·공급망': 'Trade & Supply Chain',
     '의료기기': 'Medical Devices',
     '재무리스크 & 구조조정': 'Financial Risk & Restructuring',
+    '신소재 & 제품 출시': 'New Materials & Product Launches',
+    '지속가능성 & 순환경제': 'Sustainability & Circular Economy',
+    '생산능력 & 설비투자': 'Capacity & Investment',
+    'M&A·파트너십 & 전략': 'M&A, Partnerships & Strategy',
+    '시장 동향 & 공급망': 'Market Trends & Supply Chain',
+    '폴리머 유통채널': 'Polymer Distribution Channels',
+    '자동차 & 자율주행': 'Automotive & Mobility',
+    '전기·전자 & E-모빌리티': 'Electronics & E-Mobility',
+    '반도체 & AI데이터센터': 'Semiconductors & AI Data Centers',
+    'ESS & 배터리': 'ESS & Batteries',
+    '의료기기 & 헬스케어': 'Medical Devices & Healthcare',
+    '원료 & 업스트림': 'Feedstock & Upstream',
+    '규제 & 컴플라이언스': 'Regulation & Compliance',
+    '공시 & 시그널': 'Disclosure & Signals',
   };
   return map[cleaned] || cleaned || label;
 }

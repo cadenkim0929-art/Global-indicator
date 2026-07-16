@@ -66,10 +66,13 @@ export interface IndicatorObservation {
 
 export interface RelatedNewsItem {
   title: string;
+  titleKo?: string;
+  titleEn?: string;
   link: string;
   publishedAt: string;
   sourceName: string;
   summary?: string;
+  summaryKo?: string;
   tags?: string[];
 }
 
