@@ -1,7 +1,7 @@
 'use client';
 
 import type { Article } from '@/lib/types';
-import { cleanArticleTitle, displayArticleTitle, resolveSummary, sourceNameFor, t, type UiLang } from '../format-utils';
+import { cleanArticleTitle, displayArticleTitle, resolveSummary, sourceNameFor, tagLabelFor, t, type UiLang } from '../format-utils';
 import { useDisplayTime } from './use-display-time';
 
 export interface FeedHeroProps {
@@ -18,7 +18,7 @@ export default function FeedHero({ article, categoryLabel, categoryColor, lang =
   const rawSourceLabel = article.sourceName || article.feedName;
   const cleanedTitle = cleanArticleTitle(displayArticleTitle(article, lang), rawSourceLabel);
   const summary = resolveSummary(article, categoryLabel, lang);
-  const timeLabel = useDisplayTime(article.publishedAt);
+  const timeLabel = useDisplayTime(article.publishedAt, lang);
   const tags = (article.tags || []).filter(Boolean).slice(0, 3);
 
   return (
@@ -44,7 +44,7 @@ export default function FeedHero({ article, categoryLabel, categoryColor, lang =
         <div className="feedHeroMeta">
           <span className="feedHeroSource">{sourceNameFor(rawSourceLabel, lang)}</span>
           <time dateTime={article.publishedAt}>{timeLabel}</time>
-          {tags.map((t) => <span key={t} className="feedHeroTag">#{t}</span>)}
+          {tags.map((tag) => <span key={tag} className="feedHeroTag">#{tagLabelFor(tag, lang)}</span>)}
         </div>
         <div className="feedHeroActions">
           <a href={article.link} target="_blank" rel="noreferrer" className="feedHeroCta">{t(lang, '원문 보기 →', 'Read original →')}</a>

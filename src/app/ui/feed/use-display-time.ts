@@ -1,7 +1,7 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
-import { relativeTimeKst, shortDate } from '../format-utils';
+import { relativeTimeKst, shortDate, type UiLang } from '../format-utils';
 
 // 서버에서 렌더링될 때와 클라이언트 첫 렌더 시점의 "N분 전" 문구가 서로 달라지면
 // React hydration mismatch 경고가 발생한다. useSyncExternalStore의 getServerSnapshot은
@@ -11,10 +11,10 @@ import { relativeTimeKst, shortDate } from '../format-utils';
 // subscribe는 아무 것도 구독하지 않는다.
 const noopSubscribe = () => () => {};
 
-export function useDisplayTime(publishedAt: string) {
+export function useDisplayTime(publishedAt: string, lang: UiLang = 'ko') {
   return useSyncExternalStore(
     noopSubscribe,
-    () => relativeTimeKst(publishedAt),
+    () => relativeTimeKst(publishedAt, lang),
     () => shortDate(publishedAt),
   );
 }

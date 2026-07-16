@@ -32,16 +32,16 @@ export function isTodayKst(value: string) {
 // 서버 렌더링 시점과 클라이언트 하이드레이션 시점의 "n분 전" 문구가 달라 hydration
 // mismatch가 나는 것을 피하기 위해, 화면에서는 useDisplayTime(feed/use-display-time.ts)
 // 훅을 통해 사용한다 — 이 함수를 컴포넌트에서 직접 호출하지 않는다.
-export function relativeTimeKst(value: string) {
+export function relativeTimeKst(value: string, lang: UiLang = 'ko') {
   const diffMs = Date.now() - new Date(value).getTime();
   if (!Number.isFinite(diffMs)) return shortDate(value);
   const diffMin = Math.round(diffMs / 60000);
-  if (diffMin < 1) return '방금 전';
-  if (diffMin < 60) return `${diffMin}분 전`;
+  if (diffMin < 1) return lang === 'en' ? 'just now' : '방금 전';
+  if (diffMin < 60) return lang === 'en' ? `${diffMin} min ago` : `${diffMin}분 전`;
   const diffHour = Math.round(diffMin / 60);
-  if (diffHour < 24) return `${diffHour}시간 전`;
+  if (diffHour < 24) return lang === 'en' ? `${diffHour}h ago` : `${diffHour}시간 전`;
   const diffDay = Math.round(diffHour / 24);
-  if (diffDay < 7) return `${diffDay}일 전`;
+  if (diffDay < 7) return lang === 'en' ? `${diffDay}d ago` : `${diffDay}일 전`;
   return shortDate(value);
 }
 
@@ -90,7 +90,10 @@ export function resolveSummary(article: Pick<Article, 'title' | 'summary' | 'sum
 
 export function displayArticleTitle(article: Pick<Article, 'title' | 'titleKo' | 'titleEn'>, lang: UiLang = 'ko') {
   const { titleKo, titleEn } = resolveTitles(article);
-  return lang === 'en' ? (titleEn || article.title || titleKo).replace(/^\[매크로\]/, '[Macro]') : titleKo;
+  if (lang === 'ko') return titleKo;
+  const candidate = (titleEn || article.title || titleKo).replace(/^\[매크로\]/, '[Macro]');
+  if (hasNonLatinPayload(candidate)) return 'Industry update — open original article for details';
+  return candidate;
 }
 
 export function secondaryArticleTitle(article: Pick<Article, 'title' | 'titleKo' | 'titleEn'>, lang: UiLang = 'ko') {
@@ -149,6 +152,12 @@ export function sourceNameFor(name: string | undefined | null, lang: UiLang = 'k
     '서울경제': 'Seoul Economic Daily',
     '뉴델리 경제': 'New Delhi Economy',
     '뉴데일리 경제': 'NewDaily Economy',
+    '재경일보': 'Jaekyung Ilbo',
+    '알파경제': 'Alpha Economy',
+    '한국금융경제신문': 'Korea Financial Economy News',
+    '브릿지경제': 'Bridge Economy',
+    '공공뉴스': 'Public News',
+    '투데이에너지': 'Today Energy',
     'Yahoo!ファイナンス': 'Yahoo! Finance Japan',
     '旭化成 エンプラ総合情報サイト': 'Asahi Kasei Engineering Plastics Portal',
     'ゴムタイムス': 'Rubber Times Japan',
@@ -159,6 +168,23 @@ export function sourceNameFor(name: string | undefined | null, lang: UiLang = 'k
     '财联社': 'Cailian Press',
   };
   return aliases[raw] || raw;
+}
+
+export function tagLabelFor(tag: string, lang: UiLang = 'ko') {
+  const raw = (tag || '').trim();
+  if (!raw || lang === 'ko') return raw;
+  const aliases: Record<string, string> = {
+    '관세/ATV': 'Tariffs/ATV',
+    '관세': 'Tariffs',
+    '반도체': 'Semiconductors',
+    '신소재': 'New Materials',
+    '규제': 'Regulation',
+    '배터리': 'Batteries',
+    '자동차': 'Automotive',
+    '공급망': 'Supply Chain',
+  };
+  if (aliases[raw]) return aliases[raw];
+  return /[가-힣ぁ-ヿ一-龯]/.test(raw) ? 'Topic' : raw;
 }
 
 export function t(lang: UiLang, ko: string, en: string) { return lang === 'en' ? en : ko; }

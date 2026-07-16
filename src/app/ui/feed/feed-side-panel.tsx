@@ -2,10 +2,10 @@
 
 import type { Article } from '@/lib/types';
 import { useDisplayTime } from './use-display-time';
-import { categoryLabelFor, displayArticleTitle, t, type UiLang } from '../format-utils';
+import { categoryLabelFor, displayArticleTitle, tagLabelFor, t, type UiLang } from '../format-utils';
 
 function BriefRow({ article, lang = 'ko' }: { article: Article; lang?: UiLang }) {
-  const timeLabel = useDisplayTime(article.publishedAt);
+  const timeLabel = useDisplayTime(article.publishedAt, lang);
   const title = displayArticleTitle(article, lang);
   return (
     <li className="feedBriefRow">
@@ -63,7 +63,7 @@ export default function FeedSidePanel({
                 className={`feedKeywordChip ${activeKeyword === k ? 'active' : ''}`}
                 onClick={() => onKeywordClick(k)}
               >
-                #{k}
+                #{tagLabelFor(k, lang)}
               </button>
             ))}
           </div>

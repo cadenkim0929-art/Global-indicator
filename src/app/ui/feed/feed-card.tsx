@@ -23,7 +23,7 @@ export default function FeedCard({ article, categoryLabel, categoryColor, index,
   const rawSourceLabel = article.sourceName || article.feedName;
   const cleanedTitle = cleanArticleTitle(primaryTitle, rawSourceLabel);
   const summary = resolveSummary(article, categoryLabel, lang);
-  const timeLabel = useDisplayTime(article.publishedAt);
+  const timeLabel = useDisplayTime(article.publishedAt, lang);
   const sourceLabel = sourceNameFor(rawSourceLabel, lang);
   const extraSources = (article.duplicateCount || 1) > 1 ? (lang === 'en' ? ` + ${(article.duplicateCount || 1) - 1} sources` : ` 외 ${(article.duplicateCount || 1) - 1}개 매체`) : '';
 
