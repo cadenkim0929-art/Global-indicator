@@ -61,6 +61,10 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none}
 .logoText{display:flex;flex-direction:column;line-height:1.2}
 .logoText b{font:700 16px/1.2 'Noto Sans KR';letter-spacing:-.01em;color:var(--text)}
 .logoText small{font:500 10.5px/1.4 'JetBrains Mono';color:var(--muted);letter-spacing:.03em;margin-top:2px}
+.languageToggle{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:12px 0 18px;padding:4px;border:1px solid var(--line-soft);border-radius:999px;background:rgba(255,255,255,.62);box-shadow:var(--shadow-sm)}
+.languageToggle button{border:0;border-radius:999px;background:transparent;color:var(--muted);font:800 11px/1 'Noto Sans KR';padding:8px 10px;cursor:pointer;transition:all .16s ease}
+.languageToggle button.active{background:linear-gradient(135deg,var(--brand-bright),var(--brand));color:#fff8ec;box-shadow:0 8px 18px rgba(168,99,30,.22)}
+.languageToggle button:not(.active):hover{background:var(--surface-2);color:var(--text-dim)}
 
 .sidebar nav{display:grid;gap:4px}
 .sidebar nav button{

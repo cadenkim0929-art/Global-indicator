@@ -2,6 +2,7 @@ import type { Article } from '@/lib/types';
 
 export type PageKey = 'feed' | 'sources' | 'macro' | 'reports';
 export type SortKey = 'latest' | 'score' | 'category';
+export type UiLang = 'ko' | 'en';
 
 // [피드 리디자인] 날짜/텍스트 가공 유틸을 dashboard.tsx에서 분리 —
 // 매크로 페이지와 피드 페이지(신규 컴포넌트들)가 동일 로직을 공유하기 위함.
@@ -68,15 +69,50 @@ export function resolveTitles(article: Pick<Article, 'title' | 'titleKo' | 'titl
 
 // 제목과 사실상 동일한 요약(번역 실패로 제목을 그대로 복붙한 경우 등)은 감추고,
 // 대신 짧고 정직한 상태 문구로 대체한다 — 존재하지 않는 AI 요약을 지어내지 않는다.
-export function resolveSummary(article: Pick<Article, 'title' | 'summary' | 'summaryKo'>, categoryLabel: string) {
-  const rawSummary = article.summaryKo || article.summary;
+export function resolveSummary(article: Pick<Article, 'title' | 'summary' | 'summaryKo'>, categoryLabel: string, lang: UiLang = 'ko') {
+  const rawSummary = lang === 'en' ? (article.summary || article.summaryKo) : (article.summaryKo || article.summary);
   const titleCore = article.title.replace(/\s[-–—|]\s.*$/, '').trim();
   const summaryCore = (rawSummary || '').replace(/\s[-–—|]\s.*$/, '').trim();
   const isMeaningful = !!rawSummary
     && normalizeForCompare(summaryCore) !== normalizeForCompare(titleCore)
     && !summaryCore.includes(titleCore.slice(0, 24));
-  return isMeaningful ? rawSummary! : `${categoryLabel} 관련 소식입니다. 원문에서 자세한 내용을 확인하세요.`;
+  if (isMeaningful) return rawSummary!;
+  return lang === 'en' ? `Related ${categoryLabel} update. Open the original article for details.` : `${categoryLabel} 관련 소식입니다. 원문에서 자세한 내용을 확인하세요.`;
 }
+
+
+export function displayArticleTitle(article: Pick<Article, 'title' | 'titleKo' | 'titleEn'>, lang: UiLang = 'ko') {
+  const { titleKo, titleEn } = resolveTitles(article);
+  return lang === 'en' ? (titleEn || article.title || titleKo) : titleKo;
+}
+
+export function secondaryArticleTitle(article: Pick<Article, 'title' | 'titleKo' | 'titleEn'>, lang: UiLang = 'ko') {
+  const { titleKo, titleEn } = resolveTitles(article);
+  if (lang === 'en') return titleKo && normalizeForCompare(titleKo) !== normalizeForCompare(titleEn || article.title) ? titleKo : null;
+  return titleEn;
+}
+
+export function categoryLabelFor(label: string, lang: UiLang = 'ko') {
+  if (lang === 'ko') return label;
+  const cleaned = label.replace(/^\S+\s*/, '').trim();
+  const map: Record<string, string> = {
+    '전체': 'All',
+    '원재료 & 가격': 'Feedstock & Prices',
+    '가격/원가': 'Prices & Costs',
+    '경쟁사 동향': 'Competitors',
+    '소재·제품': 'Materials & Products',
+    '소재/제품': 'Materials & Products',
+    '수요산업': 'Downstream Demand',
+    '정책·규제': 'Policy & Regulation',
+    '기술·R&D': 'Technology & R&D',
+    '통상·공급망': 'Trade & Supply Chain',
+    '의료기기': 'Medical Devices',
+    '재무리스크 & 구조조정': 'Financial Risk & Restructuring',
+  };
+  return map[cleaned] || cleaned || label;
+}
+
+export function t(lang: UiLang, ko: string, en: string) { return lang === 'en' ? en : ko; }
 
 // 대표 기사(히어로)·브리프 선정 기준: score 내림차순, 동점이면 최신순.
 export function rankByScoreThenDate(list: Article[]) {

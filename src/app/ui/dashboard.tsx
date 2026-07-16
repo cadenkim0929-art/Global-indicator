@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import Sparkline from './indicator-sparkline';
 import type { Article, IndicatorCard, IndicatorFrequency } from '@/lib/types';
-import { formatDate, isTodayKst, rankByScoreThenDate, shortDate, buildKeywordList } from './format-utils';
-import type { PageKey, SortKey } from './format-utils';
+import { categoryLabelFor, displayArticleTitle, formatDate, isTodayKst, rankByScoreThenDate, shortDate, buildKeywordList, t } from './format-utils';
+import type { PageKey, SortKey, UiLang } from './format-utils';
 import FeedHeader from './feed/feed-header';
 import FeedCategoryTabs from './feed/feed-filters';
 import FeedHero from './feed/feed-hero';
@@ -189,6 +189,15 @@ export default function Dashboard({
   const [indicatorHorizonKey, setIndicatorHorizonKey] = useState<IndicatorHorizon>('now');
   const [indicatorLoading, setIndicatorLoading] = useState(false);
   const [reportTab, setReportTab] = useState<'daily' | 'weekly' | 'monthly' | 'theme'>('daily');
+  const [uiLang, setUiLang] = useState<UiLang>(() => {
+    if (typeof window === 'undefined') return 'ko';
+    const saved = window.localStorage.getItem('ep-monitor-ui-lang');
+    return saved === 'en' ? 'en' : 'ko';
+  });
+  function changeUiLang(next: UiLang) {
+    setUiLang(next);
+    window.localStorage.setItem('ep-monitor-ui-lang', next);
+  }
 
 
   async function loadIndicators() {
@@ -704,30 +713,34 @@ export default function Dashboard({
   return <main className="appShell">
     <aside className="sidebar">
       <div className="logo"><span>EP</span><div className="logoText"><b>EP Industry Monitor</b><small>Engineering · Plastics · Intelligence</small></div></div>
+      <div className="languageToggle" role="group" aria-label={t(uiLang, '표시 언어', 'Display language')}>
+        <button type="button" className={uiLang === 'ko' ? 'active' : ''} onClick={() => changeUiLang('ko')}>한국어</button>
+        <button type="button" className={uiLang === 'en' ? 'active' : ''} onClick={() => changeUiLang('en')}>English</button>
+      </div>
       <nav>
-        <button className={page === 'feed' ? 'active' : ''} onClick={() => setPage('feed')}>EP 산업 뉴스</button>
-        <button className={page === 'macro' ? 'active' : ''} onClick={() => setPage('macro')}>매크로 브리핑</button>
-        <button className={page === 'sources' ? 'active' : ''} onClick={() => setPage('sources')}>소스</button>
+        <button className={page === 'feed' ? 'active' : ''} onClick={() => setPage('feed')}>{t(uiLang, 'EP 산업 뉴스', 'EP Industry News')}</button>
+        <button className={page === 'macro' ? 'active' : ''} onClick={() => setPage('macro')}>{t(uiLang, '매크로 브리핑', 'Macro Briefing')}</button>
+        <button className={page === 'sources' ? 'active' : ''} onClick={() => setPage('sources')}>{t(uiLang, '소스', 'Sources')}</button>
         {/* [디자인 리뉴얼] 보고서/관심 지표/알림 설정은 아직 백엔드가 없는 예정 기능이라
             실제 페이지 전환 없이 자리만 잡아두고 "Soon" 배지로 준비 중임을 명시.
             데이터 없는 기능을 있는 것처럼 보이게 하지 않기 위한 의도적 처리. */}
-        <button className={page === 'reports' ? 'active' : ''} onClick={() => setPage('reports')}>보고서</button>
-        <button className="soon" disabled title="준비 중인 기능입니다">관심 지표<span className="soonBadge">Soon</span></button>
-        <button className="soon" disabled title="준비 중인 기능입니다">알림 설정<span className="soonBadge">Soon</span></button>
+        <button className={page === 'reports' ? 'active' : ''} onClick={() => setPage('reports')}>{t(uiLang, '보고서', 'Reports')}</button>
+        <button className="soon" disabled title="준비 중인 기능입니다">{t(uiLang, '관심 지표', 'Watchlist')}<span className="soonBadge">Soon</span></button>
+        <button className="soon" disabled title="준비 중인 기능입니다">{t(uiLang, '알림 설정', 'Alerts')}<span className="soonBadge">Soon</span></button>
       </nav>
       <div className="sidebarMeta">
         <div className="sidebarStatusRow">
-          <b>실시간 수집</b>
-          <span className="statusPill"><i></i>정상</span>
+          <b>{t(uiLang, '실시간 수집', 'Live Collection')}</b>
+          <span className="statusPill"><i></i>{t(uiLang, '정상', 'OK')}</span>
         </div>
-        <div className="metaRow"><span>최종 수집</span><b>{formatDate(stats.lastCollectedAt)}</b></div>
-        <div className="metaRow"><span>EP 뉴스</span><b>{epArticles.length.toLocaleString()}건 표시</b></div>
-        <div className="metaRow"><span>매크로</span><b>{macroCount.toLocaleString()}건 별도 레인</b></div>
-        <div className="metaRow"><span>소스</span><b>{stats.totalFeeds}개</b></div>
+        <div className="metaRow"><span>{t(uiLang, '최종 수집', 'Last collected')}</span><b>{formatDate(stats.lastCollectedAt)}</b></div>
+        <div className="metaRow"><span>{t(uiLang, 'EP 뉴스', 'EP News')}</span><b>{epArticles.length.toLocaleString()}{t(uiLang, '건 표시', ' shown')}</b></div>
+        <div className="metaRow"><span>{t(uiLang, '매크로', 'Macro')}</span><b>{macroCount.toLocaleString()}{t(uiLang, '건 별도 레인', ' separate lane')}</b></div>
+        <div className="metaRow"><span>{t(uiLang, '소스', 'Sources')}</span><b>{stats.totalFeeds}{t(uiLang, '개', '')}</b></div>
         <div className="productCredit">
-          <span>제작</span>
+          <span>{t(uiLang, '제작', 'Built by')}</span>
           <b>LG화학 엔지니어링소재 사업부 마케팅전략팀</b>
-          <a href="mailto:qdong@lgchem.com">문의 qdong@lgchem.com</a>
+          <a href="mailto:qdong@lgchem.com">{t(uiLang, '문의', 'Contact')} qdong@lgchem.com</a>
         </div>
       </div>
     </aside>
@@ -735,11 +748,11 @@ export default function Dashboard({
       {page !== 'feed' && <header className="pageHeader">
         <div className="pageHeaderTitle">
           <span className="eyebrow">{page === 'macro' ? 'Macro Briefing' : page === 'reports' ? 'Deterministic Reports' : 'Source Directory'}</span>
-          <h1>{page === 'sources' ? '소스 현황' : page === 'reports' ? '보고서' : '매크로 브리핑'}</h1>
-          <p>{page === 'sources' ? `${feedCounts.length}개 소스가 최근 기여한 기사 수`
-            : page === 'reports' ? 'LLM 없이 기사·지표 데이터를 규칙 기반으로 집계한 자동 보고서입니다.'
-            : `매크로 기사 ${macroCount.toLocaleString()}건과 핵심 지표를 EP 산업 뉴스와 분리해 봅니다.`}</p>
-          {page === 'macro' && <span className="pageHeaderMeta">{indicatorMeta.totalIndicators}개 지표 · {formatDate(indicatorMeta.generatedAt)} 갱신</span>}
+          <h1>{page === 'sources' ? t(uiLang, '소스 현황', 'Source Directory') : page === 'reports' ? t(uiLang, '보고서', 'Reports') : t(uiLang, '매크로 브리핑', 'Macro Briefing')}</h1>
+          <p>{page === 'sources' ? t(uiLang, `${feedCounts.length}개 소스가 최근 기여한 기사 수`, `${feedCounts.length} sources with recent contributions`)
+            : page === 'reports' ? t(uiLang, 'LLM 없이 기사·지표 데이터를 규칙 기반으로 집계한 자동 보고서입니다.', 'Rule-based reports from article and indicator data, without LLM calls.')
+            : t(uiLang, `매크로 기사 ${macroCount.toLocaleString()}건과 핵심 지표를 EP 산업 뉴스와 분리해 봅니다.`, `${macroCount.toLocaleString()} macro articles and key indicators separated from EP industry news.`)}</p>
+          {page === 'macro' && <span className="pageHeaderMeta">{indicatorMeta.totalIndicators}{t(uiLang, '개 지표', ' indicators')} · {formatDate(indicatorMeta.generatedAt)} {t(uiLang, '갱신', 'updated')}</span>}
           {page === 'reports' && <span className="pageHeaderMeta">기준 데이터 · {formatDate(reportModel.generatedAt)}</span>}
         </div>
         <div className={`headerActions ${page === 'macro' ? 'macroHeaderActions' : ''}`}>
@@ -751,12 +764,12 @@ export default function Dashboard({
             ))}
           </div>}
           <div className="headerUtilityActions">
-            {page === 'sources' && <button className="ghost" onClick={() => refresh()} disabled={loading}>{loading ? '불러오는 중…' : '새로고침'}</button>}
+            {page === 'sources' && <button className="ghost" onClick={() => refresh()} disabled={loading}>{loading ? t(uiLang, '불러오는 중…', 'Loading…') : t(uiLang, '새로고침', 'Refresh')}</button>}
           </div>
         </div>
       </header>}
       {page === 'feed' ? <>
-        <div className="laneNotice epLaneNotice"><b>EP 산업 뉴스 레인</b><span>매크로 기사는 기본 피드에서 분리했습니다. 환율·PMI·GDP·유가 뉴스는 매크로 브리핑에서 확인하세요.</span><button onClick={() => setPage('macro')}>매크로 보기</button></div>
+        <div className="laneNotice epLaneNotice"><b>{t(uiLang, 'EP 산업 뉴스 레인', 'EP Industry News Lane')}</b><span>{t(uiLang, '매크로 기사는 기본 피드에서 분리했습니다. 환율·PMI·GDP·유가 뉴스는 매크로 브리핑에서 확인하세요.', 'Macro articles are separated from the default feed. FX, PMI, GDP and oil updates live in Macro Briefing.')}</span><button onClick={() => setPage('macro')}>{t(uiLang, '매크로 보기', 'View macro')}</button></div>
         <FeedHeader
           lastCollectedAt={stats.lastCollectedAt}
           resultsCount={filtered.length}
@@ -766,11 +779,12 @@ export default function Dashboard({
           onSortChange={(v) => { setSort(v); setVisibleCount(12); }}
           advancedOpen={showAdvanced}
           onToggleAdvanced={() => setShowAdvanced((v) => !v)}
+          lang={uiLang}
         />
 
         {showAdvanced && <div id="feedAdvancedPanel" className="feedAdvancedPanel">
           <div className="feedAdvancedRow">
-            <span className="feedAdvancedLabel">언어</span>
+            <span className="feedAdvancedLabel">{t(uiLang, '언어', 'Article language')}</span>
             <div className="tabs smallTabs">
               {Object.entries(LANGUAGE_LABELS).map(([k, v]) => (
                 <button key={k} className={selectedLanguages.includes(k) ? 'active' : ''} onClick={() => { toggle(selectedLanguages, k, setSelectedLanguages); setVisibleCount(12); }}>{v}</button>
@@ -778,12 +792,12 @@ export default function Dashboard({
             </div>
           </div>
           <div className="feedAdvancedRow">
-            <label className="scoreSlider">최소 Impact {minScore}
+            <label className="scoreSlider">{t(uiLang, '최소 Impact', 'Minimum Impact')} {minScore}
               <input type="range" min="0" max="100" step="5" value={minScore} onChange={(e) => { setMinScore(Number(e.target.value)); setVisibleCount(12); }} />
             </label>
             <label className={`customDays ${customDays ? 'active' : ''}`}>
-              직접 입력(일)
-              <input type="number" min={1} max={730} value={customDays ? days : ''} placeholder="일수"
+              {t(uiLang, '직접 입력(일)', 'Custom days')}
+              <input type="number" min={1} max={730} value={customDays ? days : ''} placeholder={t(uiLang, '일수', 'Days')}
                 onChange={(e) => { const v = Number(e.target.value); if (v > 0) { setCustomDays(true); setDays(v); } }}
                 onBlur={() => refresh()} onKeyDown={(e) => { if (e.key === 'Enter') refresh(); }} />
             </label>
@@ -797,17 +811,19 @@ export default function Dashboard({
           totalCount={epArticles.length}
           onToggle={(id) => { toggle(selectedCategories, id, setSelectedCategories); setVisibleCount(12); }}
           onSelectAll={() => { setSelectedCategories([]); setVisibleCount(12); }}
+          lang={uiLang}
         />
 
         <div className="feedLayout">
           <div className="feedMain" id="feedArticles">
             {heroArticle && <FeedHero
               article={heroArticle}
-              categoryLabel={categoryById.get(heroArticle.category)?.label || heroArticle.category}
+              categoryLabel={categoryLabelFor(categoryById.get(heroArticle.category)?.label || heroArticle.category, uiLang)}
+              lang={uiLang}
               categoryColor={categoryById.get(heroArticle.category)?.color || '#E8A63C'}
             />}
             {filtered.length === 0 ? (
-              <div className="empty"><b>조건에 맞는 기사가 없습니다</b><span>검색어를 지우거나 기간을 늘려보세요. 뉴스와 지표는 스케줄러가 자동으로 갱신합니다.</span></div>
+              <div className="empty"><b>{t(uiLang, '조건에 맞는 기사가 없습니다', 'No articles match your filters')}</b><span>{t(uiLang, '검색어를 지우거나 기간을 늘려보세요. 뉴스와 지표는 스케줄러가 자동으로 갱신합니다.', 'Clear the search term or extend the period. News and indicators refresh automatically.')}</span></div>
             ) : visibleGeneralArticles.length > 0 ? (
               <>
               <div className="feedGrid">
@@ -816,14 +832,15 @@ export default function Dashboard({
                     key={a.id}
                     article={a}
                     index={i}
-                    categoryLabel={categoryById.get(a.category)?.label || a.category}
+                    categoryLabel={categoryLabelFor(categoryById.get(a.category)?.label || a.category, uiLang)}
+                    lang={uiLang}
                     categoryColor={categoryById.get(a.category)?.color || '#E8A63C'}
                   />
                 ))}
               </div>
               {generalArticles.length > visibleGeneralArticles.length && (
                 <button type="button" className="feedMoreBtn" onClick={() => setVisibleCount((v) => v + 12)}>
-                  {Math.min(12, generalArticles.length - visibleGeneralArticles.length).toLocaleString()}건 더 보기 · 남은 {(generalArticles.length - visibleGeneralArticles.length).toLocaleString()}건
+                  {uiLang === 'en' ? `Show ${Math.min(12, generalArticles.length - visibleGeneralArticles.length).toLocaleString()} more · ${(generalArticles.length - visibleGeneralArticles.length).toLocaleString()} remaining` : `${Math.min(12, generalArticles.length - visibleGeneralArticles.length).toLocaleString()}건 더 보기 · 남은 ${(generalArticles.length - visibleGeneralArticles.length).toLocaleString()}건`}
                 </button>
               )}
               </>
@@ -851,6 +868,7 @@ export default function Dashboard({
               setVisibleCount(12); changePeriod(30);
             }}
             resultCount={filtered.length}
+            lang={uiLang}
           />
         </div>
       </> : page === 'macro' ? <>
@@ -863,12 +881,12 @@ export default function Dashboard({
           </div>
           <div className="macroHighlightBg" aria-hidden="true"><Sparkline history={macroHighlight.indicator.history} width={420} height={140} className="macroHighlightBgChart" /></div>
           <div className="macroHighlightMain">
-            <span className="macroHighlightLabel">{isTodayKst(macroHighlight.news.publishedAt) ? '오늘의 인사이트' : '최근 인사이트'}</span>
-            <h2>{editorialHeadline(macroHighlight.news.title, macroHighlight.news.sourceName)}</h2>
+            <span className="macroHighlightLabel">{isTodayKst(macroHighlight.news.publishedAt) ? t(uiLang, '오늘의 인사이트', 'Insight Today') : t(uiLang, '최근 인사이트', 'Recent Insight')}</span>
+            <h2>{editorialHeadline(displayArticleTitle(macroHighlight.news, uiLang), macroHighlight.news.sourceName)}</h2>
             {macroHighlight.news.summary && <p className="macroHighlightSummary">{macroHighlight.news.summary}</p>}
             <div className="macroHighlightActions">
-              <a href={macroHighlight.news.link} target="_blank" rel="noreferrer">뉴스 원문 보기 →</a>
-              <Link href={`/indicators/${macroHighlight.indicator.id}`} className="ghostLink">관련 지표 보기</Link>
+              <a href={macroHighlight.news.link} target="_blank" rel="noreferrer">{t(uiLang, '뉴스 원문 보기 →', 'Read original →')}</a>
+              <Link href={`/indicators/${macroHighlight.indicator.id}`} className="ghostLink">{t(uiLang, '관련 지표 보기', 'Related indicator')}</Link>
             </div>
           </div>
           <div className="macroHighlightMeta">
@@ -885,18 +903,18 @@ export default function Dashboard({
 
         <section className="macroNewsLane">
           <div className="macroNewsHead">
-            <div><span>Macro News Lane</span><b>매크로 기사 브리핑</b><p>환율·유가·GDP·PMI·통상 이슈는 EP 산업 뉴스와 분리해 관리합니다.</p></div>
-            <strong>{macroCount.toLocaleString()}건</strong>
+            <div><span>Macro News Lane</span><b>{t(uiLang, '매크로 기사 브리핑', 'Macro News Briefing')}</b><p>{t(uiLang, '환율·유가·GDP·PMI·통상 이슈는 EP 산업 뉴스와 분리해 관리합니다.', 'FX, oil, GDP, PMI and trade issues are managed separately from EP industry news.')}</p></div>
+            <strong>{macroCount.toLocaleString()}{t(uiLang, '건', '')}</strong>
           </div>
           <div className="macroNewsGrid">
             <div className="macroNewsList">
               {macroNewsCards.length ? macroNewsCards.map((a) => <a className="macroNewsRow" href={a.link} target="_blank" rel="noreferrer" key={a.id}>
-                <div><b>{editorialHeadline(stripMacroPrefix(a.titleKo || a.title), a.sourceName || a.feedName)}</b><small>{a.sourceName || a.feedName} · {shortDate(a.publishedAt)} · Impact {a.score || 0}</small></div>
-                <span>원문 ↗</span>
+                <div><b>{editorialHeadline(stripMacroPrefix(displayArticleTitle(a, uiLang)), a.sourceName || a.feedName)}</b><small>{a.sourceName || a.feedName} · {shortDate(a.publishedAt)} · Impact {a.score || 0}</small></div>
+                <span>{t(uiLang, '원문 ↗', 'Original ↗')}</span>
               </a>) : <div className="empty small">매크로 기사가 없습니다</div>}
             </div>
             <aside className="macroNewsSources">
-              <b>주요 매크로 소스</b>
+              <b>{t(uiLang, '주요 매크로 소스', 'Key Macro Sources')}</b>
               {macroNewsSources.map(([name, count]) => <div key={name}><span>{name}</span><strong>{count}</strong></div>)}
             </aside>
           </div>
@@ -936,13 +954,13 @@ export default function Dashboard({
         {reportTab === 'monthly' && renderReportBlock('월간 리뷰', reportModel.monthly)}
         {reportTab === 'theme' && <div className="reportPage"><section className="reportPanel"><div className="reportPanelHead"><b>테마 리포트</b><span>카테고리별 자동 묶음</span></div><div className="themeReportGrid">{reportModel.themeRows.map((theme) => <article className="themeReportCard" key={theme.id}><span>{theme.label}</span><b>{theme.count.toLocaleString()}건</b><small>평균 Impact {theme.avgScore}</small><div>{theme.top.map((a, i) => renderReportArticle(a, i))}</div></article>)}</div></section></div>}
       </> : <>
-        <div className="laneNotice"><b>소스도 EP 기준으로 표시</b><span>매크로 소스는 매크로 브리핑 레인에서 별도로 집계합니다.</span></div>
-        <div className="filters"><input className="searchInput" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="소스 검색…" /></div>
-        <div className="sourceList">{feedCounts.filter(([name]) => !query || name.toLowerCase().includes(query.toLowerCase())).map(([name, info]) => <div className="sourceRow" key={name}><div className="sourceInfo"><b>{name}</b><span>{info.region} · {info.type}</span></div><div className="sourceStats"><strong>{info.count}</strong><span>최근 기여</span></div></div>)}</div>
+        <div className="laneNotice"><b>{t(uiLang, '소스도 EP 기준으로 표시', 'Sources are shown by EP relevance')}</b><span>{t(uiLang, '매크로 소스는 매크로 브리핑 레인에서 별도로 집계합니다.', 'Macro sources are counted separately in the Macro Briefing lane.')}</span></div>
+        <div className="filters"><input className="searchInput" value={query} onChange={(e) => setQuery(e.target.value)} placeholder={t(uiLang, '소스 검색…', 'Search sources…')} /></div>
+        <div className="sourceList">{feedCounts.filter(([name]) => !query || name.toLowerCase().includes(query.toLowerCase())).map(([name, info]) => <div className="sourceRow" key={name}><div className="sourceInfo"><b>{name}</b><span>{info.region} · {info.type}</span></div><div className="sourceStats"><strong>{info.count}</strong><span>{t(uiLang, '최근 기여', 'Recent contributions')}</span></div></div>)}</div>
       </>}
       <footer className="contentCredit">
-        <span>LG화학 엔지니어링소재 사업부 마케팅전략팀 제작</span>
-        <a href="mailto:qdong@lgchem.com">문의 qdong@lgchem.com</a>
+        <span>{t(uiLang, 'LG화학 엔지니어링소재 사업부 마케팅전략팀 제작', 'Built by LG Chem Engineering Materials Marketing Strategy Team')}</span>
+        <a href="mailto:qdong@lgchem.com">{t(uiLang, '문의', 'Contact')} qdong@lgchem.com</a>
       </footer>
     </section>
   </main>;
