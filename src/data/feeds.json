@@ -444,7 +444,7 @@
     "name": "ICIS",
     "url": "https://news.google.com/rss/search?q=site%3Aicis.com&hl=en&gl=US&ceid=US:en",
     "category": "업계 미디어",
-    "enabled": true,
+    "enabled": false,
     "sourceWorkflowNode": "RSS_ICIS"
   },
   {
@@ -1268,7 +1268,7 @@
     "name": "ICIS Petrochemical",
     "url": "https://news.google.com/rss/search?q=site%3Aicis.com%20petrochemical%20OR%20polymer%20OR%20%22engineering%20plastics%22&hl=en-US&gl=US&ceid=US:en",
     "category": "macro",
-    "enabled": true,
+    "enabled": false,
     "sourceWorkflowNode": "GN_icis-petrochem"
   },
   {

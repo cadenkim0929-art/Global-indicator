@@ -103,6 +103,13 @@ const KILL_PATTERNS = [
   /(^|\s|\[)(article|기사)\s*[-–—|:]\s*(login|로그인)\s*[-–—|:]/i,
   /\b(login|sign\s?in|subscribe|subscription required|access denied|paywall)\b\s*[-–—|:]\s*(icis|article)/i,
   /로그인\s*[-–—|:]\s*(icis|기사)/i,
+  // [v5.49] Google News + ICIS는 로그인/권한 차단 페이지를 제목 없이 "- ICIS" 또는
+  // 짧은 출처 suffix만으로 반복 배출한다. 본문도 없고 원문 접근이 막혀 매크로 레인 품질을
+  // 떨어뜨리므로 ICIS placeholder는 수집/표시 양쪽에서 fail-closed 처리한다.
+  /^\s*(\[(매크로|Macro)\]\s*)?[-–—|:]?\s*ICIS\s*$/i,
+  /^\s*(\[(매크로|Macro)\]\s*)?[-–—|:]\s*ICIS\s*$/i,
+  /[-–—|:]\s*ICIS\s*$/i,
+  /news\.google\.com\/rss\/articles\/.*\bICIS\b/i,
   // [v5.20] FX 차트/기술적 분석 업데이트(Continuum Economics 등)는 산업 뉴스가 아니라
   // 단기 트레이딩 코멘트라 매크로 피드에서 제외. 예: "Chart USD/KRW Update: Consolidating... support".
   /\bchart\s+(usd\/krw|usdkrw|eur\/usd|usd\/jpy|usd\/cny)\s+update\b/i,
@@ -409,11 +416,15 @@ function killed(title: string, link: string, summary='') {
   const d = domainOf(link);
   const text = `${title} ${summary} ${link}`;
   const lower = text.toLowerCase();
+  if (/\bicis\b/i.test(text)) return true;
   return KILL_DOMAINS.some(k => d.includes(k))
     || TITLE_KILL_REGEX.test(title)
     || KILL_PATTERNS.some(r => r.test(text))
     || RESEARCH_COMPANIES.some(c => lower.includes(c))
     || IR_FLUFF_REGEX.test(title);
+}
+function pruneKilledRawArticles(articles: Article[]) {
+  return articles.filter((a) => !killed(a.title || '', a.link || '', `${a.summary || ''} ${a.sourceName || ''} ${a.feedName || ''} ${a.source || ''}`));
 }
 // [v2.8] passesGates 로직 정리:
 //  - hasCoreSignal: EP 재료명/기업명/미래성장 키워드 중 하나라도 있으면 true
@@ -775,7 +786,7 @@ export async function collectFeeds(options?: { maxFeeds?: number; category?: str
   for (let i = 0; i < enabledFeeds.length; i += CONCURRENCY) {
     const batch = enabledFeeds.slice(i, i + CONCURRENCY);
     await Promise.all(batch.map(fetchOne));
-    writeArticles(Array.from(byId.values()).slice(0, 5000)); // 배치마다 즉시 반영
+    writeArticles(pruneKilledRawArticles(Array.from(byId.values())).slice(0, 5000)); // 배치마다 즉시 반영
   }
 
   const durationMs = Date.now() - startedAt;
@@ -810,6 +821,7 @@ export function queryArticles(filters: ArticleFilters = {}) {
     articles = dedupeSearchWireCopies(articles);
     articles = articles.sort((a, b) => (b.score || 0) - (a.score || 0) || +new Date(b.publishedAt) - +new Date(a.publishedAt));
   }
+  articles = articles.filter((a) => !killed(a.title || '', a.link || '', `${a.summary || ''} ${a.sourceName || ''} ${a.feedName || ''} ${a.source || ''}`));
   return articles.slice(0, filters.limit ?? 200);
 }
 export function getStats(days: number = DEFAULT_LOOKBACK_DAYS) { const raw=readRawArticles(); const articles=processedArticles(days); const feedsList=getFeeds(); const cats=['전체', ...CATEGORY_META.map(c=>c.id)]; const counts=cats.map(category=>({ category, label: category==='전체'?'전체':CATEGORY_META.find(c=>c.id===category)?.label || category, count: category==='전체'?articles.length:articles.filter(a=>a.category===category).length, feeds: category==='전체'?feedsList.length:feedsList.length })); const lastCollectedAt=raw.map(a=>a.collectedAt).sort().at(-1)||null; const topTags=Object.entries(articles.flatMap(a=>a.tags).reduce<Record<string,number>>((acc,tag)=>{acc[tag]=(acc[tag]||0)+1; return acc;},{})).sort((a,b)=>b[1]-a[1]).slice(0,30).map(([tag,count])=>({tag,count})); return { totalArticles: raw.length, filteredArticles: articles.length, totalFeeds: feedsList.length, counts, lastCollectedAt, topTags, categories: CATEGORY_META, lookbackDays: days }; }
