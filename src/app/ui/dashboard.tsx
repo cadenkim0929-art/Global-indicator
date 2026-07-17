@@ -218,14 +218,15 @@ export default function Dashboard({
   const categoryById = useMemo(() => new Map((stats.categories || []).map((c) => [c.id, c])), [stats.categories]);
   const epArticles = useMemo(() => articles.filter((a) => !isMacroArticle(a)), [articles]);
   const macroArticles = useMemo(() => articles.filter(isMacroArticle), [articles]);
+  const statsCount = (category: string) => stats.counts.find((row) => row.category === category)?.count || 0;
+  const macroTotalCount = statsCount('macro-trade') || macroArticles.length;
+  const epTotalCount = Math.max(0, (stats.counts.find((row) => row.category === '전체')?.count || stats.filteredArticles || articles.length) - macroTotalCount);
   const epCounts = useMemo(() => {
-    const countMap = new Map<string, number>();
-    epArticles.forEach((a) => countMap.set(a.category, (countMap.get(a.category) || 0) + 1));
     return stats.counts.map((row) => row.category === '전체'
-      ? { ...row, count: epArticles.length }
-      : { ...row, count: countMap.get(row.category) || 0 }).filter((row) => row.category === '전체' || row.category !== 'macro-trade');
-  }, [epArticles, stats.counts]);
-  const macroCount = macroArticles.length;
+      ? { ...row, count: epTotalCount }
+      : row).filter((row) => row.category === '전체' || row.category !== 'macro-trade');
+  }, [epTotalCount, stats.counts]);
+  const macroCount = macroTotalCount;
   const visibleCategories = categories.filter((c) =>
     // [v5.39] 카테고리 탭 노출은 현재 클라이언트에 로드된 기사 subset이 아니라
     // 서버 stats.counts 기준으로 판단한다. 재무리스크처럼 빈도는 낮지만 중요한 레인은
@@ -263,6 +264,8 @@ export default function Dashboard({
     [filtered, heroArticle],
   );
   const visibleGeneralArticles = generalArticles.slice(0, visibleCount);
+  const isDefaultFeedFilter = selectedCategories.length === 0 && selectedLanguages.length === 0 && minScore === 0 && query.trim() === '';
+  const displayedResultCount = isDefaultFeedFilter ? epTotalCount : filtered.length;
   const keywordList = useMemo(
     () => buildKeywordList(stats.topTags, filtered, 10),
     [stats.topTags, filtered],
@@ -337,7 +340,7 @@ export default function Dashboard({
       // Search mode favors recall: query the server with a wider lookback and
       // larger limit instead of filtering only the already-loaded feed page.
       const effectiveDays = q ? Math.max(nextDays, 730) : nextDays;
-      const params = new URLSearchParams({ limit: q ? '1000' : '1000', days: String(effectiveDays) });
+      const params = new URLSearchParams({ limit: q ? '1000' : '120', days: String(effectiveDays) });
       if (q) params.set('q', q);
       const res = await fetch(`/api/articles?${params.toString()}`);
       const data = await res.json();
@@ -749,7 +752,7 @@ export default function Dashboard({
           <span className="statusPill"><i></i>{t(uiLang, '정상', 'OK')}</span>
         </div>
         <div className="metaRow"><span>{t(uiLang, '최종 수집', 'Last collected')}</span><b>{formatDate(stats.lastCollectedAt)}</b></div>
-        <div className="metaRow"><span>{t(uiLang, 'EP 뉴스', 'EP News')}</span><b>{epArticles.length.toLocaleString()}{t(uiLang, '건 표시', ' shown')}</b></div>
+        <div className="metaRow"><span>{t(uiLang, 'EP 뉴스', 'EP News')}</span><b>{epTotalCount.toLocaleString()}{t(uiLang, '건 표시', ' shown')}</b></div>
         <div className="metaRow"><span>{t(uiLang, '매크로', 'Macro')}</span><b>{macroCount.toLocaleString()}{t(uiLang, '건 별도 레인', ' separate lane')}</b></div>
         <div className="metaRow"><span>{t(uiLang, '소스', 'Sources')}</span><b>{stats.totalFeeds}{t(uiLang, '개', '')}</b></div>
         <div className="productCredit">
@@ -787,7 +790,7 @@ export default function Dashboard({
         <div className="laneNotice epLaneNotice"><b>{t(uiLang, 'EP 산업 뉴스 레인', 'EP Industry News Lane')}</b><span>{t(uiLang, '매크로 기사는 기본 피드에서 분리했습니다. 환율·PMI·GDP·유가 뉴스는 매크로 브리핑에서 확인하세요.', 'Macro articles are separated from the default feed. FX, PMI, GDP and oil updates live in Macro Briefing.')}</span><button onClick={() => setPage('macro')}>{t(uiLang, '매크로 보기', 'View macro')}</button></div>
         <FeedHeader
           lastCollectedAt={stats.lastCollectedAt}
-          resultsCount={filtered.length}
+          resultsCount={displayedResultCount}
           query={query}
           onQueryChange={handleFeedQueryChange}
           sort={sort}
@@ -823,7 +826,7 @@ export default function Dashboard({
           categories={visibleCategories}
           selected={selectedCategories}
           counts={epCounts}
-          totalCount={epArticles.length}
+          totalCount={epTotalCount}
           onToggle={(id) => { toggle(selectedCategories, id, setSelectedCategories); setVisibleCount(12); }}
           onSelectAll={() => { setSelectedCategories([]); setVisibleCount(12); }}
           lang={uiLang}
@@ -855,7 +858,7 @@ export default function Dashboard({
               </div>
               {generalArticles.length > visibleGeneralArticles.length && (
                 <button type="button" className="feedMoreBtn" onClick={() => setVisibleCount((v) => v + 12)}>
-                  {uiLang === 'en' ? `Show ${Math.min(12, generalArticles.length - visibleGeneralArticles.length).toLocaleString()} more · ${(generalArticles.length - visibleGeneralArticles.length).toLocaleString()} remaining` : `${Math.min(12, generalArticles.length - visibleGeneralArticles.length).toLocaleString()}건 더 보기 · 남은 ${(generalArticles.length - visibleGeneralArticles.length).toLocaleString()}건`}
+                  {uiLang === 'en' ? `Show ${Math.min(12, generalArticles.length - visibleGeneralArticles.length).toLocaleString()} more from loaded articles` : `로드된 기사에서 ${Math.min(12, generalArticles.length - visibleGeneralArticles.length).toLocaleString()}건 더 보기`}
                 </button>
               )}
               </>
@@ -882,7 +885,7 @@ export default function Dashboard({
               setQuery(''); setSelectedCategories([]); setSelectedLanguages([]); setMinScore(0);
               setVisibleCount(12); changePeriod(30);
             }}
-            resultCount={filtered.length}
+            resultCount={displayedResultCount}
             lang={uiLang}
           />
         </div>
