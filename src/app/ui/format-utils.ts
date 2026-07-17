@@ -144,6 +144,7 @@ export function sourceNameFor(name: string | undefined | null, lang: UiLang = 'k
     'GA_化学工業日報': '화학공업일보',
     '新浪财经': '시나재경',
     '新浪网': '시나닷컴',
+    '搜狐网': '소후닷컴',
     'Yahoo!ファイナンス': '야후 파이낸스 재팬',
     '旭化成 エンプラ総合情報サイト': '아사히카세이 엔프라 정보사이트',
     'ゴムタイムス': '고무타임스',

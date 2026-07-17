@@ -260,7 +260,18 @@ export async function enrichWithTranslations(articles: Article[], options: { max
   // 실패 시 원문 fallback — 번역 장애가 뉴스 수집/렌더링을 막지 않도록 한다.
   const needsSummaryKo = (a: Article) => !!a.summary && detectLanguage(a.summary) !== 'ko' && (!a.summaryKo || hasTag(a.summaryKo));
   const maxTranslate = options.maxTranslate ?? 40;
-  const need = articles.filter(a => !a.titleKo || !a.titleEn || hasTag(a.titleKo) || hasTag(a.titleEn) || needsSummaryKo(a)).slice(0, maxTranslate);
+  const translationPriority = (a: Article) => {
+    const lang = detectLanguage(`${a.title || ''} ${a.summary || ''}`);
+    // [v5.55] 초기 SSR은 성능 때문에 maxTranslate를 낮게 잡는다. 이때 영문 기사보다
+    // 중·일문 원문 노출이 더 눈에 띄므로 CJK 기사를 먼저 번역한다.
+    if (lang === 'zh' || lang === 'ja') return 0;
+    if (lang === 'de') return 1;
+    return 2;
+  };
+  const need = articles
+    .filter(a => !a.titleKo || !a.titleEn || hasTag(a.titleKo) || hasTag(a.titleEn) || needsSummaryKo(a))
+    .sort((a, b) => translationPriority(a) - translationPriority(b))
+    .slice(0, maxTranslate);
   if (need.length === 0) return articles;
 
   const raw = readRawArticles();
