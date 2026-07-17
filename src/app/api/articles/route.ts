@@ -10,6 +10,6 @@ export async function GET(request: Request) {
   const tag = searchParams.get('tag') || undefined;
   const limit = Number(searchParams.get('limit') || 200);
   const days = searchParams.get('days') ? Number(searchParams.get('days')) : DEFAULT_LOOKBACK_DAYS;
-  const articles = await enrichWithTranslations(queryArticles({ category, query, tag, limit, days }), { maxTranslate: 0 });
+  const articles = await enrichWithTranslations(queryArticles({ category, query, tag, limit, days }));
   return NextResponse.json({ articles, stats: getStats(days) });
 }

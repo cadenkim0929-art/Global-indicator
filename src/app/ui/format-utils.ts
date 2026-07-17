@@ -96,10 +96,11 @@ export function displayArticleTitle(article: Pick<Article, 'title' | 'titleKo' |
   return candidate;
 }
 
-export function secondaryArticleTitle(article: Pick<Article, 'title' | 'titleKo' | 'titleEn'>, lang: UiLang = 'ko') {
-  const { titleEn } = resolveTitles(article);
-  if (lang === 'en') return null;
-  return titleEn;
+export function secondaryArticleTitle(_article: Pick<Article, 'title' | 'titleKo' | 'titleEn'>, _lang: UiLang = 'ko') {
+  // [v5.52] 한국어 모드에서 원문/영문 제목을 부제처럼 병기하면 사용자가
+  // "번역이 안 된 기사"로 인식한다. 원문 접근은 카드 하단의 "원문 ↗" 링크로
+  // 충분하므로 카드 제목 영역에는 현재 UI 언어의 단일 제목만 표시한다.
+  return null;
 }
 
 export function categoryLabelFor(label: string, lang: UiLang = 'ko') {
@@ -138,7 +139,21 @@ export function categoryLabelFor(label: string, lang: UiLang = 'ko') {
 
 export function sourceNameFor(name: string | undefined | null, lang: UiLang = 'ko') {
   const raw = (name || '').trim();
-  if (!raw || lang === 'ko') return raw;
+  if (!raw) return raw;
+  const koAliases: Record<string, string> = {
+    'GA_化学工業日報': '화학공업일보',
+    '新浪财经': '시나재경',
+    '新浪网': '시나닷컴',
+    'Yahoo!ファイナンス': '야후 파이낸스 재팬',
+    '旭化成 エンプラ総合情報サイト': '아사히카세이 엔프라 정보사이트',
+    'ゴムタイムス': '고무타임스',
+    '京都新聞': '교토신문',
+    '日刊ケミカルニュース': '일간 케미컬뉴스',
+    'トレーダーズ・ウェブ': '트레이더스웹',
+    '財聯社': '차이롄서',
+    '财联社': '차이롄서',
+  };
+  if (lang === 'ko') return koAliases[raw] || raw;
   const aliases: Record<string, string> = {
     'GA_케미컬뉴스': 'Chemical News Korea',
     'GA_化学工業日報': 'The Chemical Daily',
