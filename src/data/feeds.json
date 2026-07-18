@@ -476,7 +476,7 @@
     "name": "GA_Chinaplas",
     "url": "https://news.google.com/rss/search?q=site:chinaplasonline.com&hl=en-US&gl=US&ceid=US:en",
     "category": "응용 산업",
-    "enabled": true,
+    "enabled": false,
     "sourceWorkflowNode": "GA_Chinaplas"
   },
   {

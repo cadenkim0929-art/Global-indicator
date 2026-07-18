@@ -146,6 +146,8 @@ const KILL_PATTERNS = [
   /\b(earnings|profits?|revenue|impairment)\b.{0,80}\b(slump|fall|sink|softens?|investors?|shares?|stock|buying opportunity)\b/i,
   /\b(care chemicals|personal care|fragrance ingredients?|fungicide|cosmetics?|longevity)\b/i,
   /\b(campaign|brand\s+campaign|celebrat(?:e|es|ing)\s+the\s+people|behind\s+everyday\s+products?|i\s+helped\s+make\s+this)\b/i,
+  /\b(international\s+exhibition\s+on\s+plastics\s+and\s+rubber\s+industries|about\s+chinaplas|why\s+visit\s+chinaplas|facts\s+&\s+figures|video\s+gallery|exhibitors\s+list|virtual\s+exhibition|cps\+\s+points\s+activities)\b/i,
+  /\b(chinaplas)\b.{0,80}\b(about|why\s+visit|facts\s+&\s+figures|home|video\s+gallery|exhibitors\s+list|virtual\s+exhibition|cps\+\s+points)\b/i,
   /\b(seeking\s+alpha|return\s+potential|stock\s+in\s+focus|\([A-Z]{2,5}Y?\)\s*[-–—]?\s*seeking\s+alpha)\b/i,
   /\b(obituary|funeral\s+home|legacy\s+obituary)\b/i,
   /\b(clinical\s+cost|pharma\s+input\s+price|dietary\s+supplement\s+industries)\b/i,
@@ -371,6 +373,7 @@ function extractTags(text: string): string[] { const lower=text.toLowerCase(); r
 function classifyArticle(text: string, fallback?: string) {
   const lower = text.toLowerCase();
   if (FINANCIAL_RISK_REGEX.test(text)) return 'financial-risk';
+  if (/\bchinaplas\b/i.test(text)) return 'signals';
   if (/(regulation|compliance|tariff|antidumping|lawsuit|fine|공정위|중기부|검찰|고발|제재|규제|관세)/i.test(text)) return 'regulation';
   if (/(caprolactam|bpa|bisphenol|naphtha|benzene|butadiene|mdi|tdi|monomer|원료|나프타|카프로락탐)/i.test(text)) return 'upstream';
   // [v1.0] n8n v5.6/v5.7 이식: 미래 성장동력 응용처는 electronics-emobility/
