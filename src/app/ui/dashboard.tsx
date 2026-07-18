@@ -179,6 +179,7 @@ export default function Dashboard({
   // "더 보기" 표시 개수. 필터가 바뀌면 12개로 리셋해서 항상 첫 페이지부터 보여준다.
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [visibleCount, setVisibleCount] = useState(12);
+  const [loadedLimit, setLoadedLimit] = useState(initialArticles.length || 120);
   // [v1.0] Global Indicators 통합 — 매크로 지표 상태
   const [allIndicators, setAllIndicators] = useState(initialIndicators);
   const [indicatorMeta, setIndicatorMeta] = useState(initialIndicatorMeta);
@@ -266,6 +267,8 @@ export default function Dashboard({
   const visibleGeneralArticles = generalArticles.slice(0, visibleCount);
   const isDefaultFeedFilter = selectedCategories.length === 0 && selectedLanguages.length === 0 && minScore === 0 && query.trim() === '';
   const displayedResultCount = isDefaultFeedFilter ? epTotalCount : filtered.length;
+  const loadedEpCount = epArticles.length;
+  const canLoadMoreFromServer = !query.trim() && loadedEpCount < epTotalCount;
   const keywordList = useMemo(
     () => buildKeywordList(stats.topTags, filtered, 10),
     [stats.topTags, filtered],
@@ -333,26 +336,41 @@ export default function Dashboard({
     };
   }, [articles, allIndicators, categoryById, stats.categories]);
 
-  async function refresh(nextDays = days, nextQuery = query) {
+  async function refresh(nextDays = days, nextQuery = query, nextLimit?: number) {
     setLoading(true);
     try {
       const q = nextQuery.trim();
       // Search mode favors recall: query the server with a wider lookback and
       // larger limit instead of filtering only the already-loaded feed page.
       const effectiveDays = q ? Math.max(nextDays, 730) : nextDays;
-      const params = new URLSearchParams({ limit: q ? '1000' : '120', days: String(effectiveDays) });
+      const limit = q ? 1000 : (nextLimit || loadedLimit || 120);
+      const params = new URLSearchParams({ limit: String(limit), days: String(effectiveDays) });
       if (q) params.set('q', q);
       const res = await fetch(`/api/articles?${params.toString()}`);
       const data = await res.json();
       setArticles(data.articles);
       setStats(data.stats);
+      setLoadedLimit(limit);
     } finally { setLoading(false); }
+  }
+
+  async function loadMoreFeedArticles() {
+    if (generalArticles.length > visibleGeneralArticles.length) {
+      setVisibleCount((v) => v + 12);
+      return;
+    }
+    if (!canLoadMoreFromServer) return;
+    const nextLimit = Math.min(Math.max(loadedLimit + 120, 240), Math.max(epTotalCount + macroTotalCount, loadedLimit + 120));
+    await refresh(days, query, nextLimit);
+    setVisibleCount((v) => v + 12);
   }
 
   function handleFeedQueryChange(value: string) {
     setQuery(value);
     setVisibleCount(12);
-    void refresh(days, value);
+    const nextLimit = value.trim() ? 1000 : 120;
+    setLoadedLimit(nextLimit);
+    void refresh(days, value, nextLimit);
   }
 
   function toggle(list: string[], value: string, setter: (v: string[]) => void) {
@@ -361,7 +379,8 @@ export default function Dashboard({
   function changePeriod(nextDays: number) {
     setDays(nextDays);
     setCustomDays(!PERIOD_PRESETS.some((p) => p.days === nextDays));
-    refresh(nextDays);
+    setLoadedLimit(120);
+    refresh(nextDays, query, 120);
   }
 
   const indicators = allIndicators.filter((c) => indicatorHorizon(c) === indicatorHorizonKey);
@@ -841,7 +860,7 @@ export default function Dashboard({
               categoryColor={categoryById.get(heroArticle.category)?.color || '#E8A63C'}
             />}
             {filtered.length === 0 ? (
-              <div className="empty"><b>{t(uiLang, '조건에 맞는 기사가 없습니다', 'No articles match your filters')}</b><span>{t(uiLang, '검색어를 지우거나 기간을 늘려보세요. 뉴스와 지표는 스케줄러가 자동으로 갱신합니다.', 'Clear the search term or extend the period. News and indicators refresh automatically.')}</span></div>
+              <div className="empty"><b>{t(uiLang, '조건에 맞는 기사가 없습니다', 'No articles match your filters')}</b><span>{t(uiLang, '현재 로드된 기사 안에는 없습니다. 기간을 늘리거나 이전 기사를 더 불러오세요.', 'No matches in the currently loaded articles. Extend the period or load older articles.')}</span>{canLoadMoreFromServer && <button type="button" className="feedMoreBtn" onClick={loadMoreFeedArticles} disabled={loading}>{loading ? t(uiLang, '불러오는 중…', 'Loading…') : t(uiLang, `이전 기사 더 불러오기 · ${loadedEpCount.toLocaleString()} / ${epTotalCount.toLocaleString()}건`, `Load older articles · ${loadedEpCount.toLocaleString()} / ${epTotalCount.toLocaleString()}`)}</button>}</div>
             ) : visibleGeneralArticles.length > 0 ? (
               <>
               <div className="feedGrid">
@@ -856,9 +875,17 @@ export default function Dashboard({
                   />
                 ))}
               </div>
-              {generalArticles.length > visibleGeneralArticles.length && (
-                <button type="button" className="feedMoreBtn" onClick={() => setVisibleCount((v) => v + 12)}>
-                  {uiLang === 'en' ? `Show ${Math.min(12, generalArticles.length - visibleGeneralArticles.length).toLocaleString()} more from loaded articles` : `로드된 기사에서 ${Math.min(12, generalArticles.length - visibleGeneralArticles.length).toLocaleString()}건 더 보기`}
+              {(generalArticles.length > visibleGeneralArticles.length || canLoadMoreFromServer) && (
+                <button type="button" className="feedMoreBtn" onClick={loadMoreFeedArticles} disabled={loading}>
+                  {loading
+                    ? t(uiLang, '불러오는 중…', 'Loading…')
+                    : generalArticles.length > visibleGeneralArticles.length
+                      ? (uiLang === 'en'
+                        ? `Show ${Math.min(12, generalArticles.length - visibleGeneralArticles.length).toLocaleString()} more from loaded articles`
+                        : `로드된 기사에서 ${Math.min(12, generalArticles.length - visibleGeneralArticles.length).toLocaleString()}건 더 보기`)
+                      : (uiLang === 'en'
+                        ? `Load older articles · ${loadedEpCount.toLocaleString()} / ${epTotalCount.toLocaleString()}`
+                        : `이전 기사 더 불러오기 · ${loadedEpCount.toLocaleString()} / ${epTotalCount.toLocaleString()}건`)}
                 </button>
               )}
               </>
