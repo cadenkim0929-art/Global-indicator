@@ -145,6 +145,7 @@ const KILL_PATTERNS = [
   /\b(stock|shares?)\b.{0,80}\b(specialty polymers?|manufacturing demand|supported by|focus amid|sink|fall|profit|earnings|revenue|investors?|ftse)\b/i,
   /\b(earnings|profits?|revenue|impairment)\b.{0,80}\b(slump|fall|sink|softens?|investors?|shares?|stock|buying opportunity)\b/i,
   /\b(care chemicals|personal care|fragrance ingredients?|fungicide|cosmetics?|longevity)\b/i,
+  /\b(campaign|brand\s+campaign|celebrat(?:e|es|ing)\s+the\s+people|behind\s+everyday\s+products?|i\s+helped\s+make\s+this)\b/i,
   /\b(seeking\s+alpha|return\s+potential|stock\s+in\s+focus|\([A-Z]{2,5}Y?\)\s*[-–—]?\s*seeking\s+alpha)\b/i,
   /\b(obituary|funeral\s+home|legacy\s+obituary)\b/i,
   /\b(clinical\s+cost|pharma\s+input\s+price|dietary\s+supplement\s+industries)\b/i,
