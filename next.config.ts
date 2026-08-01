@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const NO_STORE_HEADERS = [
   { key: "Cache-Control", value: "private, no-cache, no-store, max-age=0, must-revalidate" },
@@ -7,6 +8,9 @@ const NO_STORE_HEADERS = [
 ];
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: path.resolve(__dirname),
+  },
   async headers() {
     return [
       { source: "/:path*", headers: NO_STORE_HEADERS },

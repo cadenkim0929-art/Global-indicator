@@ -20,6 +20,7 @@ export interface Article {
   link: string;
   summary: string;
   summaryKo?: string;
+  summaryEn?: string;
   contentSnippet?: string;
   publishedAt: string;
   collectedAt: string;
@@ -66,17 +67,27 @@ export interface IndicatorObservation {
 
 export interface RelatedNewsItem {
   title: string;
+  titleKo?: string;
+  titleEn?: string;
   link: string;
   publishedAt: string;
   sourceName: string;
+  summary?: string;
+  summaryKo?: string;
+  summaryEn?: string;
+  tags?: string[];
 }
 
 export interface IndicatorCard extends IndicatorCatalogItem {
   latestValue: number | null;
   latestPeriod: string | null;
+  previousPeriod?: string | null;
   previousValue: number | null;
   pctChange: number | null;
   dataStatus: 'ok' | 'stale' | 'insufficient';
+  changeStatus?: 'ok' | 'gap' | 'insufficient';
+  changeIntervalDays?: number | null;
+  dataWarning?: string;
   history: IndicatorObservation[];
   relatedNews: RelatedNewsItem[];
 }

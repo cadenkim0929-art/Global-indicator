@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import type { IndicatorCard, IndicatorFrequency, IndicatorObservation } from '@/lib/types';
+import { displayArticleTitle, indicatorNameFor, sourceNameFor, t, type UiLang } from './format-utils';
 
 type IndicatorProfile = 'pmi' | 'rate' | 'fx' | 'commodity' | 'production' | 'inflation' | 'growth' | 'gdp-level' | 'default';
 
@@ -17,23 +18,7 @@ interface IndicatorDetailProps {
   defaultSeriesId: string;
 }
 
-type RangeOption = { label: string; count: number | null };
 type StatItem = { label: string; value: string; note?: string };
-
-const RANGE_OPTIONS: Record<IndicatorFrequency, RangeOption[]> = {
-  daily: [
-    { label: '1M', count: 22 }, { label: '3M', count: 66 }, { label: '1Y', count: 252 }, { label: '전체', count: null },
-  ],
-  monthly: [
-    { label: '1Y', count: 12 }, { label: '3Y', count: 36 }, { label: '5Y', count: 60 }, { label: '전체', count: null },
-  ],
-  quarterly: [
-    { label: '2Y', count: 8 }, { label: '5Y', count: 20 }, { label: '10Y', count: 40 }, { label: '전체', count: null },
-  ],
-  yearly: [
-    { label: '5Y', count: 5 }, { label: '10Y', count: 10 }, { label: '20Y', count: 20 }, { label: '전체', count: null },
-  ],
-};
 
 function profileFor(indicator: IndicatorCard): IndicatorProfile {
   if (indicator.id.includes('pmi')) return 'pmi';
@@ -47,9 +32,9 @@ function profileFor(indicator: IndicatorCard): IndicatorProfile {
   return 'default';
 }
 
-function compactUnit(unit: string) {
-  if (/krw per usd/i.test(unit)) return '원/USD';
-  if (/cny per usd/i.test(unit)) return '위안/USD';
+function compactUnit(unit: string, lang: UiLang = 'ko') {
+  if (/krw per usd/i.test(unit)) return t(lang, '원/USD', 'KRW/USD');
+  if (/cny per usd/i.test(unit)) return t(lang, '위안/USD', 'CNY/USD');
   if (/usd\/bbl/i.test(unit)) return 'USD/bbl';
   if (/percent|growth|yoy|qoq/i.test(unit)) return '%';
   if (/points/i.test(unit)) return 'pt';
@@ -61,9 +46,9 @@ function formatNumber(value: number | null | undefined, maximumFractionDigits = 
   return value.toLocaleString('ko-KR', { maximumFractionDigits });
 }
 
-function formatValue(value: number | null | undefined, unit: string) {
+function formatValue(value: number | null | undefined, unit: string, lang: UiLang = 'ko') {
   if (value == null) return '—';
-  return `${formatNumber(value, Math.abs(value) < 10 ? 3 : 2)} ${compactUnit(unit)}`;
+  return `${formatNumber(value, Math.abs(value) < 10 ? 3 : 2)} ${compactUnit(unit, lang)}`;
 }
 
 function deltaPct(latest?: number, previous?: number) {
@@ -89,10 +74,11 @@ function formatPeriod(period: string | null, frequency: IndicatorFrequency) {
     const month = Number(period.slice(5, 7));
     return Number.isFinite(month) && month > 0 ? `${year}-Q${Math.floor((month - 1) / 3) + 1}` : period;
   }
+  if (frequency === 'monthly') return period.slice(0, 7);
   return period.slice(0, 10);
 }
 
-function descriptions(indicator: IndicatorCard) {
+function descriptions(indicator: IndicatorCard, lang: UiLang = 'ko') {
   const profile = profileFor(indicator);
   const copy = {
     pmi: {
@@ -132,10 +118,22 @@ function descriptions(indicator: IndicatorCard) {
       implication: '최신값뿐 아니라 직전 관측치, 장기 평균, 관련 뉴스와 함께 해석해야 일시적 변동과 구조적 추세를 구분할 수 있습니다.',
     },
   } as const;
-  return copy[profile];
+  if (lang === 'ko') return copy[profile];
+  const en = {
+    pmi: { overview: 'A forward-looking manufacturing cycle indicator based on purchasing managers’ views on new orders, production, employment and inventories. Readings above 50 indicate expansion; below 50 indicate contraction.', implication: 'New orders and production direction in PMI help judge short-term demand recovery for engineering plastics used in automotive, electronics and industrial goods.' },
+    rate: { overview: 'A market-rate and financial-conditions indicator. Rate moves affect corporate funding costs and capital investment decisions.', implication: 'Higher rates can constrain downstream investment and inventory building, while lower rates can ease financing pressure and support medium-term demand.' },
+    fx: { overview: 'A daily market indicator showing exchange value between major currencies. It affects imported feedstock costs and export profitability.', implication: 'KRW and CNY direction is important when reviewing EP feedstock procurement, export competitiveness and regional margins.' },
+    commodity: { overview: 'International crude oil prices are daily commodity indicators used as leading signals for naphtha and petrochemical feedstock costs.', implication: 'A sharp oil-price rise can raise feedstock and logistics costs; if demand does not follow, EP spreads and margins can face pressure.' },
+    production: { overview: 'A monthly real-economy indicator indexing actual mining and manufacturing production activity. It lags PMI but confirms production levels.', implication: 'Sustained improvement in industrial production can signal recovering material consumption in EP downstream sectors such as automotive, electronics and machinery.' },
+    inflation: { overview: 'A monthly price indicator tracking changes in consumer goods and services.', implication: 'Inflation pressure affects rates, wages, logistics costs and consumer purchasing power, making it a useful companion signal for EP costs and end demand.' },
+    growth: { overview: 'A growth-rate indicator showing the speed of economic expansion or contraction. Check whether the basis is QoQ or YoY together with the unit and indicator name.', implication: 'Growth direction shows broad downstream manufacturing demand. It is better to review multi-quarter averages and continuity than a single release.' },
+    'gdp-level': { overview: 'An economic-scale indicator showing the total value of final goods and services produced in a country or region over a period.', implication: 'GDP level indicates long-term market scale, while real GDP trends show the direction of downstream demand. Be careful when comparing absolute values across countries with different currencies and nominal/real bases.' },
+    default: { overview: 'A core economic indicator tracked to assess global conditions and the EP downstream environment.', implication: 'Interpret latest values together with prior observations, longer-term averages and related news to distinguish temporary moves from structural trends.' },
+  } as const;
+  return en[profile];
 }
 
-function buildStats(indicator: IndicatorCard, selected: IndicatorObservation[], full: IndicatorObservation[]): StatItem[] {
+function buildStats(indicator: IndicatorCard, selected: IndicatorObservation[], full: IndicatorObservation[], lang: UiLang = 'ko'): StatItem[] {
   const values = selected.map((item) => item.value);
   const latest = values.at(-1);
   const previous = values.at(-2);
@@ -147,19 +145,19 @@ function buildStats(indicator: IndicatorCard, selected: IndicatorObservation[], 
 
   if (profile === 'pmi') {
     return [
-      { label: '직전 관측치', value: formatValue(previous, indicator.unit) },
-      { label: '50 기준선 대비', value: latest == null ? '—' : `${latest >= 50 ? '+' : ''}${formatNumber(latest - 50)}p`, note: latest != null && latest >= 50 ? '확장 국면' : '수축 국면' },
-      { label: '최근 3회 평균', value: formatValue(average(values.slice(-3)), indicator.unit) },
-      { label: '선택 기간 확장', value: `${values.filter((value) => value >= 50).length}/${values.length}회` },
+      { label: t(lang, '직전 관측치', 'Previous observation'), value: formatValue(previous, indicator.unit, lang) },
+      { label: t(lang, '50 기준선 대비', 'vs 50 baseline'), value: latest == null ? '—' : `${latest >= 50 ? '+' : ''}${formatNumber(latest - 50)}p`, note: latest != null && latest >= 50 ? t(lang, '확장 국면', 'Expansion') : t(lang, '수축 국면', 'Contraction') },
+      { label: t(lang, '최근 3회 평균', 'Last 3 avg'), value: formatValue(average(values.slice(-3)), indicator.unit, lang) },
+      { label: t(lang, '선택 기간 확장', 'Expansion count'), value: `${values.filter((value) => value >= 50).length}/${values.length}${t(lang, '회', '')}` },
     ];
   }
 
   if (profile === 'rate') {
     return [
-      { label: '직전 금리', value: formatValue(previous, indicator.unit) },
-      { label: '전기 대비', value: delta == null ? '—' : `${delta >= 0 ? '+' : ''}${formatNumber(delta * 100, 1)}bp` },
-      { label: '선택 기간 평균', value: formatValue(avg, indicator.unit) },
-      { label: '관측값 범위', value: min == null || max == null ? '—' : `${formatNumber(min)}–${formatNumber(max)}%` },
+      { label: t(lang, '직전 금리', 'Previous rate'), value: formatValue(previous, indicator.unit, lang) },
+      { label: t(lang, '전기 대비', 'vs prior'), value: delta == null ? '—' : `${delta >= 0 ? '+' : ''}${formatNumber(delta * 100, 1)}bp` },
+      { label: t(lang, '선택 기간 평균', 'Selected-period avg'), value: formatValue(avg, indicator.unit, lang) },
+      { label: t(lang, '관측값 범위', 'Observation range'), value: min == null || max == null ? '—' : `${formatNumber(min)}–${formatNumber(max)}%` },
     ];
   }
 
@@ -168,35 +166,35 @@ function buildStats(indicator: IndicatorCard, selected: IndicatorObservation[], 
     const yearAgo = fullValues.length >= 13 ? fullValues.at(-13) : null;
     const yoy = latest != null && yearAgo != null ? deltaPct(latest, yearAgo) : null;
     return [
-      { label: '직전 관측치', value: formatValue(previous, indicator.unit) },
-      { label: '전월 대비', value: deltaPct(latest, previous) == null ? '—' : `${deltaPct(latest, previous)! >= 0 ? '+' : ''}${formatNumber(deltaPct(latest, previous))}%` },
-      { label: '전년 동월 대비', value: yoy == null ? '데이터 부족' : `${yoy >= 0 ? '+' : ''}${formatNumber(yoy)}%` },
-      { label: '최근 3개월 평균', value: formatValue(average(values.slice(-3)), indicator.unit) },
+      { label: t(lang, '직전 관측치', 'Previous observation'), value: formatValue(previous, indicator.unit, lang) },
+      { label: t(lang, '전월 대비', 'MoM'), value: deltaPct(latest, previous) == null ? '—' : `${deltaPct(latest, previous)! >= 0 ? '+' : ''}${formatNumber(deltaPct(latest, previous))}%` },
+      { label: t(lang, '전년 동월 대비', 'YoY same month'), value: yoy == null ? t(lang, '데이터 부족', 'Insufficient data') : `${yoy >= 0 ? '+' : ''}${formatNumber(yoy)}%` },
+      { label: t(lang, '최근 3개월 평균', 'Last 3-month avg'), value: formatValue(average(values.slice(-3)), indicator.unit, lang) },
     ];
   }
 
   if (profile === 'growth') {
     return [
-      { label: '직전 성장률', value: formatValue(previous, indicator.unit) },
-      { label: '전기 대비 변화폭', value: delta == null ? '—' : `${delta >= 0 ? '+' : ''}${formatNumber(delta)}p` },
-      { label: '최근 4회 평균', value: formatValue(average(values.slice(-4)), indicator.unit) },
-      { label: '선택 기간 성장', value: `${values.filter((value) => value > 0).length}/${values.length}회` },
+      { label: t(lang, '직전 성장률', 'Previous growth'), value: formatValue(previous, indicator.unit, lang) },
+      { label: t(lang, '전기 대비 변화폭', 'Change vs prior'), value: delta == null ? '—' : `${delta >= 0 ? '+' : ''}${formatNumber(delta)}p` },
+      { label: t(lang, '최근 4회 평균', 'Last 4 avg'), value: formatValue(average(values.slice(-4)), indicator.unit, lang) },
+      { label: t(lang, '선택 기간 성장', 'Positive growth count'), value: `${values.filter((value) => value > 0).length}/${values.length}${t(lang, '회', '')}` },
     ];
   }
 
   const start = values[0];
   const startChange = deltaPct(latest, start);
   return [
-    { label: '직전 관측치', value: formatValue(previous, indicator.unit) },
-    { label: profile === 'fx' || profile === 'commodity' ? '전기 대비' : '기간 시작 대비', value: `${profile === 'fx' || profile === 'commodity' ? deltaPct(latest, previous) : startChange}` === 'null' ? '—' : `${(profile === 'fx' || profile === 'commodity' ? deltaPct(latest, previous)! : startChange!) >= 0 ? '+' : ''}${formatNumber(profile === 'fx' || profile === 'commodity' ? deltaPct(latest, previous) : startChange)}%` },
-    { label: '선택 기간 평균', value: formatValue(avg, indicator.unit) },
-    { label: '관측값 범위', value: min == null || max == null ? '—' : `${formatNumber(min)}–${formatNumber(max)} ${compactUnit(indicator.unit)}` },
+    { label: t(lang, '직전 관측치', 'Previous observation'), value: formatValue(previous, indicator.unit, lang) },
+    { label: profile === 'fx' || profile === 'commodity' ? t(lang, '전기 대비', 'vs prior') : t(lang, '기간 시작 대비', 'vs period start'), value: `${profile === 'fx' || profile === 'commodity' ? deltaPct(latest, previous) : startChange}` === 'null' ? '—' : `${(profile === 'fx' || profile === 'commodity' ? deltaPct(latest, previous)! : startChange!) >= 0 ? '+' : ''}${formatNumber(profile === 'fx' || profile === 'commodity' ? deltaPct(latest, previous) : startChange)}%` },
+    { label: t(lang, '선택 기간 평균', 'Selected-period avg'), value: formatValue(avg, indicator.unit, lang) },
+    { label: t(lang, '관측값 범위', 'Observation range'), value: min == null || max == null ? '—' : `${formatNumber(min)}–${formatNumber(max)} ${compactUnit(indicator.unit)}` },
   ];
 }
 
-function TrendChart({ indicator, observations }: { indicator: IndicatorCard; observations: IndicatorObservation[] }) {
+function TrendChart({ indicator, observations, lang = 'ko' }: { indicator: IndicatorCard; observations: IndicatorObservation[]; lang?: UiLang }) {
   const values = observations.map((item) => item.value);
-  if (values.length < 2) return <div className="detailChartEmpty">차트를 표시할 관측치가 부족합니다.</div>;
+  if (values.length < 2) return <div className="detailChartEmpty">{t(lang, '차트를 표시할 관측치가 부족합니다.', 'Not enough observations to display a chart.')}</div>;
 
   const profile = profileFor(indicator);
   const baseline = profile === 'pmi' ? 50 : profile === 'growth' ? 0 : null;
@@ -217,15 +215,15 @@ function TrendChart({ indicator, observations }: { indicator: IndicatorCard; obs
   const latest = observations.at(-1)!;
 
   return <div className="detailChartWrap">
-    <svg className="detailChart" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${indicator.nameKo} 선택 기간 추세 차트`}>
-      <title>{indicator.nameKo} 선택 기간 추세</title>
+    <svg className="detailChart" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${indicatorNameFor(indicator.id, indicator.nameKo, lang)} ${t(lang, '선택 기간 추세 차트', 'selected-period trend chart')}`}>
+      <title>{indicatorNameFor(indicator.id, indicator.nameKo, lang)} {t(lang, '선택 기간 추세', 'selected-period trend')}</title>
       {gridValues.map((value) => <g key={value}>
         <line x1={left} x2={width - right} y1={y(value)} y2={y(value)} className="detailGridLine" />
         <text x={left - 10} y={y(value) + 4} textAnchor="end" className="detailAxisLabel">{formatNumber(value)}</text>
       </g>)}
       {baseline != null && <g>
         <line x1={left} x2={width - right} y1={y(baseline)} y2={y(baseline)} className="detailBaseline" />
-        <text x={width - right} y={y(baseline) - 7} textAnchor="end" className="detailBaselineLabel">{profile === 'pmi' ? '확장·수축 기준 50' : '성장 기준 0'}</text>
+        <text x={width - right} y={y(baseline) - 7} textAnchor="end" className="detailBaselineLabel">{profile === 'pmi' ? t(lang, '확장·수축 기준 50', 'Expansion/contraction baseline 50') : t(lang, '성장 기준 0', 'Growth baseline 0')}</text>
       </g>}
       <path d={path} className="detailTrendLine" />
       <circle cx={x(values.length - 1)} cy={y(values.at(-1)!)} r="5" className="detailTrendDot" />
@@ -235,55 +233,62 @@ function TrendChart({ indicator, observations }: { indicator: IndicatorCard; obs
   </div>;
 }
 
-export default function IndicatorDetail({ title, subtitle, series, defaultSeriesId }: IndicatorDetailProps) {
+export default function IndicatorDetail({ subtitle, series, defaultSeriesId }: IndicatorDetailProps) {
   const [seriesId, setSeriesId] = useState(defaultSeriesId);
+  const [uiLang, setUiLang] = useState<UiLang>(() => {
+    if (typeof window === 'undefined') return 'ko';
+    const saved = window.localStorage.getItem('ep-monitor-ui-lang');
+    return saved === 'en' ? 'en' : 'ko';
+  });
+  function changeUiLang(next: UiLang) {
+    setUiLang(next);
+    window.localStorage.setItem('ep-monitor-ui-lang', next);
+  }
   const active = series.find((item) => item.id === seriesId) || series[0];
-  const options = RANGE_OPTIONS[active.frequency];
-  const defaultRange = options[Math.min(1, options.length - 1)].label;
-  const [rangeBySeries, setRangeBySeries] = useState<Record<string, string>>({});
-  const rangeLabel = rangeBySeries[active.id] || defaultRange;
-  const range = options.find((option) => option.label === rangeLabel) || options[0];
-  const selected = useMemo(() => range.count == null ? active.fullHistory : active.fullHistory.slice(-range.count), [active, range.count]);
-  const stats = useMemo(() => buildStats(active, selected, active.fullHistory), [active, selected]);
+  const selected = active.fullHistory;
+  const stats = useMemo(() => buildStats(active, selected, active.fullHistory, uiLang), [active, selected, uiLang]);
   const latest = active.latestValue;
   const previous = active.previousValue;
   const pointDelta = latest != null && previous != null ? latest - previous : null;
   const profile = profileFor(active);
-  const change = profile === 'rate' && pointDelta != null
+  const hasGap = active.changeStatus === 'gap';
+  const change = hasGap ? null : profile === 'rate' && pointDelta != null
     ? pointDelta * 100
     : profile === 'pmi' || profile === 'growth' ? pointDelta : deltaPct(latest ?? undefined, previous ?? undefined);
   const changeSuffix = profile === 'rate' ? 'bp' : profile === 'pmi' || profile === 'growth' ? 'p' : '%';
-  const copy = descriptions(active);
+  const copy = descriptions(active, uiLang);
+  const displayTitle = indicatorNameFor(active.id, active.nameKo, uiLang);
 
   return <>
-    {series.length > 1 && <div className="detailSeriesTabs" role="tablist" aria-label="GDP 상세 시리즈">
-      {series.map((item) => <button key={item.id} role="tab" aria-selected={item.id === active.id} className={item.id === active.id ? 'active' : ''} onClick={() => setSeriesId(item.id)}>{item.seriesLabel}</button>)}
+    <div className="detailLangToggle languageToggle" role="group" aria-label={t(uiLang, '표시 언어', 'Display language')}>
+      <button type="button" className={uiLang === 'ko' ? 'active' : ''} onClick={() => changeUiLang('ko')}>한국어</button>
+      <button type="button" className={uiLang === 'en' ? 'active' : ''} onClick={() => changeUiLang('en')}>English</button>
+    </div>
+    {series.length > 1 && <div className="detailSeriesTabs" role="tablist" aria-label={t(uiLang, 'GDP 상세 시리즈', 'GDP detail series')}>
+      {series.map((item) => <button key={item.id} role="tab" aria-selected={item.id === active.id} className={item.id === active.id ? 'active' : ''} onClick={() => setSeriesId(item.id)}>{uiLang === 'en' ? indicatorNameFor(item.id, item.nameKo, uiLang) : item.seriesLabel}</button>)}
     </div>}
 
     <section className="detailHero">
       <div>
-        <span className="detailKicker">{subtitle}</span>
-        <h1>{title}</h1>
-        {series.length > 1 && <p className="detailSeriesName">{active.nameKo}</p>}
+        <span className="detailKicker">{uiLang === 'en' ? subtitle.replace('매크로', 'Macro') : subtitle}</span>
+        <h1>{displayTitle}</h1>
+        {series.length > 1 && <p className="detailSeriesName">{indicatorNameFor(active.id, active.nameKo, uiLang)}</p>}
       </div>
       <div className="detailLeadValue">
-        <strong>{formatNumber(latest, Math.abs(latest || 0) < 10 ? 3 : 2)}<small>{compactUnit(active.unit)}</small></strong>
-        <span className={directionClass(change)}>{change == null ? '전기 데이터 없음' : `${change > 0 ? '▲' : change < 0 ? '▼' : '–'} ${formatNumber(Math.abs(change))}${changeSuffix}`}</span>
-        <time>{formatPeriod(active.latestPeriod, active.frequency)} 기준</time>
+        <strong>{formatNumber(latest, Math.abs(latest || 0) < 10 ? 3 : 2)}<small>{compactUnit(active.unit, uiLang)}</small></strong>
+        <span className={directionClass(change)} title={active.dataWarning}>{hasGap ? t(uiLang, `갱신공백 ${active.changeIntervalDays}일`, `Gap ${active.changeIntervalDays}d`) : change == null ? t(uiLang, '전기 데이터 없음', 'No prior data') : `${change > 0 ? '▲' : change < 0 ? '▼' : '–'} ${formatNumber(Math.abs(change))}${changeSuffix}`}</span>
+        <time>{formatPeriod(active.latestPeriod, active.frequency)} {t(uiLang, '기준', 'basis')}</time>
       </div>
     </section>
 
-    <section className="detailPanel detailChartPanel">
+    {profile !== 'pmi' && <section className="detailPanel detailChartPanel">
       <div className="detailPanelHead">
-        <div><span>Trend</span><h2>추세</h2></div>
-        <div className="detailRangeTabs">
-          {options.map((option) => <button key={option.label} className={rangeLabel === option.label ? 'active' : ''} onClick={() => setRangeBySeries((current) => ({ ...current, [active.id]: option.label }))}>{option.label}</button>)}
-        </div>
+        <div><span>Trend</span><h2>{t(uiLang, '추세', 'Trend')}</h2></div>
       </div>
-      <TrendChart indicator={active} observations={selected} />
-    </section>
+      <TrendChart indicator={active} observations={selected} lang={uiLang} />
+    </section>}
 
-    <section className="detailStatsGrid" aria-label="핵심 통계">
+    <section className="detailStatsGrid" aria-label={t(uiLang, '핵심 통계', 'Key statistics')}>
       {stats.map((stat) => <article key={stat.label}>
         <span>{stat.label}</span>
         <strong>{stat.value}</strong>
@@ -294,26 +299,26 @@ export default function IndicatorDetail({ title, subtitle, series, defaultSeries
     <div className="detailEditorialGrid">
       <section className="detailPanel detailCopy">
         <span className="detailSectionEyebrow">Overview</span>
-        <h2>지표 개요</h2>
+        <h2>{t(uiLang, '지표 개요', 'Indicator Overview')}</h2>
         <p>{copy.overview}</p>
-        <h3>EP 산업 시사점</h3>
+        <h3>{t(uiLang, 'EP 산업 시사점', 'EP Industry Implications')}</h3>
         <p>{copy.implication}</p>
       </section>
 
       <aside className="detailPanel detailNewsPanel">
         <span className="detailSectionEyebrow">Related</span>
-        <h2>관련 콘텐츠</h2>
+        <h2>{t(uiLang, '관련 콘텐츠', 'Related Content')}</h2>
         {active.relatedNews.length ? <div className="detailNewsList">{active.relatedNews.map((news) => <a key={`${news.link}-${news.publishedAt}`} href={news.link} target="_blank" rel="noreferrer">
-          <strong>{news.title}</strong>
-          <span>{news.sourceName} · {news.publishedAt.slice(0, 10)}</span>
-        </a>)}</div> : <p className="detailNoNews">현재 연결된 관련 뉴스가 없습니다.</p>}
+          <strong>{displayArticleTitle(news, uiLang)}</strong>
+          <span>{sourceNameFor(news.sourceName, uiLang)} · {news.publishedAt.slice(0, 10)}</span>
+        </a>)}</div> : <p className="detailNoNews">{t(uiLang, '현재 연결된 관련 뉴스가 없습니다.', 'No related news is currently linked.')}</p>}
       </aside>
     </div>
 
     <footer className="detailSource">
-      <span>데이터 출처</span>
+      <span>{t(uiLang, '데이터 출처', 'Data source')}</span>
       {active.sourceUrl ? <a href={active.sourceUrl} target="_blank" rel="noreferrer">{active.sourceId} ↗</a> : <b>{active.sourceId}</b>}
-      <small>단위: {active.unit} · 주기: {active.frequency}</small>
+      <small>{t(uiLang, '단위', 'Unit')}: {compactUnit(active.unit, uiLang)} · {t(uiLang, '주기', 'Frequency')}: {active.frequency}</small>
     </footer>
   </>;
 }
